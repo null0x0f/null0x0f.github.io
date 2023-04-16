@@ -12,4 +12,8 @@
     <loc>http://example.com/posts/4a17b156.html</loc>
     <lastmod>2023-04-16</lastmod>
   </url>
+  <url>
+    <loc>http://example.com/posts/0.html</loc>
+    <lastmod>2023-04-12</lastmod>
+  </url>
 </urlset> 
