@@ -3,18 +3,23 @@
   <title>NULL&#39;blog</title>
   
   
-  <link href="http://example.com/atom.xml" rel="self"/>
+  <link href="https://null0x0f.github.io/atom.xml" rel="self"/>
   
-  <link href="http://example.com/"/>
+  <link href="https://null0x0f.github.io/"/>
   <updated>2023-04-16T06:43:12.696Z</updated>
-  <id>http://example.com/</id>
+  <id>https://null0x0f.github.io/</id>
+  
+  <author>
+    <name>NULL+</name>
+    
+  </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
     <title>GDB调试</title>
-    <link href="http://example.com/posts/46594b90.html"/>
-    <id>http://example.com/posts/46594b90.html</id>
+    <link href="https://null0x0f.github.io/posts/46594b90.html"/>
+    <id>https://null0x0f.github.io/posts/46594b90.html</id>
     <published>2023-04-15T03:31:20.000Z</published>
     <updated>2023-04-16T06:43:12.696Z</updated>
     
@@ -33,8 +38,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://example.com/posts/4a17b156.html"/>
-    <id>http://example.com/posts/4a17b156.html</id>
+    <link href="https://null0x0f.github.io/posts/4a17b156.html"/>
+    <id>https://null0x0f.github.io/posts/4a17b156.html</id>
     <published>2023-04-15T03:23:34.445Z</published>
     <updated>2023-04-16T04:50:24.741Z</updated>
     
