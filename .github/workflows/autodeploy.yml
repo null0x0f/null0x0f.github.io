@@ -3,7 +3,7 @@ name: 自动部署
 on:
   push:
     branches:
-      - main
+      - master
       #2020年10月后github新建仓库默认分支改为main，注意更改
   release:
     types:
@@ -16,7 +16,7 @@ jobs:
       - name: 检查分支
         uses: actions/checkout@v2
         with:
-          ref: main
+          ref: master
 
       - name: 安装 Node
         uses: actions/setup-node@v1
