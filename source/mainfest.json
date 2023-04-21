@@ -1,0 +1,27 @@
+{
+    "name": "null`Blog",
+    "short_name": "null",
+    "theme_color": "#3b70fc",
+    "background_color": "#3b70fc",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+      {
+        "src": "/img/siteicon/code.png",
+        "sizes": "16x16",
+        "type": "image/png"
+      },
+      {
+        "src": "/img/siteicon/智能手机.png",
+        "sizes": "32x32",
+        "type": "image/png"
+      },
+      {
+        "src": "/img/siteicon/国际网络.png",
+        "sizes": "48x48",
+        "type": "image/png"
+      }
+    ],
+    "splash_pages": null
+  }
