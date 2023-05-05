@@ -81,7 +81,7 @@ c++ primer :当执行对象的拷贝操作时，常量的顶层const不受什么
  5.非常量 = 常引用
 
 判断方法: 
-![const1](const1.png)
+![const1](D:\blog\test\source\img\const1.png)
 ![const2](const2.png)
 
 代码详解:
