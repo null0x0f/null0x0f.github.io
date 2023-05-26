@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>数据结构</title>
+      <link href="/posts/79666db.html"/>
+      <url>/posts/79666db.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><h2 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h2><h3 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h3><p>树上任意节点的左子树和右子树高度之差不超过1，超过则视为不平衡<br>节点平衡因子 = 左子树高-右子树高</p><p>特性：左子树节点值&lt;根节点值&lt;左子树节点值</p><h3 id="调整最小不平衡子树"><a href="#调整最小不平衡子树" class="headerlink" title="调整最小不平衡子树"></a>调整最小不平衡子树</h3><p>LL 新插入一个节点在左子树的左节点<br>LR<br>RR<br>RL<br>判断方法：从最小的不平衡节点开始操作</p><p>LL：进行右旋，需要将最小的不平衡节点往下三个节点中间的节点作为新的根节点其他两个节点变成左右子树</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>c plus plus</title>
       <link href="/posts/d99aa42e.html"/>
       <url>/posts/d99aa42e.html</url>
