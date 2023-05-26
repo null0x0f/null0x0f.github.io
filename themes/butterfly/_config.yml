@@ -99,7 +99,7 @@ error_img:
 error_404:
   enable: false
   subtitle: 'Page Not Found'
-  background: url(https://s1.ax1x.com/2023/04/16/p99oPRU.jpg)
+  background: url()
 
 post_meta:
   page: # Home Page
@@ -641,7 +641,7 @@ tag_ui: # 留空或 index
 # Website Background (設置網站背景)
 # can set it to color or image (可設置圖片 或者 顔色)
 # The formal of image: url(http://xxxxxx.com/xxx.jpg)
-background: url(https://i.328888.xyz/2023/04/17/izWvyX.jpeg)
+background: url(https://img1.imgtp.com/2023/05/26/gBzpjIcY.png)
 
 # Footer Background
 footer_bg: false
