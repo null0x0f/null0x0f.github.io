@@ -1,7 +1,7 @@
 ---
 title: 数据结构
+abbrlink: 79666db
 date:
-abbrlink:
 tags:
 ---
 
