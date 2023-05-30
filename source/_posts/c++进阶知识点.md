@@ -642,7 +642,8 @@ void use_factory(T arg)
 ## 模板
 ### 类模板
 ### 函数模板
-### 成员模板<img src="成员模板.png" alt="成员模板" style="zoom:200%;" />
+### 成员模板
+![成员模板.png](/source/img/%E6%88%90%E5%91%98%E6%A8%A1%E6%9D%BF.png)
 ### 模板特化
 ```
 template<>
