@@ -81,8 +81,8 @@ c++ primer :当执行对象的拷贝操作时，常量的顶层const不受什么
  5.非常量 = 常引用
 
 判断方法: 
-![const1](D:\blog\test\source\img\const1.png)
-![const2](D:\blog\test\source\img\const1.png)
+![const1](/test/source/img/const1.png)
+![const2](/test/source/img/const2.png)
 
 代码详解:
 ```
@@ -243,14 +243,13 @@ adsd
 把对象1的属性拷贝给对象二
 把指针变量的值拷贝给对象二，并没有把指针变量所指向的内存空间的数据拷贝过来
 两个指针变量指向同一个空间
-![24](24.png)
 
 obj2析构函数 把指向的内存空间析构
 obj2 指向null，obj1仍然指向堆里被释放的内存空间。
 obj1再析构，还是析构的obj2之前析构的那一块空间，，结果析构两次，造成空间的coredump
 
 coredump出现原因:
-![coredump](D:\blog\test\source\img\coredump.png)
+![coredump](/test/source/img/coredump.png)
 
 #### 等号操作也是浅拷贝操作
 
@@ -310,7 +309,7 @@ int main(void)
 #### 友元类
 #### 重载运算符
 这两个都写在vs里了
-![重载](D:\blog\test\source\img\重载.png)
+![重载](/test/source/img/%E9%87%8D%E8%BD%BD.png)
 
 ## 继承
 ### 概念
@@ -348,7 +347,7 @@ class test:public Test
 };
 
 ```
-![派生类访问](派生类访问.png)
+![派生类访问](/test/source/img/%E6%B4%BE%E7%94%9F%E7%B1%BB%E8%AE%BF%E9%97%AE.png)
 protect 关键字修饰变量使用，是为了继承
 
 ### 继承中构造和析构
@@ -372,8 +371,8 @@ public:
 child(int a,int b,int c1):parent(a,b),c(c1){}
 }
 ```
-![继承1](D:\blog\test\source\img\继承1.png)
-![继承2](D:\blog\test\source\img\继承2.png)
+![继承1](/test/source/img/%E7%BB%A7%E6%89%BF1.png)
+![继承2](/test/source/img/%E7%BB%A7%E6%89%BF2.png)
 
 ### 继承和虚函数
 virtual函数:你希望derived class 重新定义它，且你对他已有默认定义
@@ -383,7 +382,7 @@ pure virtual 函数:erived class 重新定义它，且你对他没有默认定�
 
 ### 委托和继承![delegation](delegation.png)
 
-![委托2](D:\blog\test\source\img\委托2.png)
+![委托2](/test/source/img/%E5%A7%94%E6%89%982.png)
 ## 抽象基类
 ```
 class person//抽象基类(类似于接口)
