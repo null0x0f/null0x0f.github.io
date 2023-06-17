@@ -1,4 +1,7 @@
-# jsp
+---
+abbrlink: '0'
+---
+# jsp_finaltest
 ## jsp执行过程
 客户端向服务器发送请求。
 服务器接收到请求，并根据请求的URL和其他参数选择对应的处理程序进行处理。
@@ -269,5 +272,266 @@ public class MyFilter implements Filter {
 @WebListener
 public class MyContextListener implements ServletContextListener {
     // ...
+}
+```
+### 简单应用
+```
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        if ("admin".equals(username) && "123456".equals(password)) {
+            request.getRequestDispatcher("welcome.jsp").forward(request, response);
+        } else {
+            request.setAttribute("errorMsg", "Invalid username or password!");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
+    }
+}
+```
+## java Bean
+Java Bean的基本原则包括以下几点：
+
+1.实现Serializable接口(共有类)：Java Bean类必须实现Serializable接口，以便能够在网络上传输或者在不同的Java应用程序之间进行传递。
+
+2.封装属性：Java Bean类应该将属性封装起来，通过公共的getter和setter方法来访问和修改属性值。
+
+3.提供无参构造器：Java Bean类必须提供一个无参构造器，以便能够通过反射创建实例。
+
+4.实现序列化
+常见的三种Java Bean包括：
+
+实体Bean：用于封装数据的Java Bean，通常包含一些属性和对应的getter和setter方法，以及一些辅助方法。entity类
+
+业务Bean：用于提供一些服务的Java Bean，例如计算、数据转换等，通常包含一些公共方法。
+业务类，service类
+持久化Bean：数据库访问类，dao类
+
+## MVC模式
+mvc:model,view,controller
+主要目的是将应用程序的业务逻辑和用户界面分离，以便更好地管理和维护代码。
+
+### 好处
+![benefit](benefit.png)
+### 案例
+model:
+```
+public class Student {
+    private int id;
+    private String name;
+    private int age;
+    private String gender;
+
+    public Student(int id, String name, int age, String gender) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+}
+```
+#### view
+add.jsp
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Add Student</title>
+</head>
+<body>
+    <h1>Add Student</h1>
+    <form action="addStudent" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" min="0" required><br>
+        <label for="gender">Gender:</label>
+        <input type="radio" id="male" name="gender" value="Male" required>
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="gender" value="Female" required>
+        <label for="female">Female</label><br>
+        <input type="submit" value="Add">
+    </form>
+</body>
+</html>
+
+```
+showlist.jsp
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Student List</title>
+</head>
+<body>
+    <h1>Student List</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Actions</th>
+        </tr>
+        <% for (Student student : studentList) { %>
+        <tr>
+            <td><%= student.getId() %></td>
+            <td><%= student.getName() %></td>
+            <td><%= student.getAge() %></td>
+            <td><%= student.getGender() %></td>
+            <td>
+                <a href="deleteStudent?id=<%= student.getId() %>">Delete</a>
+                <a href="modifyStudent?id=<%= student.getId() %>">Modify</a>
+            </td>
+        </tr>
+        <% } %>
+    </table>
+    <br>
+    <a href="add.jsp">Add Student</a>
+</body>
+</html>
+```
+modify.jsp
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Student</title>
+</head>
+<body>
+    <h1>Modify Student</h1>
+    <form action="modifyStudent" method="post">
+        <input type="hidden" name="id" value="<%= student.getId() %>">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="<%= student.getName() %>" required><br>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" value="<%= student.getAge() %>" min="0" required><br>
+        <label for="gender">Gender:</label>
+        <input type="radio" id="male" name="gender" value="Male" <% if ("Male".equals(student.getGender())) { %>checked<% } %> required>
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="gender" value="Female" <% if ("Female".equals(student.getGender())) { %>checked<% } %> required>
+        <label for="female">Female</label><br>
+        <input type="submit" value="Save">
+    </form>
+</body>
+</html>
+```
+#### controller
+AddStudentServlet.java：添加学生的Servlet
+```
+public class AddStudentServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 获取用户提交的表单数据
+        String name = request.getParameter("name");
+        int age = Integer.parseInt(request.getParameter("age"));
+        String gender = request.getParameter("gender");
+
+        // 创建Student对象，并将其保存到数据库中
+        Student student = new Student(name, age, gender);
+        StudentDao studentDao = new StudentDaoImpl();
+        studentDao.addStudent(student);
+
+        // 重定向到学生列表页面
+        response.sendRedirect("showList");
+    }
+}
+```
+ShowListServlet.java
+```
+public class ShowListServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 查询数据库中所有的学生信息，并将其保存到request对象中
+        StudentDao studentDao = new StudentDaoImpl();
+        List<Student> studentList = studentDao.getAllStudents();
+        request.setAttribute("studentList", studentList);
+
+        // 转发到学生列表页面
+        request.getRequestDispatcher("showList.jsp").forward(request, response);
+    }
+}
+```
+DeleteStudentServlet.java
+```
+public class DeleteStudentServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 获取要删除的学生的ID，并将其从数据库中删除
+        int id = Integer.parseInt(request.getParameter("id"));
+        StudentDao studentDao = new StudentDaoImpl();
+        studentDao.deleteStudent(id);
+
+        // 重定向到学生列表页面
+        response.sendRedirect("showList");
+    }
+}
+```
+ModifyStudentServlet.java
+```
+public class ModifyStudentServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 获取要修改的学生的ID，并将其从数据库中查询出来
+        int id = Integer.parseInt(request.getParameter("id"));
+        StudentDao studentDao = new StudentDaoImpl();
+        Student student = studentDao.getStudentById(id);
+
+        // 将查询出来的学生信息保存到request对象中
+        request.setAttribute("student", student);
+
+        // 转发到修改学生信息页面
+        request.getRequestDispatcher("modify.jsp").forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 获取用户提交的表单数据
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        int age = Integer.parseInt(request.getParameter("age"));
+        String gender = request.getParameter("gender");
+
+        // 创建Student对象，并更新其在数据库中的信息
+        Student student = new Student(id, name, age, gender);
+        StudentDao studentDao = new StudentDaoImpl();
+        studentDao.updateStudent(student);
+
+        // 重定向到学生列表页面
+        response.sendRedirect("showList");
+    }
 }
 ```
