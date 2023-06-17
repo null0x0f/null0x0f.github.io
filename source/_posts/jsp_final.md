@@ -46,7 +46,7 @@ abbrlink: '0'
 ```
 我们使用了taglib指令导入了一个名为mytag的自定义标签库。在JSP页面的正文部分，我们使用了<mytag:hello>标签来调用自定义标签库中的hello标签，并传入了一个名为name的参数，值为World。在实际运行时，JSP容器会将<mytag:hello>标签转换为对应的Java代码，然后执行这段代码，最后将执行结果输出到浏览器中.
 ## jsp声明
-![jsp声明](jsp声明.png)
+![jsp声明](https://img1.imgtp.com/2023/06/18/ZKNbzIJc.png)
 <%! ... %>
 ## jsp脚本
 ```
@@ -94,7 +94,7 @@ exception对象的原型是java.lang.Throwable类或其子类
 ### 重定向
 用户向a服务器请求，a返回一个b服务器的地址给用户，用户访问b的服务器，b服务器返回一个信息给用户。
 ### 区别
-![redirect](redirect.png)
+![redirect](https://img1.imgtp.com/2023/06/18/Ay8DoZ1L.png)
 ## 访问控制
 session 
 code:
@@ -130,7 +130,7 @@ public class AdminServlet extends HttpServlet {
 }
 ```
 ### cookie和session的区别
-![cookie](cookie.png)
+![cookie](https://img1.imgtp.com/2023/06/18/C8dUqihk.png)
 
 ## EL表达式
  以下是一些常用的EL表达式：
@@ -316,7 +316,7 @@ mvc:model,view,controller
 主要目的是将应用程序的业务逻辑和用户界面分离，以便更好地管理和维护代码。
 
 ### 好处
-![benefit](benefit.png)
+![benefit](https://img1.imgtp.com/2023/06/18/RwUcdItS.png)
 ### 案例
 model:
 ```
