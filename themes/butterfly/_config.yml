@@ -206,11 +206,9 @@ noticeOutdate:
 # Footer Settings
 # --------------------------------------
 footer:
-  owner:
+ owner:
     enable: true
-    since: 2020
-  custom_text:
-  copyright: true # Copyright of theme and framework
+
 
 # aside (側邊欄)
 # --------------------------------------
@@ -235,7 +233,7 @@ aside:
       link: https://github.com/null0x0f
   card_announcement:
     enable: true
-    content: This is my Blog
+    content: technical blog
   card_recent_post:
     enable: true
     limit: 5 # if set 0 will show all

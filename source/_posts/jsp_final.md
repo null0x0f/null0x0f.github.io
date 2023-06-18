@@ -86,6 +86,7 @@ config对象的原型是javax.servlet.ServletConfig类
 pageContext对象的原型是javax.servlet.jsp.PageContext类
 page对象的原型是生成的JSP页面类
 exception对象的原型是java.lang.Throwable类或其子类
+![内置对象.png](https://img1.imgtp.com/2023/06/18/a3NKa3DY.png)
 ## 请求转发重定向
 ### 请求 
 #### 请求传递：
