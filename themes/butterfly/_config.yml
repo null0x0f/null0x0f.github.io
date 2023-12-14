@@ -9,6 +9,7 @@ nav:
 
 # Menu 目錄
 menu:
+引导: /_posts/ || fas fa-gift
 留言板: /comments/ || fas fa-envelope
   # Home: / || fas fa-home
   # Archives: /archives/ || fas fa-archive
