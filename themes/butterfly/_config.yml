@@ -10,11 +10,11 @@ nav:
 # Menu 目錄
 menu:
 引导: /_posts/ || fas fa-gift
-留言板: /comments/ || fas fa-envelope
+留言板: /comments/ || fas fa-envelope 
   # Home: / || fas fa-home
   # Archives: /archives/ || fas fa-archive
   # Tags: /tags/ || fas fa-tags
-  # Categories: /categories/ || fas fa-folder-open
+Categories: /categories/ || fas fa-folder-open
   # List||fas fa-list:
   #   Music: /music/ || fas fa-music
   #   Movie: /movies/ || fas fa-video
@@ -640,7 +640,7 @@ tag_ui: # 留空或 index
 # Website Background (設置網站背景)
 # can set it to color or image (可設置圖片 或者 顔色)
 # The formal of image: url(http://xxxxxx.com/xxx.jpg)
-background: url(https://www.freeimg.cn/i/2023/12/14/657ad2b985cee.png)
+background: url(https://img.picui.cn/free/2024/09/19/66ebd626a7af9.jpeg)
 
 # Footer Background
 footer_bg: false

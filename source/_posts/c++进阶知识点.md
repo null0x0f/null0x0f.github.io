@@ -2,6 +2,8 @@
 title: c plus plus
 abbrlink: d99aa42e
 date: 2023-04-24 11:22:45
+ categories： 
+ - Python
 ---
 # cpp知识补充
 01 - 侯捷 - C++面向对象高级开发（上下两部曲）
