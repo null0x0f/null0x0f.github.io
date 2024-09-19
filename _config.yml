@@ -109,13 +109,12 @@ deploy:
     branch: main
   - type: baidu_url_submitter # 这是新加的百度主动推送
 abbrlink:
-	alg: crc32
-	rep: hex     
+  alg: crc32
+  rep: hex     
   search:
   path: search.xml
   field: all
   content: true
-  
 
 # Live2D
 ## https://github.com/EYHN/hexo-helper-live2d
