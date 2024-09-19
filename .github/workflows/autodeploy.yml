@@ -61,3 +61,6 @@ jobs:
           branch: main
           folder: public
           commit-message: "${{ github.event.head_commit.message }} Updated By Github Actions"
+
+          env:
+  MY_SECRET: ${{ secrets.MY_SECRET }}
