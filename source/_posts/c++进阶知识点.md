@@ -2,6 +2,7 @@
 title: c plus plus
 abbrlink: d99aa42e
 date: 2023-04-24 11:22:45
+type: 
  categories： 
  - Python
 ---

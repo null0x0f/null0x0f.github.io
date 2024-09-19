@@ -3,6 +3,7 @@ title: 数据结构
 abbrlink: 79666db
 date:
 tags:
+type: 
 ---
 
 # 数据结构
