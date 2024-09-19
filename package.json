@@ -37,7 +37,7 @@
     "hexo-renderer-kramed": "^0.1.4",
     "hexo-renderer-pug": "^3.0.0",
     "hexo-renderer-stylus": "^2.1.0",
-    "hexo-server": "^3.0.0",
+    "hexo-server": "^2.0.0",
     "hexo-theme-landscape": "^0.0.3",
     "install": "^0.13.0",
     "live2d-widget-model-koharu": "^1.0.5",

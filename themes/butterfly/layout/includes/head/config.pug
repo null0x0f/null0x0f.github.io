@@ -101,8 +101,8 @@ script.
       noSupport: '!{_p("copy.noSupport")}'
     },
     relativeDate: {
-      homepage: !{theme.post_meta.page.date_format === 'relative'},
-      post: !{theme.post_meta.post.date_format === 'relative'}
+       homepage: theme.post_meta.page ? (theme.post_meta.page.date_format === 'relative') : false,
+       post: theme.post_meta.post ? (theme.post_meta.post.date_format === 'relative') : false
     },
     runtime: '!{theme.runtimeshow.enable ? _p("aside.card_webinfo.runtime.unit") : ""}',
     dateSuffix: {
