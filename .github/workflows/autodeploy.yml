@@ -56,9 +56,9 @@ jobs:
       - name: 部署到Github
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          token: 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
+          token: ${{ secrets.GITHUB_TOKEN }}
           repository-name: null0x0f/null0x0f.github.io
-          branch: main
+          branch: master
           folder: public
           commit-message: "${{ github.event.head_commit.message }} Updated By Github Actions"
 
