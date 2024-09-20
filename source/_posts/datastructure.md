@@ -1,5 +1,5 @@
 ---
-title: 数据结构
+title: Data structure
 abbrlink: 79666db
 date:
 tags:
