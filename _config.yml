@@ -106,7 +106,7 @@ deploy:
     repository:
       # github: git@github.com:anzhiyu-c/anzhiyu-c.github.io.git  #用户名@服务器Ip:git仓库位置
       github: git@github.com:null0x0f/null0x0f.github.io.git
-    branch: main
+    branch: master
   - type: baidu_url_submitter # 这是新加的百度主动推送
 abbrlink:
   alg: crc32
