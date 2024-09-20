@@ -58,7 +58,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository-name: null0x0f/null0x0f.github.io
-          branch: main
+          branch: master
           folder: public
           commit-message: "${{ github.event.head_commit.message }} Updated By Github Actions"
 
