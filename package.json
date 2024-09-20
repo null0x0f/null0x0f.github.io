@@ -42,7 +42,7 @@
     "install": "^0.13.0",
     "live2d-widget-model-koharu": "^1.0.5",
     "live2d-widget-model-miku": "^1.0.5",
-    "npm": "^10.2.5",
+    "npm": "^10.8.3",
     "workbox-build": "^6.5.4"
   },
   "devDependencies": {
