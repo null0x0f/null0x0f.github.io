@@ -158,6 +158,8 @@ plugins:
     - hexo-generator-feed
     - hexo-generator-baidu-sitemap
     - hexo-generator-sitemap
+    - jekyll-remote-theme
+
 
 # 百度主动推送
 # https://github.com/huiwang/hexo-baidu-url-submit
