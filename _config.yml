@@ -111,11 +111,10 @@ deploy:
 abbrlink:
   alg: crc32
   rep: hex     
-  search:
+search:
   path: search.xml
   field: all
   content: true
-  format: html
 
 # Live2D
 ## https://github.com/EYHN/hexo-helper-live2d
