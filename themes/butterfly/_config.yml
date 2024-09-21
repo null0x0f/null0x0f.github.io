@@ -46,8 +46,8 @@ favicon: /img/favicon.png
 
 # Avatar (頭像)
 avatar:
-  img: https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png
-  effect: false
+  img: https://img.picui.cn/free/2024/09/21/66ee7b7207f16.png
+  effect: true
 
 # Disable all banner image
 disable_top_img: false
@@ -364,15 +364,10 @@ local_search:
   enable: true
   # Preload the search data when the page loads.
   preload: false
-  # Show top n results per article, show all results by setting to -1
-  top_n_per_article: 1
-  # Unescape html strings to the readable one.
-  unescape: true
-  CDN:
-
+  CDN: 
 # Docsearch
 docsearch:
-  enable: true
+  enable: false
   appId:
   apiKey:
   indexName:
