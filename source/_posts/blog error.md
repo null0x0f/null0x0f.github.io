@@ -2,7 +2,6 @@
 title: Blog error log
 abbrlink: a0dbd9e1
 date:
-type:
 ---
 # Build And Deploy
 ## first error

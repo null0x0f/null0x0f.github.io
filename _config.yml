@@ -9,7 +9,7 @@ description: ''
 keywords:
 author: NULL+
 language: default
-timezone: 'Asia/Shanghai'
+timezone: 
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
@@ -45,7 +45,7 @@ relative_link: false
 future: true
 highlight:
   enable: true
-  line_number: true
+  line_number: false
   auto_detect: false
   tab_replace: ''
   wrap: true
@@ -176,25 +176,3 @@ baidu_url_submit:
 aplayer:
   meting: true
   asset_inject: false
-
-jsonContent:
-  dateFormat: MM-DD
-  pages:
-    title: true
-    text: true
-    path: true
-    date: true
-    excerpt: true
-    preview: true
-  posts:
-    title: true
-    text: true
-    path: true
-    date: true
-    excerpt: true
-    tags: [{
-      name: tag.name,
-      slug: tag.slug,
-      permalink: tag.permalink
-    }]
-    preview: true
