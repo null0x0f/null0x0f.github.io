@@ -46,7 +46,7 @@ favicon: /img/favicon.png
 
 # Avatar (頭像)
 avatar:
-  img: https://img.picui.cn/free/2024/09/21/66ee7b7207f16.png
+  img: https://img.picui.cn/free/2024/10/10/67078385f0d5a.png
   effect: true
 
 # Disable all banner image
@@ -361,12 +361,14 @@ algolia_search:
 
 # Local search
 local_search:
-  enable: false
-  labels:
-    input_placeholder: Search for Posts
-    hits_empty: "We didn't find any results for the search: ${query}" # if there are no result
-
-
+  enable: true
+  # Preload the search data when the page loads.
+  preload: true
+  # Show top n results per article, show all results by setting to -1
+  top_n_per_article: -1
+  # Unescape html strings to the readable one.
+  unescape: false
+  CDN: https://cdn.jsdelivr.net/npm/hexo-local-search
 # Docsearch
 docsearch:
   enable: false
@@ -637,7 +639,7 @@ tag_ui: # 留空或 index
 # Website Background (設置網站背景)
 # can set it to color or image (可設置圖片 或者 顔色)
 # The formal of image: url(http://xxxxxx.com/xxx.jpg)
-background: url(https://img.picui.cn/free/2024/09/19/66ebd626a7af9.jpeg)
+background: url(https://img.picui.cn/free/2024/10/10/670783a438cbc.jpg)
 
 # Footer Background
 footer_bg: false
@@ -989,7 +991,7 @@ electric_clock:
 # hexo-filter-gitcalendar
 # see https://akilar.top/posts/1f9c68c9/
 gitcalendar:
-  enable: true # 开关
+  enable: false # 开关
   priority: 5 #过滤器优先权
   enable_page: / # 应用页面
   # butterfly挂载容器
@@ -1013,7 +1015,7 @@ gitcalendar:
   #   name: content
   #   index: 0
   user: null0x0f #git用户名
-  apiurl: https://vercel-3o3l.vercel.app/api/?null0x0f
+  apiurl: https://github.com/Zfour/hexo-github-calendar
   minheight:
     pc: 280px #桌面端最小高度
     mibile: 0px #移动端最小高度

@@ -2,8 +2,6 @@
 title: GDB调试
 abbrlink: 46594b90
 date: 2023-04-15 11:31:20
-tags:
-type: 
 ---
 # GDB调试
 ## 编译c程序
