@@ -6,7 +6,7 @@
   <link href="https://null0x0f.github.io/atom.xml" rel="self"/>
   
   <link href="https://null0x0f.github.io/"/>
-  <updated>2025-10-16T07:22:52.702Z</updated>
+  <updated>2025-10-16T08:54:53.729Z</updated>
   <id>https://null0x0f.github.io/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Git使用方法</title>
+    <link href="https://null0x0f.github.io/posts/e3841ce1.html"/>
+    <id>https://null0x0f.github.io/posts/e3841ce1.html</id>
+    <published>2025-10-16T08:46:50.457Z</published>
+    <updated>2025-10-16T08:54:53.729Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Tortoise-git-和git-使用"><a href="#Tortoise-git-和git-使用" class="headerlink" title="Tortoise git 和git 使用"></a>Tortoise git 和git 使用</h1><h2 id="下载git和Tortoise（Tortoise安装包在-192-168-13-55）的研发部的private的软件工具里面"><a href="#下载git和Tortoise（Tortoise安装包在-192-168-13-55）的研发部的private的软件工具里面" class="headerlink" title="下载git和Tortoise（Tortoise安装包在\\192.168.13.55）的研发部的private的软件工具里面"></a>下载git和Tortoise（Tortoise安装包在<a href="ftp://192/.168.12.19%EF%BC%89">\\192.168.13.55）的研发部的private的软件工具里面</a></h2><p><img src=":/768b5f969fc3492e8dbe54b2a059f137" alt="befc8b84055d43f481bfedf73fe70efb.png"></p><h2 id="1-生成公钥"><a href="#1-生成公钥" class="headerlink" title="1.生成公钥"></a>1.生成公钥</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure><p>生成的公钥一般在Administor目录下的.ssh文件夹内 文件夹内会有下图这个文件，复制这个文件里的内容<br><img src=":/ed8c97249f4e4df9a1e1196f4a0db99a" alt="73a1e1c6fc1bccfb4c68be65301bf597.png"></p><h2 id="2-将公钥复制到自己的gitee或者github仓库中"><a href="#2-将公钥复制到自己的gitee或者github仓库中" class="headerlink" title="2.将公钥复制到自己的gitee或者github仓库中"></a>2.将公钥复制到自己的gitee或者github仓库中</h2><h3 id="gitee的话就个人主页里有个设置点击设置中这个页面添加"><a href="#gitee的话就个人主页里有个设置点击设置中这个页面添加" class="headerlink" title="gitee的话就个人主页里有个设置点击设置中这个页面添加"></a>gitee的话就个人主页里有个设置点击设置中这个页面添加</h3><p><img src=":/32d01630a53c434e8850d3da796edb62" alt="202d533127dc037fcddbb99992cce45f.png"></p><h3 id="github："><a href="#github：" class="headerlink" title="github："></a>github：</h3><p><img src=":/17695d4f680d46b590c766e286f8fcab" alt="23910bc17b639124f04e1fd796b40331.png"><br><img src=":/0d63db28d45b42bb940a64b2a391810d" alt="adcff6a2d4999896e6a79b288a5d09f7.png"></p><h2 id="3-建立仓库"><a href="#3-建立仓库" class="headerlink" title="3.建立仓库"></a>3.建立仓库</h2><h3 id="找到要创建仓库的文件夹，右击后-点击git在这里创建版本库"><a href="#找到要创建仓库的文件夹，右击后-点击git在这里创建版本库" class="headerlink" title="找到要创建仓库的文件夹，右击后 点击git在这里创建版本库"></a>找到要创建仓库的文件夹，右击后 点击git在这里创建版本库</h3><p><img src=":/f1c0e2f751b24b71b0bdd595cacc4251" alt="9536a99792eacbc3dc6bf2687a098125.png"></p><h3 id="找到设置"><a href="#找到设置" class="headerlink" title="找到设置"></a>找到设置</h3><p><img src=":/10e8970ffb9f4c5d8f294f0499330e05" alt="407dc2694d6766bb80a130ef2eee7258.png"></p><h2 id="找到远端"><a href="#找到远端" class="headerlink" title="找到远端"></a>找到远端</h2><p><img src=":/838f220bdc3d4be1aee5dc0dfaf2cee8" alt="85574f02a9fc3faaddcf47e90fe83e11.png"><br><strong>这里需要填写url和putty密匙</strong></p><h1 id="4-url的获取"><a href="#4-url的获取" class="headerlink" title="4.url的获取"></a>4.url的获取</h1><h2 id="找到你要传输的仓库"><a href="#找到你要传输的仓库" class="headerlink" title="找到你要传输的仓库"></a>找到你要传输的仓库</h2><p><img src=":/686b6fab3ee2400aa39284ff5b36e32d" alt="47ec24296601721c278cc6b3f09714a2.png"></p><h2 id="这里必须是你和别人合作的或者是自己的仓库"><a href="#这里必须是你和别人合作的或者是自己的仓库" class="headerlink" title="这里必须是你和别人合作的或者是自己的仓库"></a>这里必须是你和别人合作的或者是自己的仓库</h2><p>点击克隆下载<br><img src=":/8ba9678bc689460aa91ab38a6074a989" alt="eb1337df7214d6b9f1748b43427e6b3b.png"><br>复制图中圈出的那一行<br><img src=":/1103f08da7d04a2a90e9e10f37d6e192" alt="cfa61a3cb3c2d52cca53bd0f3fb3409d.png"></p><h2 id="把这个添加到刚刚那个页面-类似于下图"><a href="#把这个添加到刚刚那个页面-类似于下图" class="headerlink" title="把这个添加到刚刚那个页面 类似于下图"></a>把这个添加到刚刚那个页面 类似于下图</h2><p><img src=":/7ff7ecce62e642658243f74d20defa9d" alt="7d703b7ea965715266035c523b649076.png"></p><h1 id="5-获取putty密匙"><a href="#5-获取putty密匙" class="headerlink" title="5.获取putty密匙"></a>5.获取putty密匙</h1><p>在开始菜单找到Tortoise 点击<br><img src=":/951d2c9da172476ba5d7ef0d245237db" alt="f511a35a85631f96d84558eb0ddc555a.png"></p><h2 id="再点击load"><a href="#再点击load" class="headerlink" title="再点击load"></a>再点击load</h2><p><img src=":/bf779dcf66924a8ca24dc42656dc645e" alt="9afb54b17af8fb88e7be5fbbc20c4c51.png"></p><p>&nbsp;</p><h2 id="进去之后，选择刚刚的公钥文件"><a href="#进去之后，选择刚刚的公钥文件" class="headerlink" title="进去之后，选择刚刚的公钥文件"></a>进去之后，选择刚刚的公钥文件</h2><p><img src=":/15ae6a111115489b933ab42e5f2436bf" alt="f13de7570a69833a4d0464763a8b46fb.png"><br>这边文件类型要选allfiles！！！</p><p>&nbsp;</p><h2 id="选择完后把密码填写完后再选save-private-key"><a href="#选择完后把密码填写完后再选save-private-key" class="headerlink" title="选择完后把密码填写完后再选save private key"></a>选择完后把密码填写完后再选save private key</h2><p><img src=":/2f88feec322c4f95b07b875c5c4d8ec1" alt="20c68252171f4411ce14dae12b3fe9fe.png"></p><p>&nbsp;</p><p>&nbsp;</p><h2 id="然后会在你刚刚保存的文件夹里有个-ppk文件-我们回到一开始的远端界面去"><a href="#然后会在你刚刚保存的文件夹里有个-ppk文件-我们回到一开始的远端界面去" class="headerlink" title="然后会在你刚刚保存的文件夹里有个.ppk文件 我们回到一开始的远端界面去"></a>然后会在你刚刚保存的文件夹里有个.ppk文件 我们回到一开始的远端界面去</h2><p><img src=":/774df6e129794715a7596a5fce3c814b" alt="82c20a735491994fc719cd8eb9a51c5f.png"><br>选择刚刚生成的.ppk文件 点击应用就可以了</p><h2 id="6-使用"><a href="#6-使用" class="headerlink" title="6.使用"></a>6.使用</h2><h3 id="先从远端拉取代码"><a href="#先从远端拉取代码" class="headerlink" title="先从远端拉取代码"></a>先从远端拉取代码</h3><p><img src=":/453efe5305414ded9e41452eea870a8e" alt="99a6e1c65fa5c13f6286545e129acfd1.png"><br><img src=":/833227a6ab67434bb928ce45396e2d74" alt="9e5f4a9ed7f3c0b18a9c6cc05ee2f47a.png"><br>拉取这边一定要选自动加载putty密钥</p><h3 id="拉取结束后有内容更新一定要先选提交"><a href="#拉取结束后有内容更新一定要先选提交" class="headerlink" title="拉取结束后有内容更新一定要先选提交"></a>拉取结束后有内容更新一定要先选提交</h3><p><img src=":/30364f28b18c4bf7b467614d711f1097" alt="52106d5b19177c9b38228f07d4ba242b.png"><br><img src=":/6819aec13efd42a6b101830dd2cedb7b" alt="dc307a6c589bb0838893363ea561e8c0.png"></p><h3 id="最后再推送到远程仓库"><a href="#最后再推送到远程仓库" class="headerlink" title="最后再推送到远程仓库"></a>最后再推送到远程仓库</h3><p><img src=":/fa56e651f9d540bd9c88d9c8aa7f6a1e" alt="ad8684303607c89620e77e6a488ebced.png"></p><p><img src=":/b188f5df0f134f0bb10cb50ba0c20579" alt="d5e709dd44e0d21dd1ec72207b5dc730.png"></p><h3 id="推送的时候要看清楚分支"><a href="#推送的时候要看清楚分支" class="headerlink" title="推送的时候要看清楚分支"></a>推送的时候要看清楚分支</h3><p><img src=":/13eba3a75aa54cbaa88f296fcc8bad39" alt="ef7bb8a86ae29b5aa2e7b885e59b9900.png"></p><h2 id="流程-lt-span-gt-先拉取最新的仓库内容—-gt-有更新在提交，提交完后再推送-lt-span-gt"><a href="#流程-lt-span-gt-先拉取最新的仓库内容—-gt-有更新在提交，提交完后再推送-lt-span-gt" class="headerlink" title="流程&lt;/span&gt; 先拉取最新的仓库内容—-&gt;有更新在提交，提交完后再推送&lt;/span&gt;"></a><span style="color: rgb(224, 62, 45);"><span style="color: rgb(0, 0, 0);"><span style="color: rgb(255, 255, 255);">流程</span>&lt;/span&gt; 先拉取最新的仓库内容—-&gt;有更新在提交，提交完后再推送&lt;/span&gt;</h2>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Tortoise-git-和git-使用&quot;&gt;&lt;a href=&quot;#Tortoise-git-和git-使用&quot; class=&quot;headerlink&quot; title=&quot;Tortoise git 和git 使用&quot;&gt;&lt;/a&gt;Tortoise git 和git 使用&lt;/h1&gt;&lt;</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>设计模式期末</title>
@@ -57,26 +77,6 @@
   </entry>
   
   <entry>
-    <title>数据结构</title>
-    <link href="https://null0x0f.github.io/posts/79666db.html"/>
-    <id>https://null0x0f.github.io/posts/79666db.html</id>
-    <published>2025-10-16T07:22:52.701Z</published>
-    <updated>2025-10-16T07:22:52.701Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><h2 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h2><h3 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h3><p>树上任意节点的左子树和右子树高度之差不超过1，超过则视为不平衡<br>节点平衡因子 = 左子树高-右子树高</p><p>特性：左子树节点值&lt;根节点值&lt;左子树节点值</p><h3 id="调整最小不平衡子树"><a href="#调整最小不平衡子树" class="headerlink" title="调整最小不平衡子树"></a>调整最小不平衡子树</h3><p>LL 新插入一个节点在左子树的左节点<br>LR<br>RR<br>RL<br>判断方法：从最小的不平衡节点开始操作</p><p>LL：进行右旋，需要将最小的不平衡节点往下三个节点中间的节点作为新的根节点其他两个节点变成左右子树</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;数据结构&quot;&gt;&lt;a href=&quot;#数据结构&quot; class=&quot;headerlink&quot; title=&quot;数据结构&quot;&gt;&lt;/a&gt;数据结构&lt;/h1&gt;&lt;h2 id=&quot;平衡二叉树&quot;&gt;&lt;a href=&quot;#平衡二叉树&quot; class=&quot;headerlink&quot; title=&quot;平衡二叉树&quot;&gt;</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>jsp_final</title>
     <link href="https://null0x0f.github.io/posts/36dc4835.html"/>
     <id>https://null0x0f.github.io/posts/36dc4835.html</id>
@@ -89,6 +89,26 @@
       
       
     <summary type="html">&lt;h1 id=&quot;jsp-finaltest&quot;&gt;&lt;a href=&quot;#jsp-finaltest&quot; class=&quot;headerlink&quot; title=&quot;jsp_finaltest&quot;&gt;&lt;/a&gt;jsp_finaltest&lt;/h1&gt;&lt;h2 id=&quot;jsp执行过程&quot;&gt;&lt;a href=&quot;#js</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>数据结构</title>
+    <link href="https://null0x0f.github.io/posts/79666db.html"/>
+    <id>https://null0x0f.github.io/posts/79666db.html</id>
+    <published>2025-10-16T07:22:52.701Z</published>
+    <updated>2025-10-16T07:22:52.701Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><h2 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h2><h3 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h3><p>树上任意节点的左子树和右子树高度之差不超过1，超过则视为不平衡<br>节点平衡因子 = 左子树高-右子树高</p><p>特性：左子树节点值&lt;根节点值&lt;左子树节点值</p><h3 id="调整最小不平衡子树"><a href="#调整最小不平衡子树" class="headerlink" title="调整最小不平衡子树"></a>调整最小不平衡子树</h3><p>LL 新插入一个节点在左子树的左节点<br>LR<br>RR<br>RL<br>判断方法：从最小的不平衡节点开始操作</p><p>LL：进行右旋，需要将最小的不平衡节点往下三个节点中间的节点作为新的根节点其他两个节点变成左右子树</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;数据结构&quot;&gt;&lt;a href=&quot;#数据结构&quot; class=&quot;headerlink&quot; title=&quot;数据结构&quot;&gt;&lt;/a&gt;数据结构&lt;/h1&gt;&lt;h2 id=&quot;平衡二叉树&quot;&gt;&lt;a href=&quot;#平衡二叉树&quot; class=&quot;headerlink&quot; title=&quot;平衡二叉树&quot;&gt;</summary>
       
     
     
