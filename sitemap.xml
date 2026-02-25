@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://null0x0f.github.io/posts/8c681f96.html</loc>
+    
+    <lastmod>2026-02-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://null0x0f.github.io/posts/76238ee1.html</loc>
+    
+    <lastmod>2026-02-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://null0x0f.github.io/posts/7277e24d.html</loc>
     
     <lastmod>2026-01-23</lastmod>
@@ -85,7 +103,7 @@
 
   <url>
     <loc>https://null0x0f.github.io/</loc>
-    <lastmod>2026-01-23</lastmod>
+    <lastmod>2026-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
