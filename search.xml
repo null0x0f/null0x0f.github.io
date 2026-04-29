@@ -351,22 +351,22 @@
     
     
     <entry>
-      <title>标签</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title>友链</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<p>欢迎交换友链。</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="literal">NULL</span><span class="string">&#x27;blog</span></span><br><span class="line"><span class="string">  link: https://null0x0f.github.io</span></span><br><span class="line"><span class="string">  avatar: https://img.cdn1.vip/i/69f1ad36acf1c_1777446198.webp</span></span><br><span class="line"><span class="string">  descr: 技术笔记和折腾记录</span></span><br></pre></td></tr></table></figure>]]></content>
       
     </entry>
     
     
     
     <entry>
-      <title>友链</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
+      <title>标签</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
       
-        <content type="html"><![CDATA[<p>欢迎交换友链。</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="literal">NULL</span><span class="string">&#x27;blog</span></span><br><span class="line"><span class="string">  link: https://null0x0f.github.io</span></span><br><span class="line"><span class="string">  avatar: https://img.cdn1.vip/i/69f1ad36acf1c_1777446198.webp</span></span><br><span class="line"><span class="string">  descr: 技术笔记和折腾记录</span></span><br></pre></td></tr></table></figure>]]></content>
+        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
