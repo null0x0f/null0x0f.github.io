@@ -183,6 +183,27 @@
   </url>
   
   <url>
+    <loc>https://null0x0f.github.io/tags/Antigravity/</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://null0x0f.github.io/tags/Ubuntu/</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://null0x0f.github.io/tags/GitHub/</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://null0x0f.github.io/tags/AI%E8%BE%85%E5%8A%A9%E7%BC%96%E7%A8%8B/</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
@@ -205,27 +226,6 @@
   
   <url>
     <loc>https://null0x0f.github.io/tags/Cursor/</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://null0x0f.github.io/tags/Antigravity/</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://null0x0f.github.io/tags/Ubuntu/</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://null0x0f.github.io/tags/GitHub/</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -381,14 +381,14 @@
   </url>
   
   <url>
-    <loc>https://null0x0f.github.io/categories/AI/</loc>
+    <loc>https://null0x0f.github.io/categories/%E5%B7%A5%E5%85%B7/</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://null0x0f.github.io/categories/%E5%B7%A5%E5%85%B7/</loc>
+    <loc>https://null0x0f.github.io/categories/AI/</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
