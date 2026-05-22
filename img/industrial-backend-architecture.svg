@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="720" viewBox="0 0 1180 720" role="img" aria-labelledby="title desc">
+  <title id="title">工业数据服务后端系统架构图</title>
+  <desc id="desc">展示 HTTP、Handler、BatchIngestor、PostgreSQL、AlarmManager 等核心模块关系。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .title { font: 700 30px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #0f172a; }
+      .sub { font: 15px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #475569; }
+      .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 14; }
+      .box-blue { fill: #eff6ff; stroke: #60a5fa; }
+      .box-green { fill: #ecfdf5; stroke: #34d399; }
+      .box-amber { fill: #fffbeb; stroke: #f59e0b; }
+      .box-red { fill: #fef2f2; stroke: #f87171; }
+      .box-purple { fill: #f5f3ff; stroke: #8b5cf6; }
+      .label { font: 700 18px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #111827; }
+      .small { font: 14px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #334155; }
+      .line { stroke: #2563eb; stroke-width: 2.4; fill: none; marker-end: url(#arrow); }
+      .muted-line { stroke: #94a3b8; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .note { font: 13px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #64748b; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1180" height="720"/>
+  <text class="title" x="50" y="54">工业数据服务后端系统架构图</text>
+  <text class="sub" x="50" y="82">HTTP 接入、异步批量写入、动态查询、数据库报警监听和实时推送的整体关系</text>
+
+  <rect class="box box-blue" x="55" y="135" width="190" height="90"/>
+  <text class="label" x="95" y="172">上位机 / 前端</text>
+  <text class="small" x="87" y="199">HTTP JSON / SSE</text>
+
+  <rect class="box box-blue" x="310" y="120" width="210" height="120"/>
+  <text class="label" x="352" y="160">Pistache HTTP</text>
+  <text class="small" x="354" y="188">Router 路由分发</text>
+  <text class="small" x="356" y="214">CORS / 请求解析</text>
+
+  <rect class="box" x="585" y="80" width="235" height="95"/>
+  <text class="label" x="645" y="118">AuthHandler</text>
+  <text class="small" x="625" y="146">登录 / JWT 签发 / 校验</text>
+
+  <rect class="box" x="585" y="195" width="235" height="95"/>
+  <text class="label" x="645" y="233">DataHandler</text>
+  <text class="small" x="618" y="261">数据接收 / 权限校验</text>
+
+  <rect class="box" x="585" y="310" width="235" height="100"/>
+  <text class="label" x="614" y="348">Query / CrudHandler</text>
+  <text class="small" x="614" y="376">查询 / 动态 CRUD / 分页</text>
+
+  <rect class="box" x="585" y="430" width="235" height="90"/>
+  <text class="label" x="640" y="468">AlarmHandler</text>
+  <text class="small" x="636" y="496">SSE 订阅入口</text>
+
+  <rect class="box box-green" x="895" y="145" width="220" height="105"/>
+  <text class="label" x="955" y="184">ioPool</text>
+  <text class="small" x="928" y="213">异步查询 / 登录任务</text>
+
+  <rect class="box box-green" x="895" y="280" width="220" height="105"/>
+  <text class="label" x="946" y="319">ingestPool</text>
+  <text class="small" x="928" y="348">写入请求预处理</text>
+
+  <rect class="box box-amber" x="300" y="455" width="235" height="115"/>
+  <text class="label" x="352" y="494">BatchIngestor</text>
+  <text class="small" x="334" y="523">内存队列 / 批量写入</text>
+  <text class="small" x="342" y="548">失败降级为逐条写入</text>
+
+  <rect class="box box-amber" x="585" y="575" width="235" height="85"/>
+  <text class="label" x="644" y="612">Worker</text>
+  <text class="small" x="625" y="640">独立长期 DB 连接</text>
+
+  <rect class="box box-purple" x="895" y="450" width="220" height="115"/>
+  <text class="label" x="947" y="489">PostgreSQL</text>
+  <text class="small" x="932" y="518">业务数据 / json_agg</text>
+  <text class="small" x="924" y="543">LISTEN / NOTIFY</text>
+
+  <rect class="box box-red" x="55" y="575" width="220" height="85"/>
+  <text class="label" x="108" y="612">AlarmManager</text>
+  <text class="small" x="86" y="640">报警队列 / 限流 / 广播</text>
+
+  <rect class="box box-red" x="55" y="455" width="220" height="75"/>
+  <text class="label" x="118" y="488">飞书通知</text>
+  <text class="small" x="102" y="514">Webhook 推送</text>
+
+  <path class="line" d="M245 180 L310 180"/>
+  <path class="line" d="M520 175 L585 128"/>
+  <path class="line" d="M520 188 L585 242"/>
+  <path class="line" d="M520 202 L585 360"/>
+  <path class="line" d="M520 216 L585 475"/>
+  <path class="line" d="M820 128 C855 128 860 190 895 198"/>
+  <path class="line" d="M820 360 C855 360 860 205 895 198"/>
+  <path class="line" d="M820 242 L895 332"/>
+  <path class="line" d="M895 332 C720 360 650 455 535 510"/>
+  <path class="line" d="M535 535 C570 575 585 600 585 617"/>
+  <path class="line" d="M820 617 C850 617 870 520 895 508"/>
+  <path class="line" d="M895 510 C700 530 530 620 275 620"/>
+  <path class="line" d="M275 618 L245 492"/>
+  <path class="line" d="M165 575 L165 530"/>
+  <path class="muted-line" d="M165 575 C170 360 210 210 310 190"/>
+  <text class="note" x="185" y="566">SSE /api/alarm</text>
+
+  <rect class="box" x="300" y="610" width="190" height="55"/>
+  <text class="small" x="326" y="634">metadata.json</text>
+  <text class="note" x="326" y="654">表映射 / 字段白名单</text>
+  <path class="muted-line" d="M395 610 L650 285"/>
+
+  <rect class="box" x="55" y="285" width="190" height="70"/>
+  <text class="small" x="93" y="314">config.json</text>
+  <text class="note" x="84" y="336">端口 / 线程 / DB / JWT</text>
+  <path class="muted-line" d="M245 320 L310 205"/>
+</svg>

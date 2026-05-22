@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="760" viewBox="0 0 1180 760" role="img" aria-labelledby="title desc">
+  <title id="title">工业数据服务数据写入流程图</title>
+  <desc id="desc">展示请求入队、后台批量写入、失败降级为逐条写入的流程。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .title { font: 700 30px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #0f172a; }
+      .sub { font: 15px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #475569; }
+      .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 14; }
+      .blue { fill: #eff6ff; stroke: #60a5fa; }
+      .green { fill: #ecfdf5; stroke: #34d399; }
+      .amber { fill: #fffbeb; stroke: #f59e0b; }
+      .red { fill: #fef2f2; stroke: #f87171; }
+      .purple { fill: #f5f3ff; stroke: #8b5cf6; }
+      .label { font: 700 18px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #111827; }
+      .small { font: 14px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #334155; }
+      .num { font: 700 15px Arial, sans-serif; fill: #ffffff; }
+      .badge { fill: #2563eb; }
+      .line { stroke: #2563eb; stroke-width: 2.4; fill: none; marker-end: url(#arrow); }
+      .fail { stroke: #dc2626; stroke-width: 2.4; fill: none; marker-end: url(#arrow); stroke-dasharray: 7 5; }
+      .ok { stroke: #059669; stroke-width: 2.4; fill: none; marker-end: url(#arrow); }
+      .note { font: 13px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #64748b; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1180" height="760"/>
+  <text class="title" x="50" y="54">数据写入流程图</text>
+  <text class="sub" x="50" y="82">请求线程快速接收并入队，后台 Worker 批量落库；批量失败时自动降级为逐条补偿写入</text>
+
+  <rect class="box blue" x="70" y="135" width="210" height="90"/>
+  <circle class="badge" cx="95" cy="155" r="15"/>
+  <text class="num" x="90" y="160">1</text>
+  <text class="label" x="126" y="166">上位机上报</text>
+  <text class="small" x="105" y="196">POST /api/test_data</text>
+
+  <rect class="box blue" x="350" y="135" width="220" height="90"/>
+  <circle class="badge" cx="375" cy="155" r="15"/>
+  <text class="num" x="370" y="160">2</text>
+  <text class="label" x="407" y="166">JWT 校验</text>
+  <text class="small" x="390" y="196">提取 username / client_id</text>
+
+  <rect class="box green" x="640" y="135" width="235" height="90"/>
+  <circle class="badge" cx="665" cy="155" r="15"/>
+  <text class="num" x="660" y="160">3</text>
+  <text class="label" x="700" y="166">DataHandler</text>
+  <text class="small" x="675" y="196">解析 JSON / 校验 data 数组</text>
+
+  <rect class="box green" x="945" y="135" width="180" height="90"/>
+  <circle class="badge" cx="970" cy="155" r="15"/>
+  <text class="num" x="965" y="160">4</text>
+  <text class="label" x="1005" y="166">MetaManager</text>
+  <text class="small" x="980" y="196">表名 / 字段 / 白名单</text>
+
+  <rect class="box amber" x="640" y="300" width="235" height="95"/>
+  <circle class="badge" cx="665" cy="320" r="15"/>
+  <text class="num" x="660" y="325">5</text>
+  <text class="label" x="700" y="332">入队</text>
+  <text class="small" x="682" y="360">转换为 RowTask</text>
+  <text class="small" x="682" y="382">写入 BatchIngestor 队列</text>
+
+  <rect class="box" x="350" y="300" width="220" height="95"/>
+  <circle class="badge" cx="375" cy="320" r="15"/>
+  <text class="num" x="370" y="325">6</text>
+  <text class="label" x="412" y="332">立即响应</text>
+  <text class="small" x="388" y="360">返回 accepted 和队列统计</text>
+  <text class="note" x="393" y="382">HTTP 请求不等待落库完成</text>
+
+  <rect class="box amber" x="70" y="465" width="235" height="105"/>
+  <circle class="badge" cx="95" cy="485" r="15"/>
+  <text class="num" x="90" y="490">7</text>
+  <text class="label" x="130" y="497">后台 Worker</text>
+  <text class="small" x="110" y="525">pullBatch()</text>
+  <text class="small" x="110" y="550">按 table 分组</text>
+
+  <rect class="box purple" x="375" y="465" width="235" height="105"/>
+  <circle class="badge" cx="400" cy="485" r="15"/>
+  <text class="num" x="395" y="490">8</text>
+  <text class="label" x="435" y="497">事务批量写入</text>
+  <text class="small" x="412" y="525">BEGIN</text>
+  <text class="small" x="412" y="550">INSERT ... ON CONFLICT DO NOTHING</text>
+
+  <rect class="box green" x="685" y="445" width="205" height="85"/>
+  <circle class="badge" cx="710" cy="465" r="15"/>
+  <text class="num" x="705" y="470">9</text>
+  <text class="label" x="750" y="477">成功提交</text>
+  <text class="small" x="730" y="505">COMMIT / processed 增加</text>
+
+  <rect class="box red" x="685" y="570" width="205" height="100"/>
+  <circle class="badge" cx="710" cy="590" r="15"/>
+  <text class="num" x="705" y="595">10</text>
+  <text class="label" x="750" y="602">失败降级</text>
+  <text class="small" x="730" y="630">ROLLBACK</text>
+  <text class="small" x="730" y="652">逐条 INSERT 补偿</text>
+
+  <rect class="box purple" x="960" y="465" width="170" height="105"/>
+  <text class="label" x="1005" y="505">PostgreSQL</text>
+  <text class="small" x="995" y="535">最终持久化</text>
+
+  <path class="line" d="M280 180 L350 180"/>
+  <path class="line" d="M570 180 L640 180"/>
+  <path class="line" d="M875 180 L945 180"/>
+  <path class="line" d="M1035 225 C1035 300 910 340 875 348"/>
+  <path class="line" d="M640 348 L570 348"/>
+  <path class="line" d="M350 348 C275 345 240 250 230 225"/>
+  <path class="line" d="M640 382 C500 430 360 490 305 515"/>
+  <path class="line" d="M305 518 L375 518"/>
+  <path class="ok" d="M610 510 L685 488"/>
+  <path class="ok" d="M890 488 L960 518"/>
+  <path class="fail" d="M610 545 C645 570 660 606 685 620"/>
+  <path class="line" d="M890 620 C945 610 965 570 990 548"/>
+
+  <text class="note" x="620" y="488">批量成功</text>
+  <text class="note" x="615" y="588">批量失败</text>
+  <text class="note" x="78" y="620">关键收益：削峰填谷、降低请求阻塞、隔离脏数据影响</text>
+</svg>

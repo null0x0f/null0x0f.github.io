@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>工业数据服务后端项目复盘</title>
+      <link href="/posts/f69af7f7.html"/>
+      <url>/posts/f69af7f7.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-工业数据服务后端项目复盘：从高频数据写入到实时报警推送"><a href="#C-工业数据服务后端项目复盘：从高频数据写入到实时报警推送" class="headerlink" title="C++ 工业数据服务后端项目复盘：从高频数据写入到实时报警推送"></a>C++ 工业数据服务后端项目复盘：从高频数据写入到实时报警推送</h1><h2 id="1-项目背景"><a href="#1-项目背景" class="headerlink" title="1. 项目背景"></a>1. 项目背景</h2><p>这个项目是一个面向工业设备和上位机系统的数据服务后端，主要负责接收电解槽、MEA、CCM 等生产和测试环节产生的数据，并将这些数据稳定写入 PostgreSQL 数据库。</p><p>系统除了基础的数据入库，还提供了动态查询、更新、删除、用户登录认证、设备写入权限控制、实时报警推送等能力。整体目标是让前端大屏、上位机、生产管理系统能够通过统一的 HTTP API 访问后端数据。</p><h2 id="2-技术栈"><a href="#2-技术栈" class="headerlink" title="2. 技术栈"></a>2. 技术栈</h2><div class="table-container"><table><thead><tr><th>模块</th><th>技术</th></tr></thead><tbody><tr><td>开发语言</td><td>C++17</td></tr><tr><td>HTTP 框架</td><td>Pistache</td></tr><tr><td>数据库</td><td>PostgreSQL</td></tr><tr><td>数据库访问</td><td>libpq 原生 C API</td></tr><tr><td>JSON 处理</td><td>nlohmann/json</td></tr><tr><td>并发处理</td><td>自定义 ThreadPool、后台 Worker</td></tr><tr><td>数据写入</td><td>批量队列、事务提交、失败降级</td></tr><tr><td>认证</td><td>JWT、libsodium 密码校验</td></tr><tr><td>日志</td><td>spdlog</td></tr><tr><td>实时推送</td><td>SSE</td></tr><tr><td>外部通知</td><td>libcurl、飞书机器人 Webhook</td></tr><tr><td>构建系统</td><td>CMake</td></tr><tr><td>配置管理</td><td>JSON 配置文件</td></tr><tr><td>扩展依赖</td><td>OpenCV</td></tr></tbody></table></div><p>这套技术栈的特点是比较偏底层，尤其是数据库访问没有使用 ORM，而是直接基于 libpq 封装，这样可以更明确地控制 SQL、连接生命周期和性能开销。</p><h2 id="3-系统整体架构"><a href="#3-系统整体架构" class="headerlink" title="3. 系统整体架构"></a>3. 系统整体架构</h2><p>系统可以分成四层：</p><p><img src="/img/industrial-backend-architecture.svg" alt="系统架构图"></p><p>HTTP 层负责接收请求和路由分发，Handler 层负责业务处理。查询类接口通过数据库连接池访问 PostgreSQL，写入类接口则先进入内存队列，再由后台 Worker 批量写入数据库。</p><p>这样设计的好处是：上位机上报数据时不需要等待数据库完整写入，可以快速返回；后台再统一进行批处理，提高吞吐能力。</p><h2 id="4-核心模块设计"><a href="#4-核心模块设计" class="headerlink" title="4. 核心模块设计"></a>4. 核心模块设计</h2><h3 id="4-1-配置管理"><a href="#4-1-配置管理" class="headerlink" title="4.1 配置管理"></a>4.1 配置管理</h3><p>项目通过 config/config.json 管理运行参数，包括服务端口、线程数、数据库连接串、JWT 参数、写入队列大小、批量写入大小、飞书机器人地址等。</p><p>这样可以避免把环境参数写死在代码里，方便在开发、测试、部署环境中切换。</p><h3 id="4-2-元数据驱动的数据映射"><a href="#4-2-元数据驱动的数据映射" class="headerlink" title="4.2 元数据驱动的数据映射"></a>4.2 元数据驱动的数据映射</h3><p>项目中有一个比较关键的配置文件：metadata.json。</p><p>它定义了逻辑表名、真实数据库表名、主键、字段映射和写入白名单。例如前端或上位机传入的是中文字段名，后端会根据元数据映射到数据库字段。</p><p>这种设计带来了几个好处：</p><ul><li>前端字段和数据库字段解耦；</li><li>动态 CRUD 可以通过白名单限制表和字段；</li><li>不同业务表可以复用同一套写入逻辑；</li><li>设备写入权限可以在配置层控制。</li></ul><h3 id="4-3-批量写入引擎"><a href="#4-3-批量写入引擎" class="headerlink" title="4.3 批量写入引擎"></a>4.3 批量写入引擎</h3><p>数据写入没有直接在 HTTP 请求线程里执行，而是进入 BatchIngestor 队列。</p><p>写入流程大致是：</p><ol><li>上位机调用 /api/test_data；</li><li>后端校验 JWT，并提取 client_id；</li><li>根据 metadata.json 校验表名和写入权限；</li><li>将数据转换成 RowTask 放入队列；</li><li>后台 Worker 从队列中批量取数据；</li><li>按表分组；</li><li>使用事务批量写入 PostgreSQL；</li><li>如果批量写入失败，则降级为逐条写入。</li></ol><p>数据写入流程图：</p><p><img src="/img/industrial-backend-ingest-flow.svg" alt="数据写入流程图"></p><p>这个设计解决了高频数据上报时 HTTP 请求被数据库阻塞的问题，也避免了单条插入带来的性能浪费。</p><h3 id="4-4-数据库连接管理"><a href="#4-4-数据库连接管理" class="headerlink" title="4.4 数据库连接管理"></a>4.4 数据库连接管理</h3><p>查询接口使用连接池，连接通过 RAII 的方式自动归还。每次获取连接时会检查连接是否有效，如果连接断开，会尝试重连或重建连接。</p><p>写入 Worker 则使用独立长期连接，避免后台写入线程和前台查询线程争抢同一个连接池。</p><h3 id="4-5-动态-CRUD"><a href="#4-5-动态-CRUD" class="headerlink" title="4.5 动态 CRUD"></a>4.5 动态 CRUD</h3><p>系统提供了通用接口：</p><ul><li>POST /api/query</li><li>PUT /api/update</li><li>POST /api/delete</li></ul><p>这些接口不是直接拼接任意 SQL，而是先通过 metadata.json 校验逻辑表和字段，再由后端生成参数化 SQL。</p><p>这样既保留了动态查询的灵活性，也降低了 SQL 注入风险。</p><h3 id="4-6-JWT-认证与设备权限"><a href="#4-6-JWT-认证与设备权限" class="headerlink" title="4.6 JWT 认证与设备权限"></a>4.6 JWT 认证与设备权限</h3><p>登录接口 /api/login 支持普通用户和上位机设备两种模式。</p><p>普通用户 Token 使用配置文件中的过期时间；上位机 Token 会额外带上 client_id，有效期默认一年。</p><p>设备上报数据时，后端会读取 Token 中的 client_id，再和 metadata.json 中的 write_permission 进行匹配。这样可以限制不同设备只能写入自己被授权的数据表。</p><h3 id="4-7-实时报警推送"><a href="#4-7-实时报警推送" class="headerlink" title="4.7 实时报警推送"></a>4.7 实时报警推送</h3><p>报警模块不是直接在数据写入逻辑里硬编码判断，而是通过 PostgreSQL 的 LISTEN / NOTIFY 机制接收数据库侧产生的报警事件。</p><p>后端的 PgListener 会监听 electrolyzer_issue_channel。当数据库发出通知时，后端解析报警 JSON，然后交给 AlarmManager 处理。</p><p>AlarmManager 做了三件事：</p><ul><li>通过 SSE 推送给前端大屏；</li><li>通过飞书机器人发送外部通知；</li><li>对相同 rate_limit_key 做 20 秒限流，避免重复报警刷屏。</li></ul><p>报警链路图：</p><p><img src="/img/industrial-backend-alarm-flow.svg" alt="报警链路图"></p><h2 id="5-项目中的工程思考"><a href="#5-项目中的工程思考" class="headerlink" title="5. 项目中的工程思考"></a>5. 项目中的工程思考</h2><p>这个项目里比较有价值的点，不是单独某个接口，而是整体工程结构：</p><p>第一，写入链路做了异步化。HTTP 请求只负责接收和入队，数据库写入交给后台 Worker，降低了上位机请求超时的风险。</p><p>第二，使用元数据驱动表结构。新增业务表时，可以更多地通过配置扩展，而不是复制一套新的 Handler。</p><p>第三，数据库操作尽量做了安全边界。动态查询、更新、删除都要求表名和字段经过白名单校验，避免完全开放 SQL 能力。</p><p>第四，报警链路和业务写入链路解耦。报警由数据库通知触发，后端负责转发和限流，这样后续扩展短信、邮件、企业微信等渠道也比较自然。</p><h2 id="6-当前不足与后续优化"><a href="#6-当前不足与后续优化" class="headerlink" title="6. 当前不足与后续优化"></a>6. 当前不足与后续优化</h2><p>这个项目目前已经具备核心能力，但仍然有一些可以继续优化的地方：</p><ul><li>部分接口目前还没有统一接入 JWT 鉴权，例如 Flex CRUD 接口；</li><li>写入队列是内存队列，服务异常退出时可能丢失未落库数据；</li><li>日志配置中有滚动日志参数，但当前代码还没有真正接入 rotating sink；</li><li>server.host 配置目前被读取，但实际服务绑定的是 0.0.0.0；</li><li>OPTIONS 预检路由还不是全路由自动处理；</li><li>后续可以考虑增加单元测试、接口测试和部署脚本。</li></ul><h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7. 总结"></a>7. 总结</h2><p>这个后端项目主要完成了工业数据服务中的几个关键问题：高频数据接入、批量写入、动态查询、权限控制、实时报警和外部通知。</p><p>对我来说，这个项目的价值不仅在于实现了一组 API，更重要的是完整经历了一个后端服务从路由设计、配置管理、数据库封装、并发写入、安全控制到报警推送的工程化过程。</p><p>它也让我更清楚地理解了：在实际业务系统里，稳定性、可维护性和可扩展性往往比单个功能点更重要。一个好的后端服务，不只是能把数据写进去，还要能在高频请求、异常数据、数据库波动、权限隔离和报警通知这些场景下持续工作。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 项目 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 工业控制 </tag>
+            
+            <tag> PLC </tag>
+            
+            <tag> 数据可视化 </tag>
+            
+            <tag> 数据库 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Ubuntu 服务器 GRUB 引导故障修复与排查记录</title>
       <link href="/posts/8c681f96.html"/>
       <url>/posts/8c681f96.html</url>
@@ -307,22 +338,22 @@
     
     
     <entry>
-      <title></title>
-      <link href="/mainfest.json"/>
-      <url>/mainfest.json</url>
+      <title>关于</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
       
-        <content type="html"><![CDATA[{"name":"null`Blog","short_name":"null","theme_color":"#3b70fc","background_color":"#3b70fc","display":"standalone","scope":"/","start_url":"/","icons":[{"src":"/img/siteicon/code.png","sizes":"16x16","type":"image/png"},{"src":"/img/siteicon/智能手机.png","sizes":"32x32","type":"image/png"},{"src":"/img/siteicon/国际网络.png","sizes":"48x48","type":"image/png"}],"splash_pages":null}]]></content>
+        <content type="html"><![CDATA[<p>这里先放一个关于页占位，后面可以改成你的个人介绍、技术栈、项目经历或者博客说明。</p><h2 id="现在关注"><a href="#现在关注" class="headerlink" title="现在关注"></a>现在关注</h2><ul><li>C/C++ 和系统编程</li><li>Linux、服务器和网络配置</li><li>开发工具、调试和工程效率</li><li>AI 辅助编程实践</li></ul><h2 id="博客内容"><a href="#博客内容" class="headerlink" title="博客内容"></a>博客内容</h2><p>这里会主要记录技术笔记、踩坑过程、配置备忘和一些长期折腾。</p>]]></content>
       
     </entry>
     
     
     
     <entry>
-      <title>关于</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
+      <title></title>
+      <link href="/mainfest.json"/>
+      <url>/mainfest.json</url>
       
-        <content type="html"><![CDATA[<p>这里先放一个关于页占位，后面可以改成你的个人介绍、技术栈、项目经历或者博客说明。</p><h2 id="现在关注"><a href="#现在关注" class="headerlink" title="现在关注"></a>现在关注</h2><ul><li>C/C++ 和系统编程</li><li>Linux、服务器和网络配置</li><li>开发工具、调试和工程效率</li><li>AI 辅助编程实践</li></ul><h2 id="博客内容"><a href="#博客内容" class="headerlink" title="博客内容"></a>博客内容</h2><p>这里会主要记录技术笔记、踩坑过程、配置备忘和一些长期折腾。</p>]]></content>
+        <content type="html"><![CDATA[{"name":"null`Blog","short_name":"null","theme_color":"#3b70fc","background_color":"#3b70fc","display":"standalone","scope":"/","start_url":"/","icons":[{"src":"/img/siteicon/code.png","sizes":"16x16","type":"image/png"},{"src":"/img/siteicon/智能手机.png","sizes":"32x32","type":"image/png"},{"src":"/img/siteicon/国际网络.png","sizes":"48x48","type":"image/png"}],"splash_pages":null}]]></content>
       
     </entry>
     
@@ -351,22 +382,22 @@
     
     
     <entry>
-      <title>友链</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
+      <title>标签</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
       
-        <content type="html"><![CDATA[<p>欢迎交换友链。</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="literal">NULL</span><span class="string">&#x27;blog</span></span><br><span class="line"><span class="string">  link: https://null0x0f.github.io</span></span><br><span class="line"><span class="string">  avatar: https://img.cdn1.vip/i/69f1ad36acf1c_1777446198.webp</span></span><br><span class="line"><span class="string">  descr: 技术笔记和折腾记录</span></span><br></pre></td></tr></table></figure>]]></content>
+        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
     
     
     <entry>
-      <title>标签</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title>友链</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<p>欢迎交换友链。</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="literal">NULL</span><span class="string">&#x27;blog</span></span><br><span class="line"><span class="string">  link: https://null0x0f.github.io</span></span><br><span class="line"><span class="string">  avatar: https://img.cdn1.vip/i/69f1ad36acf1c_1777446198.webp</span></span><br><span class="line"><span class="string">  descr: 技术笔记和折腾记录</span></span><br></pre></td></tr></table></figure>]]></content>
       
     </entry>
     

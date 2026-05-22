@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="700" viewBox="0 0 1180 700" role="img" aria-labelledby="title desc">
+  <title id="title">工业数据服务报警链路图</title>
+  <desc id="desc">展示 PostgreSQL NOTIFY、PgListener、AlarmManager、SSE 和飞书通知链路。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .title { font: 700 30px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #0f172a; }
+      .sub { font: 15px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #475569; }
+      .lane { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1.5; rx: 14; }
+      .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 14; }
+      .blue { fill: #eff6ff; stroke: #60a5fa; }
+      .green { fill: #ecfdf5; stroke: #34d399; }
+      .amber { fill: #fffbeb; stroke: #f59e0b; }
+      .red { fill: #fef2f2; stroke: #f87171; }
+      .purple { fill: #f5f3ff; stroke: #8b5cf6; }
+      .label { font: 700 18px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #111827; }
+      .small { font: 14px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #334155; }
+      .lane-title { font: 700 16px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #334155; }
+      .line { stroke: #2563eb; stroke-width: 2.4; fill: none; marker-end: url(#arrow); }
+      .push { stroke: #dc2626; stroke-width: 2.4; fill: none; marker-end: url(#arrow); }
+      .keep { stroke: #94a3b8; stroke-width: 2; fill: none; marker-end: url(#arrow); stroke-dasharray: 6 6; }
+      .note { font: 13px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #64748b; }
+      .pill { fill: #0f172a; rx: 14; }
+      .pill-text { font: 700 13px "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif; fill: #ffffff; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1180" height="700"/>
+  <text class="title" x="50" y="54">报警链路图</text>
+  <text class="sub" x="50" y="82">数据库侧产生报警事件，后端监听并转发到前端大屏和飞书机器人，同时做限流保护</text>
+
+  <rect class="lane" x="50" y="125" width="250" height="505"/>
+  <text class="lane-title" x="125" y="155">PostgreSQL</text>
+
+  <rect class="lane" x="330" y="125" width="220" height="505"/>
+  <text class="lane-title" x="405" y="155">PgListener</text>
+
+  <rect class="lane" x="580" y="125" width="250" height="505"/>
+  <text class="lane-title" x="655" y="155">AlarmManager</text>
+
+  <rect class="lane" x="860" y="125" width="130" height="505"/>
+  <text class="lane-title" x="905" y="155">SSE</text>
+
+  <rect class="lane" x="1015" y="125" width="115" height="505"/>
+  <text class="lane-title" x="1045" y="155">飞书</text>
+
+  <rect class="box blue" x="875" y="185" width="100" height="62"/>
+  <text class="small" x="893" y="214">前端大屏</text>
+  <text class="note" x="887" y="236">/api/alarm</text>
+
+  <rect class="box red" x="1030" y="185" width="85" height="62"/>
+  <text class="small" x="1042" y="214">Webhook</text>
+  <text class="note" x="1047" y="236">机器人</text>
+
+  <rect class="box purple" x="80" y="205" width="190" height="90"/>
+  <text class="label" x="118" y="242">业务触发器</text>
+  <text class="small" x="106" y="270">生成报警 JSON</text>
+
+  <rect class="box purple" x="80" y="345" width="190" height="85"/>
+  <text class="label" x="116" y="381">NOTIFY</text>
+  <text class="small" x="91" y="408">electrolyzer_issue_channel</text>
+
+  <rect class="box green" x="350" y="240" width="180" height="105"/>
+  <text class="label" x="396" y="277">监听事件</text>
+  <text class="small" x="382" y="306">解析 payload</text>
+  <text class="small" x="372" y="329">组装 message / key</text>
+
+  <rect class="box amber" x="610" y="225" width="190" height="105"/>
+  <text class="label" x="654" y="262">trigger()</text>
+  <text class="small" x="635" y="291">event_type</text>
+  <text class="small" x="635" y="314">rate_limit_key</text>
+
+  <rect class="box amber" x="610" y="370" width="190" height="95"/>
+  <text class="label" x="648" y="407">20 秒限流</text>
+  <text class="small" x="640" y="436">相同 key 抑制重复推送</text>
+
+  <rect class="box blue" x="610" y="515" width="190" height="75"/>
+  <text class="label" x="642" y="548">广播与通知</text>
+  <text class="small" x="638" y="574">SSE + FeishuNotifier</text>
+
+  <path class="line" d="M175 295 L175 345"/>
+  <path class="line" d="M270 388 L350 292"/>
+  <path class="line" d="M530 292 L610 277"/>
+  <path class="line" d="M705 330 L705 370"/>
+  <path class="line" d="M705 465 L705 515"/>
+  <path class="push" d="M800 552 L875 225"/>
+  <path class="push" d="M800 552 C900 600 995 500 1030 232"/>
+  <path class="keep" d="M875 205 C765 150 670 170 610 238"/>
+
+  <rect class="pill" x="625" y="485" width="160" height="28"/>
+  <text class="pill-text" x="649" y="504">未命中限流时推送</text>
+
+  <rect class="box red" x="610" y="615" width="190" height="45"/>
+  <text class="small" x="644" y="643">命中限流：丢弃重复报警</text>
+  <path class="keep" d="M800 418 C875 430 850 615 800 637"/>
+
+  <text class="note" x="342" y="388">数据库连接断开时会重连监听</text>
+  <text class="note" x="842" y="360">SSE 连接成功后先发送 connected</text>
+  <text class="note" x="842" y="382">无报警时每 15 秒 keep-alive</text>
+  <text class="note" x="72" y="665">关键收益：报警判断和后端推送解耦，前端实时感知，外部通知异步发送，限流避免重复刷屏</text>
+</svg>
