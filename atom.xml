@@ -6,7 +6,7 @@
   <link href="https://null0x0f.github.io/atom.xml" rel="self"/>
   
   <link href="https://null0x0f.github.io/"/>
-  <updated>2026-05-22T03:34:55.037Z</updated>
+  <updated>2026-05-22T05:25:27.516Z</updated>
   <id>https://null0x0f.github.io/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2026 年第 21 周周报</title>
+    <link href="https://null0x0f.github.io/posts/406cb2ca.html"/>
+    <id>https://null0x0f.github.io/posts/406cb2ca.html</id>
+    <published>2026-05-22T05:25:06.668Z</published>
+    <updated>2026-05-22T05:25:27.516Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="本周完成"><a href="#本周完成" class="headerlink" title="本周完成"></a>本周完成</h2><ul><li>项目进展</li><li>技术学习</li><li>问题修复</li><li>文档沉淀</li></ul><h2 id="关键收获"><a href="#关键收获" class="headerlink" title="关键收获"></a>关键收获</h2><ul><li>学到了什么</li><li>哪些问题以后可以复用经验</li></ul><h2 id="遗留问题"><a href="#遗留问题" class="headerlink" title="遗留问题"></a>遗留问题</h2><ul><li>还没解决的问题</li><li>需要继续跟进的点</li></ul><h2 id="下周计划"><a href="#下周计划" class="headerlink" title="下周计划"></a>下周计划</h2><ul><li>计划推进的任务</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;本周完成&quot;&gt;&lt;a href=&quot;#本周完成&quot; class=&quot;headerlink&quot; title=&quot;本周完成&quot;&gt;&lt;/a&gt;本周完成&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;项目进展&lt;/li&gt;
+&lt;li&gt;技术学习&lt;/li&gt;
+&lt;li&gt;问题修复&lt;/li&gt;
+&lt;li&gt;文档沉淀&lt;/li&gt;
+&lt;/ul</summary>
+      
+    
+    
+    
+    <category term="周报" scheme="https://null0x0f.github.io/categories/%E5%91%A8%E6%8A%A5/"/>
+    
+    
+    <category term="工作留痕" scheme="https://null0x0f.github.io/tags/%E5%B7%A5%E4%BD%9C%E7%95%99%E7%97%95/"/>
+    
+    <category term="周报" scheme="https://null0x0f.github.io/tags/%E5%91%A8%E6%8A%A5/"/>
+    
+  </entry>
   
   <entry>
     <title>工业数据服务后端项目复盘</title>
