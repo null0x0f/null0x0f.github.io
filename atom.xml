@@ -6,7 +6,7 @@
   <link href="https://null0x0f.github.io/atom.xml" rel="self"/>
   
   <link href="https://null0x0f.github.io/"/>
-  <updated>2026-05-22T05:25:27.516Z</updated>
+  <updated>2026-05-25T09:15:03.654Z</updated>
   <id>https://null0x0f.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2026-05-25 日报</title>
+    <link href="https://null0x0f.github.io/posts/f08f0f20.html"/>
+    <id>https://null0x0f.github.io/posts/f08f0f20.html</id>
+    <published>2026-05-25T09:10:53.230Z</published>
+    <updated>2026-05-25T09:15:03.654Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="今日完成"><a href="#今日完成" class="headerlink" title="今日完成"></a>今日完成</h2><ul><li>新增后端查询接口的not_match参数</li><li>阅读或学习了2028ai预测<br><a href="https://www.citriniresearch.com/p/2028gic">https://www.citriniresearch.com/p/2028gic</a></li><li>无产出文档</li></ul><h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><ul><li>遇到的问题：上位机插入数据，后端服务拦截</li><li>排查过程：与前端插入数据的方法进行比较</li><li>最终结论：不管是插入或者查询必须在metadata.json里面插入对应的列名</li></ul><h2 id="明日计划"><a href="#明日计划" class="headerlink" title="明日计划"></a>明日计划</h2><ul><li>对后端的所有接口进行更加细致的用户权限管理（具体在access_level和对通用查询，删除和更新接口的权限验证完善）</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;今日完成&quot;&gt;&lt;a href=&quot;#今日完成&quot; class=&quot;headerlink&quot; title=&quot;今日完成&quot;&gt;&lt;/a&gt;今日完成&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;新增后端查询接口的not_match参数&lt;/li&gt;
+&lt;li&gt;阅读或学习了2028ai预测&lt;br&gt;&lt;a href=</summary>
+      
+    
+    
+    
+    <category term="日报" scheme="https://null0x0f.github.io/categories/%E6%97%A5%E6%8A%A5/"/>
+    
+    
+    <category term="工作留痕" scheme="https://null0x0f.github.io/tags/%E5%B7%A5%E4%BD%9C%E7%95%99%E7%97%95/"/>
+    
+    <category term="日报" scheme="https://null0x0f.github.io/tags/%E6%97%A5%E6%8A%A5/"/>
+    
+  </entry>
   
   <entry>
     <title>2026 年第 21 周周报</title>
@@ -332,11 +360,11 @@
     <category term="编程" scheme="https://null0x0f.github.io/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
+    <category term="设计模式" scheme="https://null0x0f.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
     <category term="C++" scheme="https://null0x0f.github.io/tags/C/"/>
     
     <category term="STL" scheme="https://null0x0f.github.io/tags/STL/"/>
-    
-    <category term="设计模式" scheme="https://null0x0f.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
   </entry>
   
