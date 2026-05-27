@@ -178,6 +178,84 @@
   #rightside > div > button {
     border-radius: 5px;
   }
+
+  #live2d-mascot {
+    position: fixed;
+    right: 64px;
+    bottom: 24px;
+    z-index: 99;
+    width: 96px;
+    height: 104px;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    background-image: url('/img/spritesheet(1).webp');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 768px 936px;
+    cursor: pointer;
+    filter: drop-shadow(0 8px 10px rgba(27, 20, 18, 0.18));
+    transform-origin: 50% 85%;
+    animation:
+      live2d-mascot-sprite 1.05s steps(6) infinite,
+      live2d-mascot-float 4.2s ease-in-out infinite;
+    transition: filter 0.2s ease;
+  }
+
+  #live2d-mascot:hover {
+    filter: drop-shadow(0 12px 14px rgba(27, 20, 18, 0.24));
+  }
+
+  #live2d-mascot.is-poked {
+    animation:
+      live2d-mascot-sprite 1.05s steps(6) infinite,
+      live2d-mascot-poke 0.44s ease;
+  }
+
+  @keyframes live2d-mascot-sprite {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -576px 0;
+    }
+  }
+
+  @keyframes live2d-mascot-float {
+    0%, 100% {
+      transform: translateY(0) rotate(-1deg);
+    }
+    50% {
+      transform: translateY(-7px) rotate(1deg);
+    }
+  }
+
+  @keyframes live2d-mascot-poke {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    38% {
+      transform: translateY(5px) scale(0.94, 1.06) rotate(-5deg);
+    }
+    68% {
+      transform: translateY(-6px) scale(1.05, 0.96) rotate(4deg);
+    }
+  }
+
+  @media (max-width: 768px) {
+    #live2d-mascot {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #live2d-mascot,
+    #live2d-mascot.is-poked {
+      animation: none;
+      background-position: 0 0;
+    }
+  }
   
   /* 滚动条 */
   
