@@ -6,7 +6,7 @@
   <link href="https://null0x0f.github.io/atom.xml" rel="self"/>
   
   <link href="https://null0x0f.github.io/"/>
-  <updated>2026-05-27T06:28:53.512Z</updated>
+  <updated>2026-05-27T08:00:35.276Z</updated>
   <id>https://null0x0f.github.io/</id>
   
   <author>
@@ -17,11 +17,35 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>windows下载codex指南</title>
+    <link href="https://null0x0f.github.io/posts/f535badc.html"/>
+    <id>https://null0x0f.github.io/posts/f535badc.html</id>
+    <published>2026-05-27T07:58:24.331Z</published>
+    <updated>2026-05-27T08:00:35.276Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="解决codex在windows端的下载问题"><a href="#解决codex在windows端的下载问题" class="headerlink" title="解决codex在windows端的下载问题"></a>解决codex在windows端的下载问题</h1><p>原文解决链接：<a href="https://github.com/openai/codex/issues/13993">https://github.com/openai/codex/issues/13993</a></p><h2 id="下面是解决步骤："><a href="#下面是解决步骤：" class="headerlink" title="下面是解决步骤："></a>下面是解决步骤：</h2><h3 id="第一步："><a href="#第一步：" class="headerlink" title="第一步："></a>第一步：</h3><p>打开如下网址：<br><a href="https://link.csdn.net/?target=https%3A%2F%2Fstore.rg-adguard.net%2F%3Flogin%3Dfrom_csdn" title="https://store.rg-adguard.net/">https://store.rg-adguard.net/</a></p><p>在左边选择product</p><p>搜索栏中输入codex的产品ID：9PLM9XGG6VKS</p><p><img src="/img/codex.png" alt="codex"><br>&nbsp;</p><p>右边的 √</p><p>&nbsp;</p><h3 id="第二步："><a href="#第二步：" class="headerlink" title="第二步："></a>第二步：</h3><p>在搜索结果中点击<a href="https://link.csdn.net/?target=http%3A%2F%2Ftlu.dl.delivery.mp.microsoft.com%2Ffilestreamingservice%2Ffiles%2Fc49bed96-42b5-4538-8ab4-324f4e4430f8%3FP1%3D1778147649%26P2%3D404%26P3%3D2%26P4%3DnL6Hdc4j2rUc5BNbWOV1sdxaScWV2ND9YViw%252bGC0Obo63wIe1324amBymwVoAvWqkTbDwdOLh5R%252bo7TmwiIOzA%253d%253d%26login%3Dfrom_csdn" title="OpenAI.Codex_26.429.8261.0_x64__2p2nqsd0c76g0.msix">OpenAI.Codex<em>26.429.8261.0_x64</em>_2p2nqsd0c76g0.msix</a>的链接，这个就是微软商店中得到的安装包， 下载 .msix 文件（不要安装）， 将其重命名为 .zip， 仅将 app/ 目录下的内容解压到某个文件夹， 然后从该文件夹运行 Codex.exe。如果顺利的话到这一步就下载成功了。</p><p>注：有的浏览器无法下载，博主使用的Chrome浏览器就无法正常下载，这就需要转到下一步骤。</p><h3 id="第三步："><a href="#第三步：" class="headerlink" title="第三步："></a>第三步：</h3><p>如下是无法正常下载的处理步骤：</p><p>1. 右键链接把链接复制下来</p><p>2. 打开powershell，运行如下指令：</p><p>curl.exe -L “复制出来的微软CDN链接” -o package.msixbundle</p><p>&nbsp;</p><p>3. 然后在运行的位置就可以找到下载好的文件了。</p><p>4. 将其重命名为 .zip， 仅将 app/ 目录下的内容解压到某个文件夹， 然后从该文件夹运行 Codex.exe。如果顺利的话到这一步就下载成功了。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;解决codex在windows端的下载问题&quot;&gt;&lt;a href=&quot;#解决codex在windows端的下载问题&quot; class=&quot;headerlink&quot; title=&quot;解决codex在windows端的下载问题&quot;&gt;&lt;/a&gt;解决codex在windows端的下载问题&lt;/</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="https://null0x0f.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="AI辅助编程" scheme="https://null0x0f.github.io/tags/AI%E8%BE%85%E5%8A%A9%E7%BC%96%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
     <title>2026-05-27 日报</title>
     <link href="https://null0x0f.github.io/posts/b2aa085d.html"/>
     <id>https://null0x0f.github.io/posts/b2aa085d.html</id>
     <published>2026-05-27T06:24:54.462Z</published>
-    <updated>2026-05-27T06:28:53.512Z</updated>
+    <updated>2026-05-27T06:29:08.908Z</updated>
     
     <content type="html"><![CDATA[<h2 id="今日完成"><a href="#今日完成" class="headerlink" title="今日完成"></a>今日完成</h2><ul><li>跟codex学习ai调用浏览器开发</li><li>无产出文档</li></ul><h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><ul><li>遇到的问题：无</li></ul><h2 id="明日计划"><a href="#明日计划" class="headerlink" title="明日计划"></a>明日计划</h2><p>- </p>]]></content>
     
@@ -390,11 +414,11 @@
     <category term="编程" scheme="https://null0x0f.github.io/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-    <category term="设计模式" scheme="https://null0x0f.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
     <category term="C++" scheme="https://null0x0f.github.io/tags/C/"/>
     
     <category term="STL" scheme="https://null0x0f.github.io/tags/STL/"/>
+    
+    <category term="设计模式" scheme="https://null0x0f.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
   </entry>
   

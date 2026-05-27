@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>windows下载codex指南</title>
+      <link href="/posts/f535badc.html"/>
+      <url>/posts/f535badc.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="解决codex在windows端的下载问题"><a href="#解决codex在windows端的下载问题" class="headerlink" title="解决codex在windows端的下载问题"></a>解决codex在windows端的下载问题</h1><p>原文解决链接：<a href="https://github.com/openai/codex/issues/13993">https://github.com/openai/codex/issues/13993</a></p><h2 id="下面是解决步骤："><a href="#下面是解决步骤：" class="headerlink" title="下面是解决步骤："></a>下面是解决步骤：</h2><h3 id="第一步："><a href="#第一步：" class="headerlink" title="第一步："></a>第一步：</h3><p>打开如下网址：<br><a href="https://link.csdn.net/?target=https%3A%2F%2Fstore.rg-adguard.net%2F%3Flogin%3Dfrom_csdn" title="https://store.rg-adguard.net/">https://store.rg-adguard.net/</a></p><p>在左边选择product</p><p>搜索栏中输入codex的产品ID：9PLM9XGG6VKS</p><p><img src="/img/codex.png" alt="codex"><br>&nbsp;</p><p>右边的 √</p><p>&nbsp;</p><h3 id="第二步："><a href="#第二步：" class="headerlink" title="第二步："></a>第二步：</h3><p>在搜索结果中点击<a href="https://link.csdn.net/?target=http%3A%2F%2Ftlu.dl.delivery.mp.microsoft.com%2Ffilestreamingservice%2Ffiles%2Fc49bed96-42b5-4538-8ab4-324f4e4430f8%3FP1%3D1778147649%26P2%3D404%26P3%3D2%26P4%3DnL6Hdc4j2rUc5BNbWOV1sdxaScWV2ND9YViw%252bGC0Obo63wIe1324amBymwVoAvWqkTbDwdOLh5R%252bo7TmwiIOzA%253d%253d%26login%3Dfrom_csdn" title="OpenAI.Codex_26.429.8261.0_x64__2p2nqsd0c76g0.msix">OpenAI.Codex<em>26.429.8261.0_x64</em>_2p2nqsd0c76g0.msix</a>的链接，这个就是微软商店中得到的安装包， 下载 .msix 文件（不要安装）， 将其重命名为 .zip， 仅将 app/ 目录下的内容解压到某个文件夹， 然后从该文件夹运行 Codex.exe。如果顺利的话到这一步就下载成功了。</p><p>注：有的浏览器无法下载，博主使用的Chrome浏览器就无法正常下载，这就需要转到下一步骤。</p><h3 id="第三步："><a href="#第三步：" class="headerlink" title="第三步："></a>第三步：</h3><p>如下是无法正常下载的处理步骤：</p><p>1. 右键链接把链接复制下来</p><p>2. 打开powershell，运行如下指令：</p><p>curl.exe -L “复制出来的微软CDN链接” -o package.msixbundle</p><p>&nbsp;</p><p>3. 然后在运行的位置就可以找到下载好的文件了。</p><p>4. 将其重命名为 .zip， 仅将 app/ 目录下的内容解压到某个文件夹， 然后从该文件夹运行 Codex.exe。如果顺利的话到这一步就下载成功了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> AI辅助编程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2026-05-27 日报</title>
       <link href="/posts/b2aa085d.html"/>
       <url>/posts/b2aa085d.html</url>
@@ -374,11 +399,11 @@
       
         <tags>
             
-            <tag> 设计模式 </tag>
-            
             <tag> C++ </tag>
             
             <tag> STL </tag>
+            
+            <tag> 设计模式 </tag>
             
         </tags>
       
@@ -419,17 +444,6 @@
     
     
     <entry>
-      <title></title>
-      <link href="/mainfest.json"/>
-      <url>/mainfest.json</url>
-      
-        <content type="html"><![CDATA[{"name":"null`Blog","short_name":"null","theme_color":"#3b70fc","background_color":"#3b70fc","display":"standalone","scope":"/","start_url":"/","icons":[{"src":"/img/siteicon/code.png","sizes":"16x16","type":"image/png"},{"src":"/img/siteicon/智能手机.png","sizes":"32x32","type":"image/png"},{"src":"/img/siteicon/国际网络.png","sizes":"48x48","type":"image/png"}],"splash_pages":null}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>关于</title>
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
@@ -441,11 +455,11 @@
     
     
     <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
+      <title></title>
+      <link href="/mainfest.json"/>
+      <url>/mainfest.json</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[{"name":"null`Blog","short_name":"null","theme_color":"#3b70fc","background_color":"#3b70fc","display":"standalone","scope":"/","start_url":"/","icons":[{"src":"/img/siteicon/code.png","sizes":"16x16","type":"image/png"},{"src":"/img/siteicon/智能手机.png","sizes":"32x32","type":"image/png"},{"src":"/img/siteicon/国际网络.png","sizes":"48x48","type":"image/png"}],"splash_pages":null}]]></content>
       
     </entry>
     
@@ -468,6 +482,17 @@
       <url>/link/index.html</url>
       
         <content type="html"><![CDATA[<p>欢迎交换友链。</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="literal">NULL</span><span class="string">&#x27;blog</span></span><br><span class="line"><span class="string">  link: https://null0x0f.github.io</span></span><br><span class="line"><span class="string">  avatar: https://img.cdn1.vip/i/69f1ad36acf1c_1777446198.webp</span></span><br><span class="line"><span class="string">  descr: 技术笔记和折腾记录</span></span><br></pre></td></tr></table></figure>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
