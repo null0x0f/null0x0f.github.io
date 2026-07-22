@@ -1,0 +1,637 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>视觉算法岗位面试复盘 | NULL'blog</title><meta name="author" content="NULL+"><meta name="copyright" content="NULL+"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="C++&#x2F;Qt 视觉算法岗位面试复盘本次面试未录用。题目集中在 C++、Qt 多线程、PLC 高频采集、数据一致性、数据库、CI&#x2F;CD 和开源协议。它们并不是孤立知识点，核心考察的是能否设计一条可靠的数据链路： 123设备采集 -&gt; 请求调度 -&gt; 数据处理 -&gt; 数据存储 -&gt; UI展示                         |">
+<meta property="og:type" content="article">
+<meta property="og:title" content="视觉算法岗位面试复盘">
+<meta property="og:url" content="https://null0x0f.github.io/posts/12e82db6.html">
+<meta property="og:site_name" content="NULL&#39;blog">
+<meta property="og:description" content="C++&#x2F;Qt 视觉算法岗位面试复盘本次面试未录用。题目集中在 C++、Qt 多线程、PLC 高频采集、数据一致性、数据库、CI&#x2F;CD 和开源协议。它们并不是孤立知识点，核心考察的是能否设计一条可靠的数据链路： 123设备采集 -&gt; 请求调度 -&gt; 数据处理 -&gt; 数据存储 -&gt; UI展示                         |">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://null0x0f.github.io/img/bleach.png">
+<meta property="article:published_time" content="2026-07-22T06:34:56.848Z">
+<meta property="article:modified_time" content="2026-07-22T06:35:59.422Z">
+<meta property="article:author" content="NULL+">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="Code Review">
+<meta property="article:tag" content="Workflow">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://null0x0f.github.io/img/bleach.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://null0x0f.github.io/posts/12e82db6.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="manifest" href="/manifest.json"/><meta name="msapplication-TileColor" content="#3b70fc"/><link rel="apple-touch-icon" sizes="180x180" href="/img/siteicon/code.png"/><link rel="icon" type="image/png" sizes="32x32" href="/img/siteicon/%E6%89%8B%E6%9C%BA%E6%95%B0%E6%8D%AE.png"/><link rel="icon" type="image/png" sizes="16x16" href="/img/siteicon/%E6%99%BA%E8%83%BD%E6%89%8B%E6%9C%BA.png"/><link rel="mask-icon" href="/img/siteicon/%E6%95%B0%E6%8D%AE%E9%A9%BE%E9%A9%B6%E8%88%B1.png" color="#5bbad5"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":80,"languages":{"author":"作者: NULL+","link":"链接: ","source":"来源: NULL'blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '视觉算法岗位面试复盘',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-07-22 14:35:59'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://unpkg.com/github-calendar@latest/dist/github-calendar-responsive.css"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu@1.1.6/lib/clock.min.css" /><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="NULL'blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/bleach.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%97%A5%E6%8A%A5/"><i class="fa-fw fas fa-calendar-day"></i><span> 日报</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E5%91%A8%E6%8A%A5/"><i class="fa-fw fas fa-calendar-week"></i><span> 周报</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="NULL'blog"><span class="site-name">NULL'blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%97%A5%E6%8A%A5/"><i class="fa-fw fas fa-calendar-day"></i><span> 日报</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E5%91%A8%E6%8A%A5/"><i class="fa-fw fas fa-calendar-week"></i><span> 周报</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">视觉算法岗位面试复盘</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-07-22T06:34:56.848Z" title="发表于 2026-07-22 14:34:56">2026-07-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-07-22T06:35:59.422Z" title="更新于 2026-07-22 14:35:59">2026-07-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%B7%A5%E7%A8%8B%E6%95%88%E7%8E%87/">工程效率</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="视觉算法岗位面试复盘"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="C-Qt-视觉算法岗位面试复盘"><a href="#C-Qt-视觉算法岗位面试复盘" class="headerlink" title="C++/Qt 视觉算法岗位面试复盘"></a>C++/Qt 视觉算法岗位面试复盘</h1><p>本次面试未录用。题目集中在 C++、Qt 多线程、PLC 高频采集、数据一致性、数据库、CI/CD 和开源协议。它们并不是孤立知识点，核心考察的是能否设计一条可靠的数据链路：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">设备采集 -&gt; 请求调度 -&gt; 数据处理 -&gt; 数据存储 -&gt; UI展示</span><br><span class="line">                         |</span><br><span class="line">                         +-&gt; 实时控制</span><br></pre></td></tr></table></figure>
+<p>回答这类问题时，先说结论，再说明线程边界、数据结构、失败策略和验证指标。</p>
+<h2 id="一、C-17-有什么新特性，用过什么"><a href="#一、C-17-有什么新特性，用过什么" class="headerlink" title="一、C++17 有什么新特性，用过什么"></a>一、C++17 有什么新特性，用过什么</h2><h3 id="适合面试的回答"><a href="#适合面试的回答" class="headerlink" title="适合面试的回答"></a>适合面试的回答</h3><p>我常用的 C++17 特性包括：</p>
+<ul>
+<li>结构化绑定：拆分 <code>pair</code>、<code>tuple</code> 或键值结果。</li>
+<li><code>if constexpr</code>：在模板中进行编译期分支。</li>
+<li><code>std::optional</code>：表示可能不存在的解析结果或配置项。</li>
+<li><code>std::variant</code>：表示多种可能的数据类型。</li>
+<li><code>std::string_view</code>：只读字符串视图，减少复制。</li>
+<li><code>std::filesystem</code>：处理配置、日志和归档文件路径。</li>
+<li><code>std::scoped_lock</code>、<code>std::shared_mutex</code>：进行 RAII 加锁和读写锁保护。</li>
+<li>折叠表达式、<code>std::apply</code>：用于通用模板处理。</li>
+</ul>
+<p>在设备协议解析中，可以用 <code>std::optional</code> 表示解析失败，用结构化绑定读取结果，用 <code>string_view</code> 避免不必要的字符串拷贝；配置和日志目录可以使用 <code>std::filesystem</code>。</p>
+<p>只回答真正使用过的特性，不要把 C++20 的 <code>std::jthread</code>、协程说成 C++17 特性。</p>
+<h2 id="二、多线程数据冲突怎么办"><a href="#二、多线程数据冲突怎么办" class="headerlink" title="二、多线程数据冲突怎么办"></a>二、多线程数据冲突怎么办</h2><p>数据竞争的条件是：多个线程访问同一块内存，至少一个线程写入，并且没有同步机制。</p>
+<p>处理顺序：</p>
+<ol>
+<li>优先采用线程所有权，数据只由一个线程修改，线程之间通过信号槽传递快照。</li>
+<li>简单计数器、标志位使用 <code>std::atomic</code>。</li>
+<li>复合数据和容器使用 <code>QMutex</code>、<code>QReadWriteLock</code> 或 C++ 标准库锁。</li>
+<li>多生产者、多消费者场景使用有界线程安全队列。</li>
+<li>使用 RAII 锁，例如 <code>QMutexLocker</code>、<code>std::lock_guard</code>、<code>std::scoped_lock</code>。</li>
+</ol>
+<p>不要把“所有地方都加锁”当作线程安全设计。锁的范围应尽量小，持锁时不能执行网络、数据库或长时间计算。</p>
+<h2 id="三、Qt-中多线程启动步骤"><a href="#三、Qt-中多线程启动步骤" class="headerlink" title="三、Qt 中多线程启动步骤"></a>三、Qt 中多线程启动步骤</h2><p>推荐使用 <code>QObject + QThread</code>，而不是把业务逻辑全部写进 <code>QThread::run()</code>。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">创建无父对象的 Worker</span><br><span class="line">        |</span><br><span class="line">        v</span><br><span class="line">worker-&gt;moveToThread(thread)</span><br><span class="line">        |</span><br><span class="line">        v</span><br><span class="line">thread.started -&gt; worker.createDevice</span><br><span class="line">        |</span><br><span class="line">        v</span><br><span class="line">Worker 在自己的事件循环中创建和使用 QModbusTcpClient</span><br></pre></td></tr></table></figure>
+<p>典型步骤：</p>
+<ol>
+<li>创建 <code>QThread</code>。</li>
+<li>创建没有父对象的 Worker。</li>
+<li>调用 <code>moveToThread()</code>。</li>
+<li>把 <code>QThread::started</code> 连接到 Worker 的初始化槽。</li>
+<li>使用跨线程信号槽发送操作请求。</li>
+<li>Worker 完成时发送结果信号。</li>
+<li>停止时先通知 Worker 停止，再退出线程并 <code>wait()</code>。</li>
+<li>用 <code>thread.finished -&gt; worker.deleteLater</code> 管理 Worker 生命周期。</li>
+</ol>
+<p>跨线程不能直接调用 <code>QModbusTcpClient</code> 的函数。客户端应该在所属线程创建，也只能在该线程使用。</p>
+<h2 id="四、怎么保证线程安全"><a href="#四、怎么保证线程安全" class="headerlink" title="四、怎么保证线程安全"></a>四、怎么保证线程安全</h2><p>核心方法是明确所有权：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>推荐所有者</th>
+<th>是否需要锁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每台 PLC 的客户端</td>
+<td>对应 Worker 线程</td>
+<td>不需要，禁止跨线程调用</td>
+</tr>
+<tr>
+<td>每台 PLC 的读写队列</td>
+<td>对应 Worker 线程</td>
+<td>不需要</td>
+</tr>
+<tr>
+<td>每台 PLC 的解析缓存</td>
+<td>对应 Worker 线程</td>
+<td>不需要</td>
+</tr>
+<tr>
+<td>UI 控件</td>
+<td>主线程</td>
+<td>不需要</td>
+</tr>
+<tr>
+<td>全局请求数、失败数</td>
+<td>多线程</td>
+<td><code>std::atomic</code></td>
+</tr>
+<tr>
+<td>共享快照容器</td>
+<td>多线程读写</td>
+<td><code>QReadWriteLock</code>，或改成单线程所有权</td>
+</tr>
+<tr>
+<td>数据库任务队列</td>
+<td>多个采集者、一个写库者</td>
+<td><code>QMutex + QWaitCondition</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>原子变量适合独立值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::<span class="type">atomic_uint64_t</span> totalRequests&#123;<span class="number">0</span>&#125;;</span><br><span class="line">std::atomic_bool stopRequested&#123;<span class="literal">false</span>&#125;;</span><br></pre></td></tr></table></figure>
+<p>原子变量不能保证多个字段组成的快照一致。例如压力、温度、时间戳必须同时属于同一采样周期，应该复制完整的不可变快照，或用锁保护整个快照。</p>
+<h2 id="五、100-台-PLC-同时读取，Qt-采用什么策略"><a href="#五、100-台-PLC-同时读取，Qt-采用什么策略" class="headerlink" title="五、100 台 PLC 同时读取，Qt 采用什么策略"></a>五、100 台 PLC 同时读取，Qt 采用什么策略</h2><p>不建议简单创建100个永久轮询线程。</p>
+<p>如果通信库是异步接口，可以使用少量 I/O 线程管理多个 <code>ModbusWorker</code>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2～4 个 I/O 线程</span><br><span class="line">    └── 每个线程管理 5～10 个 Worker</span><br><span class="line">            └── 每个 Worker 独占一个客户端和一台 PLC 的队列</span><br></pre></td></tr></table></figure>
+<p>如果通信库是阻塞接口，则使用固定大小线程池或分组线程。每个设备仍然要有独立的超时、重试、在线状态、序列号和统计信息。</p>
+<p>采集策略：</p>
+<ul>
+<li>长连接，避免每次轮询重新连接。</li>
+<li>合并连续寄存器，减少请求数。</li>
+<li>错开设备轮询时间，避免同时发送100个请求。</li>
+<li>同一连接上保持请求顺序，避免并发使用非线程安全客户端。</li>
+<li>慢设备不能阻塞其他设备。</li>
+<li>采集结果进入有界队列或快照存储。</li>
+<li>UI只读取最新快照，不直接参与设备通信。</li>
+</ul>
+<p>如果需要严格的同一时刻数据，PC轮询无法保证，需要 PLC 统一触发、时钟同步和采样时间戳。</p>
+<h2 id="六、需要快速频率读取数据怎么办"><a href="#六、需要快速频率读取数据怎么办" class="headerlink" title="六、需要快速频率读取数据怎么办"></a>六、需要快速频率读取数据怎么办</h2><p>先确认目标频率是“设备数据刷新频率”“通信轮询频率”还是“控制执行频率”，三者不能混淆。</p>
+<p>优化方向：</p>
+<ul>
+<li>使用设备支持的异步、订阅或主动上报机制。</li>
+<li>保持连接，批量读取连续寄存器。</li>
+<li>使用二进制协议和预分配缓冲区。</li>
+<li>减少字符串转换、日志和频繁内存分配。</li>
+<li>采集、计算、存储和 UI 分开。</li>
+<li>用 <code>QElapsedTimer</code> 测量周期、平均延迟、P95/P99 延迟和抖动。</li>
+<li>使用截止时间调度，避免简单连续 <code>msleep(1)</code> 造成漂移。</li>
+</ul>
+<p>普通 <code>QTimer</code>、Windows线程和 Qt Widgets 不能提供硬实时的1ms保证。</p>
+<h2 id="七、Qt-跟不上设备读取频率怎么办"><a href="#七、Qt-跟不上设备读取频率怎么办" class="headerlink" title="七、Qt 跟不上设备读取频率怎么办"></a>七、Qt 跟不上设备读取频率怎么办</h2><p>这是生产速度大于消费速度的问题，需要明确过载策略，而不是无限堆积队列。</p>
+<ul>
+<li>只关心最新状态：覆盖旧快照。</li>
+<li>历史数据不能丢：使用有界环形缓冲区和批量落盘。</li>
+<li>UI使用降采样数据，例如最大值、最小值、平均值。</li>
+<li>计算很慢：使用 <code>QThreadPool</code>，结果必须带序号。</li>
+<li>队列超过阈值：限流、丢弃低优先级数据并报警。</li>
+<li>数据库变慢：采集与写库解耦，批量写入。</li>
+</ul>
+<p>先分别测量采集、解析、计算、数据库和 UI 耗时，不能只凭感觉判断瓶颈。</p>
+<h2 id="八、读取后还要处理，数据对不上怎么办"><a href="#八、读取后还要处理，数据对不上怎么办" class="headerlink" title="八、读取后还要处理，数据对不上怎么办"></a>八、读取后还要处理，数据对不上怎么办</h2><p>异步处理可能乱序返回，不能用“谁最后返回谁覆盖”的方式更新数据。每条采样消息都应携带设备编号、采样时间和序列号：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Sample</span> &#123;</span><br><span class="line">    <span class="type">int</span> deviceId;</span><br><span class="line">    quint64 sequence;</span><br><span class="line">    qint64 sampleTime;</span><br><span class="line">    qint64 receiveTime;</span><br><span class="line">    QByteArray rawData;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>处理结果必须继续携带相同的 <code>deviceId + sequence</code>。更新时：</p>
+<ul>
+<li>丢弃比当前序号更旧的结果。</li>
+<li>检测序号跳变，统计丢包。</li>
+<li>检测重复序号。</li>
+<li>多设备融合时按采样时间窗口匹配，而不是按到达顺序匹配。</li>
+<li>处理输入使用不可变快照，不能读取持续变化的全局变量。</li>
+</ul>
+<h2 id="九、数据能读取但-UI-卡顿怎么办"><a href="#九、数据能读取但-UI-卡顿怎么办" class="headerlink" title="九、数据能读取但 UI 卡顿怎么办"></a>九、数据能读取但 UI 卡顿怎么办</h2><p>设备可以1000Hz采集，但 UI 没有必要1000Hz重绘。</p>
+<p>推荐：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">采集线程：按设备频率读取</span><br><span class="line">处理线程：完成计算和数据校验</span><br><span class="line">主线程：每30～100ms刷新一次UI</span><br></pre></td></tr></table></figure>
+<p>Qt Widgets 中使用 <code>QTimer</code> 控制 UI 更新周期：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">QTimer *timer = <span class="keyword">new</span> <span class="built_in">QTimer</span>(<span class="keyword">this</span>);</span><br><span class="line">timer-&gt;<span class="built_in">setInterval</span>(<span class="number">100</span>); <span class="comment">// 100ms，约10Hz</span></span><br><span class="line">timer-&gt;<span class="built_in">setTimerType</span>(Qt::PreciseTimer);</span><br><span class="line"><span class="built_in">connect</span>(timer, &amp;QTimer::timeout,</span><br><span class="line">        <span class="keyword">this</span>, &amp;MainWindow::updateUI);</span><br><span class="line">timer-&gt;<span class="built_in">start</span>();</span><br></pre></td></tr></table></figure>
+<p><code>update()</code> 是异步请求重绘，Qt会合并重复的重绘请求；<code>repaint()</code> 是同步重绘，高频调用容易阻塞主线程。不要每个采样点发送一个 UI 信号，也不要在主线程执行数据库、文件和复杂计算。</p>
+<p>当前项目中的 <code>timerUpdateUI</code> 只控制 <code>updateUI()</code>，不控制 Modbus 采集频率。采集信号、CSV和HTTP信号仍可能高频进入主线程，需要额外进行快照合并或限频。</p>
+<h2 id="十、机械臂1000Hz、PLC500Hz，5N时退回"><a href="#十、机械臂1000Hz、PLC500Hz，5N时退回" class="headerlink" title="十、机械臂1000Hz、PLC500Hz，5N时退回"></a>十、机械臂1000Hz、PLC500Hz，5N时退回</h2><p>500Hz 的 PLC 每2ms更新一次数据，机械臂1000Hz每1ms执行一次。再叠加采样、通信、PLC扫描、软件处理和执行器响应延迟，等当前力值达到5N再退回必然会超调。</p>
+<p>面试官提出的斜率预测是有效的延迟补偿方法：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">k = 最近一段力曲线的斜率</span><br><span class="line">F_predict = F_current + k * T_delay</span><br></pre></td></tr></table></figure>
+<p>当 <code>F_predict &gt;= 5N</code> 时提前发送退回信号。</p>
+<p>更成熟的方案：</p>
+<ul>
+<li>用最近多个采样点做线性拟合，而不是只用相邻两个点。</li>
+<li>通过滤波减少噪声，但滤波窗口不能过大。</li>
+<li>根据力增长速度、机械臂速度和制动距离动态提前触发。</li>
+<li>接触前采用快速接近、低速接触的两段式策略。</li>
+<li>机械臂控制器运行1kHz本地状态机，PLC作为外环或流程控制。</li>
+<li>使用时间戳补偿数据已经产生的延迟。</li>
+<li>对安全动作增加硬件限位、安全PLC或硬件比较器。</li>
+</ul>
+<p>可以使用更复杂的状态观测器、Smith预测器或MPC，但软件预测不能消除不可控的网络抖动，也不能替代硬实时安全链路。</p>
+<h2 id="十一、设备采集数据特别多，数据库如何优化"><a href="#十一、设备采集数据特别多，数据库如何优化" class="headerlink" title="十一、设备采集数据特别多，数据库如何优化"></a>十一、设备采集数据特别多，数据库如何优化</h2><p>数据库优化要同时考虑“写得进去”和“查得出来”。推荐架构：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">采集线程 -&gt; 有界队列 -&gt; 批量写库线程 -&gt; 原始表/聚合表 -&gt; 查询服务/UI</span><br></pre></td></tr></table></figure>
+<h3 id="写入优化"><a href="#写入优化" class="headerlink" title="写入优化"></a>写入优化</h3><ul>
+<li>不要每条数据单独开启事务。</li>
+<li>使用预编译语句、多行插入或数据库批量接口。</li>
+<li>一个数据库连接由写库线程独占。</li>
+<li>控制批量大小和提交周期，例如按条数或几十毫秒提交。</li>
+<li>队列有上限，数据库变慢时执行限流或丢弃低价值数据。</li>
+</ul>
+<h3 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h3><ul>
+<li>只查询需要的列，避免 <code>SELECT *</code>。</li>
+<li>按设备和时间范围查询。</li>
+<li>建立符合实际查询的联合索引，例如 <code>(device_id, timestamp)</code>。</li>
+<li>按天或按月进行时间分区。</li>
+<li>最近数据保存原始精度，历史数据使用秒级或分钟级聚合。</li>
+<li>曲线查询按屏幕分辨率降采样，不要一次返回百万个点。</li>
+<li>深度翻页使用游标或主键翻页，避免深度 <code>OFFSET</code>。</li>
+<li>使用 <code>EXPLAIN</code> 检查是否发生全表扫描。</li>
+</ul>
+<p>游标翻页的本质是记录上一页最后一条的排序位置：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> device_data</span><br><span class="line"><span class="keyword">WHERE</span> device_id <span class="operator">=</span> <span class="number">1</span></span><br><span class="line">  <span class="keyword">AND</span> id <span class="operator">&lt;</span> <span class="number">901</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> id <span class="keyword">DESC</span></span><br><span class="line">LIMIT <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+<p><code>id &lt; 901</code> 不是取第901条，而是从上一页最后一条记录之后继续读取。前端只保存并传回 <code>next_cursor</code>，不计算偏移量。</p>
+<h3 id="数据生命周期"><a href="#数据生命周期" class="headerlink" title="数据生命周期"></a>数据生命周期</h3><ul>
+<li>热数据保留在线快速查询。</li>
+<li>旧数据压缩或迁移到历史表。</li>
+<li>很久以前的数据归档到文件或对象存储。</li>
+<li>根据业务要求设置保留周期。</li>
+</ul>
+<h2 id="十二、CI-CD-了解吗"><a href="#十二、CI-CD-了解吗" class="headerlink" title="十二、CI/CD 了解吗"></a>十二、CI/CD 了解吗</h2><p>CI/CD 是持续集成、持续交付和持续部署。</p>
+<h3 id="CI"><a href="#CI" class="headerlink" title="CI"></a>CI</h3><p>每次提交代码后自动执行：</p>
+<ol>
+<li>拉取代码。</li>
+<li>安装或缓存依赖。</li>
+<li>编译 Debug/Release。</li>
+<li>运行单元测试和集成测试。</li>
+<li>执行静态检查、格式检查和安全扫描。</li>
+<li>保存测试报告和构建产物。</li>
+</ol>
+<h3 id="CD"><a href="#CD" class="headerlink" title="CD"></a>CD</h3><ul>
+<li>持续交付：构建出可发布版本，由人工确认上线。</li>
+<li>持续部署：通过自动化流程直接部署到目标环境。</li>
+</ul>
+<p>Qt项目可以在流水线中配置：</p>
+<ul>
+<li>Windows、Linux等构建矩阵。</li>
+<li>Qt版本和编译器版本固定。</li>
+<li>CMake/qmake自动构建。</li>
+<li>Qt Test测试。</li>
+<li>AddressSanitizer、ThreadSanitizer或静态分析。</li>
+<li>打包依赖库、配置文件和安装程序。</li>
+<li>版本号、Git提交号和构建时间写入产物。</li>
+</ul>
+<p>面试时可以说：我理解CI/CD的重点不是“自动打包”本身，而是让每次提交可重复编译、可测试、可追溯、可回滚。</p>
+<h2 id="十三、软件中的开源协议"><a href="#十三、软件中的开源协议" class="headerlink" title="十三、软件中的开源协议"></a>十三、软件中的开源协议</h2><p>使用开源代码前要看对应项目的 <code>LICENSE</code>、<code>NOTICE</code> 和第三方依赖清单，不能只看项目名称。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>协议类型</th>
+<th>主要特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MIT/BSD</td>
+<td>宽松，可商用和闭源，通常需要保留版权和许可声明</td>
+</tr>
+<tr>
+<td>Apache-2.0</td>
+<td>宽松，包含专利授权和专利终止条款，需要保留NOTICE等声明</td>
+</tr>
+<tr>
+<td>GPL</td>
+<td>强Copyleft，分发衍生作品时通常需要按GPL提供源代码</td>
+</tr>
+<tr>
+<td>LGPL</td>
+<td>比GPL宽松，通常允许动态链接闭源使用，但要满足重新链接、声明等义务；静态链接要求更严格</td>
+</tr>
+<tr>
+<td>AGPL</td>
+<td>在GPL基础上关注网络服务场景，通过网络提供服务也可能触发源代码提供义务</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>还要关注：</p>
+<ul>
+<li>开源协议是否允许商业使用。</li>
+<li>是否要求公开修改后的源代码。</li>
+<li>是否需要保留版权和NOTICE。</li>
+<li>静态链接和动态链接的区别。</li>
+<li>第三方依赖是否带有传染性协议。</li>
+<li>Qt具体版本使用的是LGPL、GPL还是商业授权。</li>
+</ul>
+<p>面试回答可以是：我会逐个确认依赖的许可证，保存许可证和NOTICE，维护第三方清单；商业产品中优先选择合规的MIT、BSD、Apache或满足条件的LGPL方案，GPL/AGPL依赖需要在引入前评估分发方式和源代码义务。</p>
+<h2 id="十四、结合现有-ModbusWorker-的代码复盘"><a href="#十四、结合现有-ModbusWorker-的代码复盘" class="headerlink" title="十四、结合现有 ModbusWorker 的代码复盘"></a>十四、结合现有 ModbusWorker 的代码复盘</h2><p>当前单Worker的线程封闭思路是可以保留的，但扩展到20台PLC前必须处理这些问题：</p>
+<ol>
+<li><code>readRequestCount</code> 不能是文件级 <code>static</code>，必须是每个Worker的成员。</li>
+<li>PLC地址、端口、Unit ID必须进入 <code>PlcConfig</code>，不能硬编码。</li>
+<li>所有结果信号携带 <code>deviceId</code>，否则20台设备的数据无法区分。</li>
+<li>读队列和写队列分离，写队列使用FIFO，不能用 <code>prepend()</code> 导致写命令倒序。</li>
+<li>读取失败不能直接计入完整周期，需要成功掩码、序列号和数据质量标记。</li>
+<li>读请求不能无限快速循环，需要轮询周期、超时和退避策略。</li>
+<li>队列要有容量上限，写命令需要超时、确认和失败反馈。</li>
+<li>UI只接收最新快照，不能让每次采样都触发控件刷新。</li>
+<li>数据库和CSV写入不能放在I/O线程中。</li>
+<li>关闭程序时先停止Worker，再退出线程并等待，确保客户端和未完成请求安全释放。</li>
+</ol>
+<h2 id="十五、最终口述模板"><a href="#十五、最终口述模板" class="headerlink" title="十五、最终口述模板"></a>十五、最终口述模板</h2><p>遇到这类综合题，可以用下面的顺序回答：</p>
+<blockquote>
+<p>我的设计会把采集、处理、存储和UI分层。每个PLC有独立的连接状态、请求队列、序列号和快照，异步通信通过少量I/O线程管理。线程之间使用信号槽或有界队列传递不可变数据，简单统计使用原子变量，复合数据使用锁或线程所有权。采集速度大于处理速度时采用批处理、限流、降采样和丢弃策略。所有数据携带设备编号、时间戳和序列号，避免异步处理后数据错位。UI只按固定频率显示最新快照。对于1kHz机械臂和500Hz PLC的力控问题，我会测量总延迟，根据力曲线斜率预测未来力值并提前触发，同时把硬实时闭环和安全保护放在实时控制器或硬件侧。数据库采用批量写入、时间分区、联合索引、聚合和游标分页。代码通过CI/CD自动编译、测试、检查和打包，并按许可证要求管理第三方依赖。</p>
+</blockquote>
+<p>这段回答的重点不是堆砌名词，而是说明数据如何流动、哪里可能阻塞、哪里可能竞争、失败后如何恢复，以及如何验证系统确实可靠。</p>
+<p>&nbsp;</p>
+<h2 id="失利总结"><a href="#失利总结" class="headerlink" title="失利总结"></a>失利总结</h2><p>基础知识不够扎实，开发流程规范不够了解。<br>失败是人生的主旋律，但是如何面对失败，把我们分成了不同的人</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://null0x0f.github.io">NULL+</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://null0x0f.github.io/posts/12e82db6.html">https://null0x0f.github.io/posts/12e82db6.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://null0x0f.github.io" target="_blank">NULL'blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/GitHub/">GitHub</a><a class="post-meta__tags" href="/tags/Git/">Git</a><a class="post-meta__tags" href="/tags/Code-Review/">Code Review</a><a class="post-meta__tags" href="/tags/Workflow/">Workflow</a></div><div class="post_share"><div class="social-share" data-image="/img/bleach.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/f535badc.html" title="windows下载codex指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">windows下载codex指南</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/bf1160cb.html" title="堆叠式工作流"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-27</div><div class="title">堆叠式工作流</div></div></a></div><div><a href="/posts/7277e24d.html" title="Antigravity安装"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-23</div><div class="title">Antigravity安装</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="utterances-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/bleach.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">NULL+</div><div class="author-info__description">记录 C++、系统、工具</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/null0x0f"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/null0x0f" target="_blank" title=""><i class="fab fa-github"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">技术笔记、踩坑记录。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-Qt-%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E5%B2%97%E4%BD%8D%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98"><span class="toc-number">1.</span> <span class="toc-text">C++&#x2F;Qt 视觉算法岗位面试复盘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81C-17-%E6%9C%89%E4%BB%80%E4%B9%88%E6%96%B0%E7%89%B9%E6%80%A7%EF%BC%8C%E7%94%A8%E8%BF%87%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text">一、C++17 有什么新特性，用过什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E5%90%88%E9%9D%A2%E8%AF%95%E7%9A%84%E5%9B%9E%E7%AD%94"><span class="toc-number">1.1.1.</span> <span class="toc-text">适合面试的回答</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%95%B0%E6%8D%AE%E5%86%B2%E7%AA%81%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-number">1.2.</span> <span class="toc-text">二、多线程数据冲突怎么办</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Qt-%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%90%AF%E5%8A%A8%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.3.</span> <span class="toc-text">三、Qt 中多线程启动步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">1.4.</span> <span class="toc-text">四、怎么保证线程安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81100-%E5%8F%B0-PLC-%E5%90%8C%E6%97%B6%E8%AF%BB%E5%8F%96%EF%BC%8CQt-%E9%87%87%E7%94%A8%E4%BB%80%E4%B9%88%E7%AD%96%E7%95%A5"><span class="toc-number">1.5.</span> <span class="toc-text">五、100 台 PLC 同时读取，Qt 采用什么策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%9C%80%E8%A6%81%E5%BF%AB%E9%80%9F%E9%A2%91%E7%8E%87%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-number">1.6.</span> <span class="toc-text">六、需要快速频率读取数据怎么办</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81Qt-%E8%B7%9F%E4%B8%8D%E4%B8%8A%E8%AE%BE%E5%A4%87%E8%AF%BB%E5%8F%96%E9%A2%91%E7%8E%87%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-number">1.7.</span> <span class="toc-text">七、Qt 跟不上设备读取频率怎么办</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E8%AF%BB%E5%8F%96%E5%90%8E%E8%BF%98%E8%A6%81%E5%A4%84%E7%90%86%EF%BC%8C%E6%95%B0%E6%8D%AE%E5%AF%B9%E4%B8%8D%E4%B8%8A%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-number">1.8.</span> <span class="toc-text">八、读取后还要处理，数据对不上怎么办</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E6%95%B0%E6%8D%AE%E8%83%BD%E8%AF%BB%E5%8F%96%E4%BD%86-UI-%E5%8D%A1%E9%A1%BF%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-number">1.9.</span> <span class="toc-text">九、数据能读取但 UI 卡顿怎么办</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E3%80%81%E6%9C%BA%E6%A2%B0%E8%87%821000Hz%E3%80%81PLC500Hz%EF%BC%8C5N%E6%97%B6%E9%80%80%E5%9B%9E"><span class="toc-number">1.10.</span> <span class="toc-text">十、机械臂1000Hz、PLC500Hz，5N时退回</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E8%AE%BE%E5%A4%87%E9%87%87%E9%9B%86%E6%95%B0%E6%8D%AE%E7%89%B9%E5%88%AB%E5%A4%9A%EF%BC%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96"><span class="toc-number">1.11.</span> <span class="toc-text">十一、设备采集数据特别多，数据库如何优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E4%BC%98%E5%8C%96"><span class="toc-number">1.11.1.</span> <span class="toc-text">写入优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="toc-number">1.11.2.</span> <span class="toc-text">查询优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">1.11.3.</span> <span class="toc-text">数据生命周期</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81CI-CD-%E4%BA%86%E8%A7%A3%E5%90%97"><span class="toc-number">1.12.</span> <span class="toc-text">十二、CI&#x2F;CD 了解吗</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CI"><span class="toc-number">1.12.1.</span> <span class="toc-text">CI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CD"><span class="toc-number">1.12.2.</span> <span class="toc-text">CD</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%B8%89%E3%80%81%E8%BD%AF%E4%BB%B6%E4%B8%AD%E7%9A%84%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.13.</span> <span class="toc-text">十三、软件中的开源协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E5%9B%9B%E3%80%81%E7%BB%93%E5%90%88%E7%8E%B0%E6%9C%89-ModbusWorker-%E7%9A%84%E4%BB%A3%E7%A0%81%E5%A4%8D%E7%9B%98"><span class="toc-number">1.14.</span> <span class="toc-text">十四、结合现有 ModbusWorker 的代码复盘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%BA%94%E3%80%81%E6%9C%80%E7%BB%88%E5%8F%A3%E8%BF%B0%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.15.</span> <span class="toc-text">十五、最终口述模板</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%B1%E5%88%A9%E6%80%BB%E7%BB%93"><span class="toc-number">1.16.</span> <span class="toc-text">失利总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/12e82db6.html" title="视觉算法岗位面试复盘">视觉算法岗位面试复盘</a><time datetime="2026-07-22T06:34:56.848Z" title="发表于 2026-07-22 14:34:56">2026-07-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/f535badc.html" title="windows下载codex指南">windows下载codex指南</a><time datetime="2026-05-27T07:58:24.331Z" title="发表于 2026-05-27 15:58:24">2026-05-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b2aa085d.html" title="2026-05-27 日报">2026-05-27 日报</a><time datetime="2026-05-27T06:24:54.462Z" title="发表于 2026-05-27 14:24:54">2026-05-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/f08f0f20.html" title="2026-05-25 日报">2026-05-25 日报</a><time datetime="2026-05-25T09:10:53.230Z" title="发表于 2026-05-25 17:10:53">2026-05-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/406cb2ca.html" title="2026 年第 21 周周报">2026 年第 21 周周报</a><time datetime="2026-05-22T05:25:06.668Z" title="发表于 2026-05-22 13:25:06">2026-05-22</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2026 By NULL+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script><script>function loadUtterances () {
+  let ele = document.createElement('script')
+  ele.setAttribute('id', 'utterances_comment')
+  ele.setAttribute('src', 'https://utteranc.es/client.js')
+  ele.setAttribute('repo', 'null0x0f/null0x0f.github.io')
+  ele.setAttribute('issue-term', 'pathname')
+  let nowTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'photon-dark' : 'github-light'
+  ele.setAttribute('theme', nowTheme)
+  ele.setAttribute('crossorigin', 'anonymous')
+  ele.setAttribute('async', 'true')
+  document.getElementById('utterances-wrap').insertAdjacentElement('afterbegin',ele)
+}
+
+function utterancesTheme () {
+  const iframe = document.querySelector('.utterances-frame')
+  if (iframe) {
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'photon-dark' : 'github-light'
+    const message = {
+      type: 'set-theme',
+      theme: theme
+    };
+    iframe.contentWindow.postMessage(message, 'https://utteranc.es');
+  }
+}
+
+if ('Utterances' === 'Utterances' || !true) {
+  if (true) btf.loadComment(document.getElementById('utterances-wrap'), loadUtterances)
+  else loadUtterances()
+} else {
+  function loadOtherComment () {
+    loadUtterances()
+  }
+}</script></div><script src="https://unpkg.com/github-calendar@latest/dist/github-calendar.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var host = document.getElementById('recent-posts');
+    if (host) {
+      var wrap = document.createElement('div');
+      wrap.className = 'github-calendar';
+      host.prepend(wrap);
+      // 初始化 GitHub 贡献图（改成你的用户名）
+      GitHubCalendar(".github-calendar", "null0x0f", { responsive: true });
+    }
+  });
+</script>
+<script defer src="/js/live2d-mascot.js"></script><div class="app-refresh" id="app-refresh" style="position: fixed;top: -2.2rem;left: 0;right: 0;z-index: 99999;padding: 0 1rem;font-size: 15px;height: 2.2rem;transition: all 0.3s ease;"><div class="app-refresh-wrap" style=" display: flex;color: #fff;height: 100%;align-items: center;justify-content: center;"><label>✨ 有新文章啦！ 👉</label><a href="javascript:void(0)" onclick="location.reload()"><span style="color: #fff;text-decoration: underline;cursor: pointer;">🍗点击食用🍔</span></a></div></div><script>if ('serviceWorker' in navigator) {
+if (navigator.serviceWorker.controller) {
+navigator.serviceWorker.addEventListener('controllerchange', function() {
+showNotification()
+})
+}
+window.addEventListener('load', function() {
+navigator.serviceWorker.register('/sw.js')
+})
+}
+function showNotification() {
+if (GLOBAL_CONFIG.Snackbar) {
+var snackbarBg =
+document.documentElement.getAttribute('data-theme') === 'light' ?
+GLOBAL_CONFIG.Snackbar.bgLight :
+GLOBAL_CONFIG.Snackbar.bgDark
+var snackbarPos = GLOBAL_CONFIG.Snackbar.position
+Snackbar.show({
+text: '✨ 有新文章啦！ 👉',
+backgroundColor: snackbarBg,
+duration: 500000,
+pos: snackbarPos,
+actionText: '🍗点击食用🍔',
+actionTextColor: '#fff',
+onActionClick: function(e) {
+location.reload()
+},
+})
+} else {
+var showBg =
+document.documentElement.getAttribute('data-theme') === 'light' ?
+'#3b70fc' :
+'#1f1f1f'
+var cssText = `top: 0; background: ${showBg};`
+document.getElementById('app-refresh').style.cssText = cssText
+}
+}</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu@1.1.6/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    if(parent_div_git) {
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var qweather_key = '43d2913d6dec46aa9571ee8d72878f8d';
+  var gaud_map_key = '563a959d007d0f2c5167053ad5e9a910';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '112.6534116,27.96920845';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu@1.1.6/lib/clock.min.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><script async src="/js/ali_font.js"></script><!-- hexo injector body_end end --></body></html>
