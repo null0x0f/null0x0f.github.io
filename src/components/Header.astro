@@ -1,0 +1,23 @@
+---
+interface Props { current?: "blog" | "about"; }
+const { current } = Astro.props;
+---
+<header class="site-header">
+  <span class="scroll-progress" data-scroll-progress aria-hidden="true"></span>
+  <div class="shell nav-wrap">
+    <a class="brand" href="/" aria-label="返回首页">
+      <span class="brand-mark">JN</span><span class="brand-name">Jackie Null</span>
+    </a>
+    <button class="nav-action menu-toggle" data-menu-toggle aria-label="打开导航" aria-expanded="false">☰</button>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="/blog" aria-current={current === "blog" ? "page" : undefined}>Blog</a>
+      <a href="/about" aria-current={current === "about" ? "page" : undefined}>About</a>
+    </nav>
+    <div class="nav-tools">
+      <button class="nav-action search-trigger" data-search-open aria-label="搜索">
+        <span class="search-trigger-icon" aria-hidden="true">⌕</span><span class="search-label">搜索</span><span class="shortcut">⌘K</span>
+      </button>
+      <button class="nav-action" data-theme-toggle aria-label="切换主题">☾</button>
+    </div>
+  </div>
+</header>

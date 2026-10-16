@@ -1,0 +1,49 @@
+---
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import MangaBackground from "@/components/MangaBackground.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  current?: "blog" | "about";
+  hideFooter?: boolean;
+}
+
+const { title, description = "关于 C++、Qt、嵌入式与工业软件的个人技术博客。", current, hideFooter = false } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script is:inline>document.documentElement.classList.add('js');document.documentElement.dataset.theme=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')</script>
+  </head>
+  <body id="top">
+    <MangaBackground />
+    <Header current={current} />
+    <slot />
+    {!hideFooter && <Footer />}
+    <dialog class="search-dialog" id="site-search" aria-labelledby="search-dialog-title">
+      <div class="search-surface">
+        <header class="search-box">
+          <span class="search-input-icon" aria-hidden="true">⌕</span>
+          <label class="sr-only" id="search-dialog-title" for="site-search-input">搜索站内内容</label>
+          <input id="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-autocomplete="list" />
+          <button class="search-clear" type="button" data-search-clear aria-label="清空搜索" title="清空搜索" hidden>×</button>
+          <button class="search-close" type="button" data-search-close aria-label="关闭搜索" title="关闭搜索">Esc</button>
+        </header>
+        <div class="search-toolbar">
+          <span class="search-summary" data-search-summary aria-live="polite">载入内容</span>
+        </div>
+        <div class="search-results" id="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </dialog>
+    <button class="back-to-top" type="button" data-back-to-top aria-label="返回顶部" title="返回顶部">↑</button>
+    <script is:inline src="/app.js"></script>
+  </body>
+</html>

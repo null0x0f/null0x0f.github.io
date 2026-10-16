@@ -1,0 +1,37 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import GitHubContributions from "@/components/GitHubContributions.astro";
+import HomeHero from "@/components/HomeHero.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const formatDate = (date: Date) => date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+---
+
+<BaseLayout title="Jackie Null — Software & Systems">
+  <main>
+    <HomeHero />
+
+    <section class="section" id="latest-writing" data-reveal>
+      <div class="shell">
+        <header class="section-head">
+          <span class="section-index">01</span>
+          <div><p class="section-label">Latest writing</p><h2>最近文章</h2></div>
+          <a class="text-link internal" href="/blog">浏览全部文章</a>
+        </header>
+        <div class="writing-list">
+          {posts.slice(0, 4).map((post) => (
+            <a class="writing-item" href={`/blog/${post.id}`}>
+              <div><h3>{post.data.title}</h3><p>{post.data.description}</p></div>
+              <span class="topic">{post.data.tags.join(" · ")}</span>
+              <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+              <span class="row-arrow" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <GitHubContributions username="null0x0f" />
+  </main>
+</BaseLayout>

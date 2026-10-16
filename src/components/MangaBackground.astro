@@ -1,0 +1,82 @@
+<div class="manga-background" aria-hidden="true">
+  <img
+    src="/images/bleach.jpg"
+    alt=""
+    width="640"
+    height="914"
+    loading="eager"
+    decoding="async"
+    fetchpriority="low"
+  />
+</div>
+
+<style>
+  .manga-background {
+    --edge-veil: 35%;
+    --reading-veil: 92%;
+    --art-opacity: 0.7;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    background: var(--bg);
+  }
+
+  .manga-background img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    width: auto;
+    max-width: none;
+    height: 100%;
+    opacity: var(--art-opacity);
+    mix-blend-mode: multiply;
+    mask-image: linear-gradient(90deg, transparent, #000 24%);
+  }
+
+  .manga-background::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background:
+      linear-gradient(180deg, transparent 65%, color-mix(in srgb, var(--bg) 35%, transparent)),
+      linear-gradient(
+        90deg,
+        var(--bg),
+        color-mix(in srgb, var(--bg) var(--reading-veil), transparent) 22%,
+        color-mix(in srgb, var(--bg) var(--reading-veil), transparent) 78%,
+        color-mix(in srgb, var(--bg) var(--edge-veil), transparent)
+      );
+  }
+
+  :global([data-theme="dark"]) .manga-background {
+    --edge-veil: 75%;
+    --reading-veil: 96%;
+    --art-opacity: 0.5;
+  }
+
+  :global([data-theme="dark"]) .manga-background img {
+    mix-blend-mode: normal;
+  }
+
+  @media (max-width: 760px) {
+    .manga-background {
+      --edge-veil: 70%;
+      --reading-veil: 90%;
+    }
+
+    .manga-background img {
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+    }
+
+    :global([data-theme="dark"]) .manga-background {
+      --edge-veil: 88%;
+      --reading-veil: 97%;
+    }
+  }
+</style>

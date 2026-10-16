@@ -1,0 +1,20 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="About — Jackie Null" description="关于 Jackie Null。" current="about">
+  <main class="shell about-layout">
+    <header class="about-intro">
+      <p class="eyebrow">About / Profile</p>
+      <h1>你好，我是<br />Jackie Null。</h1>
+      <p>一名关注可靠性与实际交付的软件工程师，主要工作在桌面软件、嵌入式设备和工业现场之间。</p>
+      <div class="about-availability"><span class="status-dot"></span><span>专注工业软件与设备通信</span></div>
+      <div class="hero-links"><a class="text-link internal" href="/blog">阅读文章</a><a class="text-link" href="https://github.com/null0x0f" target="_blank" rel="noreferrer">GitHub</a></div>
+    </header>
+    <div class="about-content">
+      <section><span class="about-section-index">01 / NOW</span><h2>现在</h2><p>我目前专注于 C++ / Qt 工业软件、设备通信和工程工具链。喜欢把难以观察的系统状态变得清晰，让复杂操作成为可理解、可恢复的工作流。</p><p>这个网站用于记录真实问题、工程决策和那些值得反复查阅的技术细节。</p></section>
+      <section><span class="about-section-index">02 / PRINCIPLES</span><h2>工作方式</h2><div class="decision-list"><div class="decision"><span>01</span><div><strong>先建立边界</strong><p>明确模块职责、失败方式和数据所有权，再选择具体技术。</p></div></div><div class="decision"><span>02</span><div><strong>为诊断而设计</strong><p>系统不只要工作，还要能解释为什么没有工作。</p></div></div><div class="decision"><span>03</span><div><strong>保持工具简单</strong><p>减少隐式状态，让操作结果清楚、可撤销、可重复。</p></div></div></div></section>
+      <section><span class="about-section-index">03 / FOCUS</span><h2>关注方向</h2><div class="timeline"><div class="timeline-row"><time>Core</time><div><strong>C++ · Qt · Embedded Linux</strong><p>应用架构、性能、并发与设备集成</p></div></div><div class="timeline-row"><time>Protocol</time><div><strong>Modbus · CAN · RS485</strong><p>工业协议、现场诊断与数据采集</p></div></div><div class="timeline-row"><time>Tools</time><div><strong>CMake · Git · Python</strong><p>构建系统、自动化测试与工程效率</p></div></div></div></section>
+    </div>
+  </main>
+</BaseLayout>

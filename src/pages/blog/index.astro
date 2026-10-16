@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const years = [...new Set(posts.map((post) => post.data.publishedAt.getFullYear()))];
+const date = (value: Date) => value.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+const topics = [...new Set(posts.flatMap((post) => post.data.tags))];
+---
+
+<BaseLayout title="Blog — Jackie Null" description="关于 C++、Qt、嵌入式与工业软件的技术文章。" current="blog">
+  <main class="shell page-shell">
+    <header class="page-heading">
+      <div><p class="eyebrow">Writing / Archive</p><h1>工程笔记与<br />技术思考</h1></div>
+      <div class="page-heading-aside">
+        <p>关于软件架构、工业通信与嵌入式开发的长篇记录。写清楚问题，也写清楚为什么这样选择。</p>
+        <dl><div><dt>文章</dt><dd>{posts.length}</dd></div><div><dt>主题</dt><dd>{topics.length}</dd></div><div><dt>年份</dt><dd>{years.length}</dd></div></dl>
+      </div>
+    </header>
+    <div class="filter-bar">
+      <div class="filter-group" aria-label="文章筛选"><button class="filter-btn is-active" data-filter="all">全部</button>{topics.map((topic) => <button class="filter-btn" data-filter={topic.toLowerCase()}>{topic}</button>)}</div>
+      <span class="result-count" data-result-count>{posts.length} 篇内容</span>
+    </div>
+    <section class="archive">
+      {years.map((year) => (
+        <div class="archive-year">
+          <h2><span>{year}</span><small>{posts.filter((post) => post.data.publishedAt.getFullYear() === year).length} posts</small></h2>
+          <div class="archive-list">
+            {posts.filter((post) => post.data.publishedAt.getFullYear() === year).map((post) => (
+              <a class="archive-item" data-topic={post.data.tags.map((tag) => tag.toLowerCase()).join(" ")} href={`/blog/${post.id}`}>
+                <div><h3>{post.data.title}</h3><p>{post.data.description}</p></div>
+                <span>{post.data.tags.join(" · ")}</span>
+                <time datetime={post.data.publishedAt.toISOString()}>{date(post.data.publishedAt)}</time>
+                <i aria-hidden="true">↗</i>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+  </main>
+</BaseLayout>
