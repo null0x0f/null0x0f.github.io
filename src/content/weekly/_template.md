@@ -1,7 +1,7 @@
 ---
 title: "2026年10月第二周"
 description: "周报更改 ai体验 健身痕迹"
-weekOf: "2026-10-12"
+weekOf: 本周周一
 publishedAt: 2026-10-16
 tags: [C++, Qt,周报]
 draft: false
