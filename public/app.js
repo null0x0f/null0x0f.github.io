@@ -96,7 +96,7 @@ const appendHighlightedText = (target, value, query) => {
 const scoreSearchItem = (item, tokens) => {
   const title = normalizeSearchText(item.title);
   const description = normalizeSearchText(item.description);
-  const meta = normalizeSearchText(item.meta);
+  const meta = normalizeSearchText([item.type, item.meta].filter(Boolean).join(" "));
   if (!tokens.every((token) => `${title} ${description} ${meta}`.includes(token))) return -1;
   return tokens.reduce((score, token) => {
     if (title.startsWith(token)) return score + 80;
@@ -309,6 +309,16 @@ document.querySelectorAll(".copy-code").forEach((button) => {
   });
 });
 
+document.querySelectorAll(".weekly-reading .prose table").forEach((table) => {
+  const wrapper = document.createElement("div");
+  wrapper.className = "weekly-table-scroll";
+  wrapper.tabIndex = 0;
+  wrapper.setAttribute("role", "region");
+  wrapper.setAttribute("aria-label", "可横向滚动的表格");
+  table.before(wrapper);
+  wrapper.append(table);
+});
+
 const filterButtons = document.querySelectorAll("[data-filter]");
 const archiveItems = document.querySelectorAll("[data-topic]");
 filterButtons.forEach((button) => {
@@ -321,6 +331,43 @@ filterButtons.forEach((button) => {
     if (count) count.textContent = `${visible} 篇内容`;
   });
 });
+
+const weeklyArchive = document.querySelector("[data-weekly-archive]");
+if (weeklyArchive) {
+  const form = weeklyArchive.querySelector("[data-weekly-filters]");
+  const query = weeklyArchive.querySelector("[data-weekly-query]");
+  const year = weeklyArchive.querySelector("[data-weekly-year]");
+  const entries = [...weeklyArchive.querySelectorAll("[data-weekly-entry]")];
+  const count = weeklyArchive.querySelector("[data-weekly-count]");
+  const reset = weeklyArchive.querySelector("[data-weekly-reset]");
+  const empty = weeklyArchive.querySelector("[data-weekly-no-results]");
+  const applyFilters = () => {
+    const tokens = normalizeSearchText(query?.value ?? "").trim().split(/\s+/).filter(Boolean);
+    const selectedYear = year?.value ?? "all";
+    entries.forEach((entry) => {
+      entry.hidden = (selectedYear !== "all" && entry.dataset.year !== selectedYear)
+        || !tokens.every((token) => normalizeSearchText(entry.dataset.search).includes(token));
+    });
+    weeklyArchive.querySelectorAll("[data-weekly-month]").forEach((group) => {
+      const visibleEntries = group.querySelectorAll("[data-weekly-entry]:not([hidden])").length;
+      group.hidden = visibleEntries === 0;
+      const monthCount = group.querySelector("h3 small");
+      if (monthCount) monthCount.textContent = `${visibleEntries} 期`;
+    });
+    const visible = entries.filter((entry) => !entry.hidden).length;
+    if (count) count.textContent = `显示 ${visible} / ${entries.length} 期`;
+    if (empty) empty.hidden = visible > 0;
+    if (reset) reset.hidden = !tokens.length && selectedYear === "all";
+  };
+  if (form) {
+    form.hidden = false;
+    form.addEventListener("submit", (event) => event.preventDefault());
+    query?.addEventListener("input", applyFilters);
+    year?.addEventListener("change", applyFilters);
+    form.addEventListener("reset", () => requestAnimationFrame(applyFilters));
+    weeklyArchive.querySelector("[data-weekly-clear]")?.addEventListener("click", () => form.reset());
+  }
+}
 
 const revealSelectors = [
   ".page-heading",

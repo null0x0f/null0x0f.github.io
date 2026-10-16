@@ -1,0 +1,22 @@
+---
+import { getPublishedWeekly } from "@/lib/weekly";
+import { getWeekInfo } from "@/lib/weekly-dates";
+
+const latest = (await getPublishedWeekly())[0];
+const week = latest && getWeekInfo(latest.data.weekOf);
+---
+
+<section class="section weekly-home" data-reveal>
+  <div class="shell">
+    <header class="section-head">
+      <span class="section-index">02</span>
+      <div><p class="section-label">Weekly journal</p><h2>这一周，值得记下</h2></div>
+      <a class="text-link internal" href="/weekly/">全部周报</a>
+    </header>
+    <a class="weekly-teaser" href={latest ? `/weekly/${latest.id}/` : "/weekly/"}>
+      <span class="weekly-teaser-label">{week ? week.label : "WEEK BY WEEK"}<span>{week ? week.range : "开发 · 学习 · 复盘"}</span></span>
+      <div class="weekly-teaser-copy"><h3>{latest ? latest.data.title : "给每一周，留一页记录。"}</h3><p>{latest ? latest.data.description : "记录开发进展、踩过的坑和新收获。第一篇周报正在酝酿中。"}</p></div>
+      <span class="weekly-arrow" aria-hidden="true">↗</span>
+    </a>
+  </div>
+</section>

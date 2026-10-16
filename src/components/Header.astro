@@ -1,5 +1,5 @@
 ---
-interface Props { current?: "blog" | "about"; }
+interface Props { current?: "blog" | "weekly" | "about"; }
 const { current } = Astro.props;
 ---
 <header class="site-header">
@@ -11,6 +11,7 @@ const { current } = Astro.props;
     <button class="nav-action menu-toggle" data-menu-toggle aria-label="打开导航" aria-expanded="false">☰</button>
     <nav class="site-nav" aria-label="主导航">
       <a href="/blog" aria-current={current === "blog" ? "page" : undefined}>Blog</a>
+      <a href="/weekly/" aria-current={current === "weekly" ? "page" : undefined}>周报</a>
       <a href="/about" aria-current={current === "about" ? "page" : undefined}>About</a>
     </nav>
     <div class="nav-tools">

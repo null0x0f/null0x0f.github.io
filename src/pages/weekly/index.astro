@@ -1,0 +1,87 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getPublishedWeekly } from "@/lib/weekly";
+import { formatWeeklyDate, getWeekInfo } from "@/lib/weekly-dates";
+
+const entries = await getPublishedWeekly();
+const latest = entries[0];
+const latestWeek = latest && getWeekInfo(latest.data.weekOf);
+const years = [...new Set(entries.map(({ data }) => getWeekInfo(data.weekOf).year))];
+const months = [...new Set(entries.map(({ data }) => data.weekOf.slice(0, 7)))];
+const prompts = [
+  ["01", "本周推进", "做了什么，留下了什么"],
+  ["02", "问题与解法", "把踩过的坑变成经验"],
+  ["03", "输入与收获", "好文章、新工具、小发现"],
+  ["04", "下周计划", "带着具体的问题继续"]
+];
+---
+
+<BaseLayout title="周报 — Jackie Null" description="以周为单位，记录开发进展、问题与解法、学习收获和下周计划。" current="weekly">
+  <main class="shell weekly-page">
+    <header class="weekly-heading" data-reveal>
+      <div class="weekly-intro">
+        <p class="weekly-kicker"><span aria-hidden="true"></span>Weekly journal / 周报</p>
+        <h1>每周一记，<br /><em>慢慢积累。</em></h1>
+        <p class="weekly-lede">技术文章记录一个问题的答案，周报记录走到答案的过程。写下开发中的进展、卡住的瞬间，以及这一周的新收获。</p>
+        <p class="weekly-heading-foot">以周为单位，给思考留一点空间。<span aria-hidden="true">↘</span></p>
+      </div>
+      <aside class="weekly-notebook" aria-label="周报记录方向">
+        <div class="weekly-notebook-head"><span>一周的四个切面</span><span aria-hidden="true">W /</span></div>
+        <ol>{prompts.map(([number, title, description]) => <li><span>{number}</span><div><strong>{title}</strong><p>{description}</p></div></li>)}</ol>
+        <span class="weekly-notebook-foot">BUILD · LEARN · REFLECT · REPEAT</span>
+      </aside>
+    </header>
+
+    {latest && latestWeek && (
+      <section aria-labelledby="latest-weekly-heading" data-reveal>
+        <h2 class="sr-only" id="latest-weekly-heading">最新一期</h2>
+        <a class="weekly-feature" href={`/weekly/${latest.id}/`}>
+          <div class="weekly-stamp"><span>WEEK</span><strong>{latestWeek.number}</strong><span>{latestWeek.isoYear}</span></div>
+          <div class="weekly-feature-copy">
+            <div class="weekly-feature-meta"><span class="weekly-badge">最新一期</span><time datetime={latest.data.weekOf}>{latestWeek.range}</time></div>
+            <h3>{latest.data.title}</h3><p>{latest.data.description}</p>
+            <div class="weekly-tags">{latest.data.tags.map((tag) => <span>{tag}</span>)}</div>
+          </div>
+          <span class="weekly-arrow" aria-hidden="true">↗</span>
+        </a>
+      </section>
+    )}
+
+    <section class="weekly-archive" aria-labelledby="weekly-archive-heading" data-weekly-archive>
+      <header class="weekly-archive-head"><div><p class="weekly-kicker">The archive</p><h2 id="weekly-archive-heading">每一周，都有迹可循</h2></div><span data-weekly-count aria-live="polite">{entries.length ? `已记录 ${entries.length} 期` : "记录即将开始"}</span></header>
+      {entries.length > 0 ? (
+        <>
+          <form class="weekly-filters" role="search" data-weekly-filters hidden>
+            <label class="weekly-search"><span aria-hidden="true">⌕</span><span class="sr-only">搜索周报标题、摘要、标签或周次</span><input type="search" name="q" placeholder="搜索周报标题、标签或周次…" autocomplete="off" data-weekly-query /></label>
+            <label class="weekly-year-filter"><span>年份</span><select name="year" data-weekly-year><option value="all">全部年份</option>{years.map((year) => <option value={year}>{year} 年</option>)}</select></label>
+            <button class="weekly-reset" type="reset" hidden data-weekly-reset>重置筛选</button>
+          </form>
+          <div class="weekly-months">
+            {months.map((month) => {
+              const group = entries.filter(({ data }) => data.weekOf.startsWith(month));
+              const firstWeek = getWeekInfo(group[0].data.weekOf);
+              return <section class="weekly-month" data-weekly-month data-reveal>
+                <h3>{firstWeek.monthLabel}<small>{group.length} 期</small></h3>
+                <div class="weekly-entries">{group.map((entry) => {
+                  const week = getWeekInfo(entry.data.weekOf);
+                  return <a class="weekly-entry" href={`/weekly/${entry.id}/`} data-weekly-entry data-year={week.year} data-search={["周报", entry.data.title, entry.data.description, week.label, week.range, ...entry.data.tags].join(" ")}>
+                    <span class="weekly-entry-issue"><strong>W{week.number}</strong><span>{week.isoYear}</span></span>
+                    <div class="weekly-entry-copy"><h4>{entry.data.title}</h4><p>{entry.data.description}</p><div class="weekly-entry-meta"><time datetime={entry.data.weekOf}>{week.range}</time>{entry.data.tags.length > 0 && <span>{entry.data.tags.join(" · ")}</span>}</div></div>
+                    <span class="weekly-entry-published">发布于<time datetime={entry.data.publishedAt.toISOString()}>{formatWeeklyDate(entry.data.publishedAt)}</time></span>
+                    <span class="weekly-arrow" aria-hidden="true">↗</span>
+                  </a>;
+                })}</div>
+              </section>;
+            })}
+          </div>
+          <div class="weekly-no-results" data-weekly-no-results hidden><h3>这一页，还没有匹配的记录。</h3><p>试试其他关键词，或切换年份。</p><button class="text-link" type="button" data-weekly-clear>查看全部周报 ↗</button></div>
+        </>
+      ) : (
+        <div class="weekly-empty" data-reveal>
+          <span class="weekly-empty-mark" aria-hidden="true">To be<br /><strong>continued.</strong></span>
+          <div><p class="weekly-kicker">下一页 / 从这一周开始</p><h3>第一篇周报，正在酝酿中。</h3><p>这里会慢慢积累开发记录、问题复盘和学习收获。<br />在此之前，可以先读读已经整理好的技术文章。</p><a class="text-link internal" href="/blog">去读技术文章</a></div>
+        </div>
+      )}
+    </section>
+  </main>
+</BaseLayout>

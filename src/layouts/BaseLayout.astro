@@ -6,7 +6,7 @@ import MangaBackground from "@/components/MangaBackground.astro";
 interface Props {
   title: string;
   description?: string;
-  current?: "blog" | "about";
+  current?: "blog" | "weekly" | "about";
   hideFooter?: boolean;
 }
 
@@ -21,6 +21,7 @@ const { title, description = "关于 C++、Qt、嵌入式与工业软件的个�
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/weekly.css" />
     <script is:inline>document.documentElement.classList.add('js');document.documentElement.dataset.theme=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')</script>
   </head>
   <body id="top">
@@ -33,7 +34,7 @@ const { title, description = "关于 C++、Qt、嵌入式与工业软件的个�
         <header class="search-box">
           <span class="search-input-icon" aria-hidden="true">⌕</span>
           <label class="sr-only" id="search-dialog-title" for="site-search-input">搜索站内内容</label>
-          <input id="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-autocomplete="list" />
+          <input id="site-search-input" type="search" placeholder="搜索文章和周报" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-autocomplete="list" />
           <button class="search-clear" type="button" data-search-clear aria-label="清空搜索" title="清空搜索" hidden>×</button>
           <button class="search-close" type="button" data-search-close aria-label="关闭搜索" title="关闭搜索">Esc</button>
         </header>

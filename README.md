@@ -2,10 +2,11 @@
 
 这是一个基于 Astro 的个人技术博客，内容以 Markdown 文件为中心，主要记录 C++、Qt、Embedded、Modbus、CAN、RS485、工业软件和上位机开发经验。
 
-当前产品范围只有：
+当前产品范围：
 
-- 首页：个人介绍、最新文章、GitHub 贡献活动
+- 首页：个人介绍、最新文章、周报入口与最新一期、GitHub 贡献活动
 - Blog：文章归档、标签筛选和站内搜索
+- Weekly / 周报：独立的周报归档、日期范围、ISO 周次和周报详情
 - Article：Markdown 文章详情、目录、代码高亮和阅读进度
 - About：个人介绍和技术方向
 
@@ -16,7 +17,7 @@ Projects 与 Notes 页面已经从当前站点移除。仓库中的 `src/content
 - Astro 5：静态站点生成
 - TypeScript：Astro 配置、组件和内容类型检查
 - Markdown / MDX：文章格式
-- Astro Content Collections：Blog frontmatter 校验和类型生成
+- Astro Content Collections：Blog 与 Weekly frontmatter 校验和类型生成
 - Shiki：代码块语法高亮
 - 原生 CSS：响应式布局、深色模式和视觉系统
 - 原生浏览器 API：主题切换、搜索、筛选、目录高亮、代码复制和返回顶部
@@ -28,9 +29,11 @@ Projects 与 Notes 页面已经从当前站点移除。仓库中的 `src/content
 
 推荐使用：
 
-- Node.js 20 或更高版本
-- pnpm 9 或更高版本
+- Node.js 24，与 GitHub Actions 构建环境保持一致
+- pnpm 11.25.0，与 `package.json` 的 `packageManager` 字段保持一致
 - Git
+
+pnpm 11 要求 Node.js 至少为 22.13；本项目统一推荐 Node.js 24。不要继续沿用旧版文档中的 Node.js 20 / pnpm 9 环境。
 
 检查版本：
 
@@ -45,7 +48,10 @@ git --version
 ```powershell
 npm.cmd --version
 npm.cmd install --global pnpm@11.25.0
+pnpm.cmd --version
 ```
+
+如果 PowerShell 也阻止运行 `pnpm.ps1`，后续命令用 `pnpm.cmd install`、`pnpm.cmd dev` 和 `pnpm.cmd build`。
 
 也可以使用 Corepack：
 
@@ -60,9 +66,9 @@ pnpm --version
 第一次下载项目：
 
 ```bash
-git clone <你的 GitHub 仓库地址>
-cd blog
-pnpm install
+git clone --branch new--blog https://github.com/null0x0f/null0x0f.github.io.git blog-github
+cd blog-github
+pnpm install --frozen-lockfile
 ```
 
 启动开发服务器：
@@ -88,6 +94,10 @@ pnpm preview
 
 ```text
 .
+├── .github/workflows/deploy.yml  # 推送 new--blog 后构建并部署 GitHub Pages
+├── docs/
+│   ├── weekly-writing.md         # 周报写作、发布与排错说明
+│   └── legacy-article-migration.md
 ├── src/
 │   ├── components/
 │   │   ├── Header.astro
@@ -97,25 +107,33 @@ pnpm preview
 │   ├── layouts/
 │   │   └── BaseLayout.astro
 │   ├── content/
-│   │   ├── blog/                 # 当前正式发布的文章
+│   │   ├── blog/                 # 技术文章
+│   │   ├── weekly/               # 周报，支持 Markdown / MDX
+│   │   │   └── _template.md      # 周报模板，draft: true，不公开
 │   │   ├── projects/             # 暂存素材，不参与当前构建
 │   │   └── notes/                # 暂存素材，不参与当前构建
-│   ├── content.config.ts         # 当前只注册 blog 集合
+│   ├── content.config.ts         # 注册 blog 与 weekly 集合
 │   └── pages/
 │       ├── index.astro           # 首页
 │       ├── about.astro            # About
 │       ├── blog/index.astro       # Blog 归档
 │       ├── blog/[...slug].astro   # Article 详情
-│       └── search-index.json.ts   # Blog 搜索索引
+│       ├── weekly/index.astro     # 周报归档
+│       ├── weekly/[...slug].astro # 周报详情
+│       └── search-index.json.ts   # 公开文章与周报的搜索索引
 ├── public/
 │   ├── styles.css
+│   ├── weekly.css                 # 周报布局、归档、阅读及响应式样式
 │   ├── app.js
 │   ├── home-motion.js
 │   ├── github-contributions.js
-│   └── images/blog/               # 文章图片
+│   └── images/
+│       ├── blog/                 # 文章图片
+│       └── weekly/               # 周报图片，按需创建
 ├── astro.config.mjs
 ├── package.json
 ├── pnpm-lock.yaml
+├── pnpm-workspace.yaml           # esbuild、sharp 构建许可
 ├── tsconfig.json
 └── README.md
 ```
@@ -176,10 +194,26 @@ src/content/blog/qt-thread-safe-signal.md
 pnpm build
 git add src/content/blog/qt-thread-safe-signal.md
 git commit -m "新增 Qt 线程安全文章"
-git push origin main
+git push origin HEAD:new--blog
 ```
 
 开发服务器运行时保存 Markdown 后通常会自动刷新；如果内容类型缓存没有及时更新，停止并重新运行 `pnpm dev`。
+
+## 新增周报
+
+周报使用独立目录 `src/content/weekly/`，归档入口为 `/weekly/`。它与 Blog 文章分开归档，共用站内搜索和 Markdown 阅读体验。
+
+推荐先复制模板，在项目根目录运行：
+
+```powershell
+Copy-Item -LiteralPath "src/content/weekly/_template.md" -Destination "src/content/weekly/2026-10-12.md"
+```
+
+然后修改标题、摘要、日期和正文，将复制出来的文件设为 `draft: false`。`weekOf` 必须是该周周一，例如 `2026-10-12`；系统自动显示对应周日 `2026-10-18` 和 ISO 周次。模板本身保持 `draft: true`。
+
+每个 `weekOf` 只允许一篇公开周报，重复时构建会报错。未来的 `publishedAt` 不会自动延迟发布：需要暂存时使用 `draft: true`。初始模板不会出现在首页、周报归档、搜索或公开详情页中。
+
+完整字段、图片规范、GitHub Pages 发布步骤、跨年周说明和常见错误见 [周报写作与发布指南](docs/weekly-writing.md)。
 
 ## Markdown 写作规范
 
@@ -227,7 +261,7 @@ Markdown 使用以 `/` 开头的公共路径：
 
 图片文件名建议使用英文、数字和连字符。不要把图片放进 `dist/`，不要提交密钥、内网地址、设备序列号或其他敏感信息。Linux 服务器区分文件名大小写。
 
-当前项目不会自动处理 Markdown 同目录图片。如果需要图片与文章源文件放在一起，需要后续扩展 Astro 的资源处理方式；现在请统一使用 `public/images/blog/`。
+当前写作流程统一使用 `public/` 下的公共图片路径：Blog 图片放在 `public/images/blog/`，周报图片放在 `public/images/weekly/YYYY-MM-DD/`。Markdown 链接不要带 `public/` 前缀。
 
 ## Jump 漫画背景
 
@@ -239,7 +273,7 @@ Markdown 使用以 `/` 开头的公共路径：
 
 ## 搜索、主题和交互
 
-`src/pages/search-index.json.ts` 在构建时读取公开 Blog 文章并生成 `/search-index.json`。搜索内容包括文章标题、摘要和标签，不需要数据库或后端搜索服务。
+`src/pages/search-index.json.ts` 在构建时读取公开 Blog 文章和周报，生成 `/search-index.json`。搜索匹配标题、摘要、标签、周报周次和内容类型，结果区分“文章”和“周报”；目前不索引整篇正文，不需要数据库或后端搜索服务。`draft: true` 的内容不会加入索引。
 
 `public/app.js` 负责：
 
@@ -247,7 +281,7 @@ Markdown 使用以 `/` 开头的公共路径：
 - Blog 标签筛选
 - 关键词高亮和相关度排序
 - 方向键选择、回车打开
-- 最近访问文章记录
+- 最近访问文章与周报记录
 - 深色 / 浅色模式
 - 文章目录高亮
 - 代码复制
@@ -263,6 +297,27 @@ Markdown 使用以 `/` 开头的公共路径：
 ```
 
 贡献数据使用公开接口，不需要 GitHub Token。页面会先显示浏览器中的最近缓存，同时在后台检查新数据；点击贡献区右上角的刷新按钮可以手动检查。页面重新变为可见且距离上次检查超过 5 分钟时也会再次请求。GitHub 官方统计和第三方接口 CDN 本身可能存在数分钟到数十分钟延迟，因此这里是近实时显示，而不是秒级实时数据。接口不可用时会保留最近缓存，首页其他内容仍然可以正常显示。
+
+## 部署到 GitHub Pages
+
+正式仓库为 `null0x0f/null0x0f.github.io`，站点地址为 <https://null0x0f.github.io/>。仓库已有 `.github/workflows/deploy.yml`，推送到远端 `new--blog` 分支后，GitHub Actions 会安装依赖、执行 `pnpm build`，再将 `dist/` 作为 Pages 构建产物发布。
+
+首次启用时，在仓库 **Settings → Pages → Build and deployment** 中，将 **Source** 设为 **GitHub Actions**。如果 `github-pages` 环境配置了部署分支限制，需要允许 `new--blog`。
+
+提交内容并发布：
+
+```bash
+pnpm build
+git add src/content/weekly/2026-10-12.md
+git commit -m "发布 2026-10-12 周报"
+git push origin HEAD:new--blog
+```
+
+如有新图片，需要同时 `git add public/images/weekly/2026-10-12/`。最后在仓库 **Actions** 页面查看构建与部署结果。上述推送命令将当前提交发送到远端 `new--blog`，因此本地分支叫 `master` 也可以使用；若远端存在本地没有的更新，应先同步并解决冲突，不要直接强制推送。
+
+`new--blog` 是部署源码分支，不是网址的一部分。当前属于用户主页仓库，`astro.config.mjs` 中的 `site` 为 `https://null0x0f.github.io`，无需设置 `base: "/new--blog"`。
+
+提交源文件、锁文件、`pnpm-workspace.yaml` 和 Workflow 即可，不需要提交 `dist/` 或 `node_modules/`。线上不会运行 Node.js，新增或修改 Markdown 后必须重新构建和部署才会更新。
 
 ## 部署到 Ubuntu 云服务器
 
@@ -316,7 +371,7 @@ sudo systemctl reload nginx
 
 ### 本地或 GitHub Actions 构建
 
-也可以在本地或 GitHub Actions 执行 `pnpm build`，然后只上传 `dist/` 到服务器。当前仓库没有配置自动部署 Workflow；之后如果需要，可以再增加 SSH、对象存储或 CDN 部署流程。
+也可以在本地执行 `pnpm build`，然后只上传 `dist/` 到服务器。当前仓库的自动部署 Workflow 用于 GitHub Pages，不会自动更新 Ubuntu 云服务器；若继续使用云服务器，需要手动上传，或单独配置 SSH、对象存储等部署流程。
 
 正式上线建议使用 HTTPS，例如：
 
@@ -331,6 +386,8 @@ sudo certbot --nginx -d example.com -d www.example.com
 ```text
 src/
 public/
+docs/
+.github/workflows/
 astro.config.mjs
 package.json
 pnpm-lock.yaml
@@ -354,7 +411,7 @@ dist/
 ```bash
 git add src/content/blog/my-article.md public/images/blog/my-image.webp
 git commit -m "新增技术文章"
-git push origin main
+git push origin HEAD:new--blog
 ```
 
 ## 从旧博客迁移文章
@@ -386,7 +443,11 @@ git push origin main
 
 ### 新建 Markdown 后文章没有出现
 
-确认文件位于 `src/content/blog/`，扩展名是 `.md` 或 `.mdx`，frontmatter 字段完整，并重新运行 `pnpm dev` 或 `pnpm build`。
+技术文章放在 `src/content/blog/`，周报放在 `src/content/weekly/`。确认扩展名是 `.md` 或 `.mdx`、frontmatter 字段完整，且 `draft` 不是 `true`，并重新运行 `pnpm dev` 或 `pnpm build`。线上还需确认最新一次 GitHub Actions 部署成功。
+
+### 周报提示 weekOf 无效或出现重复周报
+
+`weekOf` 必须是有效的 `YYYY-MM-DD` 日期，且当天为周一。例如 `2026-10-12` 有效，`2026-10-18` 是周日，不能作为 `weekOf`。同一周只保留一篇 `draft: false` 的周报；修改已有周报，或把重复文件保留为草稿。详细规则见 [周报写作与发布指南](docs/weekly-writing.md)。
 
 ### 构建提示 frontmatter 错误
 

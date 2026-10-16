@@ -1,0 +1,194 @@
+/* 周报：沿用漫画主题，以期次、记录周期和纵向阅读为主。 */
+.weekly-page { padding-bottom: 112px; }
+.weekly-kicker { display: flex; align-items: center; gap: 10px; margin: 0; font: 600 11px/1.6 Consolas, monospace; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+.weekly-kicker > span { width: 9px; height: 9px; background: var(--accent); border: 1px solid var(--text); }
+.weekly-heading { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(270px, .7fr); gap: 100px; align-items: center; padding: 94px 0 82px; }
+.weekly-heading h1 { margin: 26px 0; font-size: clamp(44px, 4.6vw, 66px); line-height: 1.25; letter-spacing: -2px; font-weight: 850; }
+.weekly-heading h1 em { position: relative; font-style: normal; isolation: isolate; }
+.weekly-heading h1 em::after { content: ""; position: absolute; z-index: -1; bottom: 4px; left: -3px; right: -8px; height: 16px; background: var(--accent-yellow); transform: rotate(-2deg); }
+[data-theme="dark"] .weekly-heading h1 em::after { opacity: .35; }
+.weekly-lede { max-width: 540px; margin: 0; color: var(--muted); font-size: 16px; line-height: 1.95; }
+.weekly-heading-foot { display: flex; align-items: center; gap: 26px; margin: 28px 0 0; font-size: 12px; color: var(--muted); }
+.weekly-heading-foot > span { font-size: 24px; color: var(--accent); }
+.weekly-notebook { position: relative; background: var(--bg); border: 2px solid var(--text); box-shadow: 7px 7px 0 var(--accent); transform: rotate(1.5deg); }
+.weekly-notebook::before { content: ""; position: absolute; width: 72px; height: 22px; top: -12px; left: calc(50% - 36px); background: var(--accent-yellow); opacity: .8; transform: rotate(-5deg); }
+.weekly-notebook-head { display: flex; align-items: center; justify-content: space-between; padding: 23px 24px 15px; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 700; }
+.weekly-notebook-head > span:last-child { color: var(--accent); font: 900 22px/1 Consolas, monospace; }
+.weekly-notebook ol { margin: 0; padding: 0 24px; list-style: none; }
+.weekly-notebook li { display: flex; align-items: baseline; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+.weekly-notebook li > span { color: var(--accent); font: 12px/1 Consolas, monospace; }
+.weekly-notebook strong { font-size: 14px; font-weight: 650; }
+.weekly-notebook p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+.weekly-notebook-foot { display: block; padding: 16px 24px; font: 9px/1.5 Consolas, monospace; letter-spacing: 1px; color: var(--muted); }
+.weekly-feature { display: grid; grid-template-columns: 120px minmax(0, 1fr) 38px; align-items: center; gap: 36px; padding: 36px; border: 2px solid var(--text); background: var(--bg); box-shadow: 5px 5px 0 var(--accent-yellow); transition: transform 160ms ease, box-shadow 160ms ease; }
+.weekly-feature:hover { transform: translateY(-3px); box-shadow: 7px 8px 0 var(--accent-yellow); }
+.weekly-stamp { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px; border-right: 1px solid var(--border); font: 11px/1.3 Consolas, monospace; color: var(--muted); }
+.weekly-stamp strong { color: var(--text); font-size: 64px; line-height: 1; letter-spacing: -5px; }
+.weekly-feature-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; color: var(--muted); font: 12px/1.6 Consolas, monospace; }
+.weekly-badge { padding: 3px 9px; background: var(--accent-yellow); border: 1px solid var(--text); color: #1a1a1a; font: 700 11px/1.6 "Microsoft YaHei", sans-serif; }
+.weekly-feature h3 { margin: 15px 0 10px; font-size: clamp(21px, 2.1vw, 29px); line-height: 1.5; overflow-wrap: anywhere; }
+.weekly-feature-copy > p { margin: 0; max-width: 700px; color: var(--muted); font-size: 14px; line-height: 1.9; }
+.weekly-arrow { font-size: 26px; font-weight: 500; color: var(--accent); }
+.weekly-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.weekly-tags > span { border: 1px solid var(--border); padding: 2px 8px; font: 11px/1.7 Consolas, "Microsoft YaHei", monospace; color: var(--muted); background: var(--surface); overflow-wrap: anywhere; }
+.weekly-archive { padding-top: 80px; }
+.weekly-archive-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; padding-bottom: 24px; border-bottom: 2px solid var(--text); }
+.weekly-archive-head h2 { margin: 10px 0 0; font-size: 25px; line-height: 1.5; letter-spacing: -.5px; }
+.weekly-archive-head > span { flex-shrink: 0; padding-bottom: 4px; color: var(--muted); font-size: 12px; }
+.weekly-filters { display: flex; gap: 16px; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.weekly-search { display: flex; align-items: center; flex: 1; gap: 10px; min-width: 0; padding: 0 14px; background: var(--bg); border: 1px solid var(--border); }
+.weekly-search > span:first-child { color: var(--accent); font-size: 23px; }
+.weekly-search input { width: 100%; min-width: 0; height: 43px; padding: 0; border: 0; background: transparent; color: var(--text); font: inherit; font-size: 13px; }
+.weekly-search:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.weekly-search input:focus-visible { outline: 0; }
+.weekly-search input::placeholder { color: var(--muted); }
+.weekly-year-filter { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+.weekly-year-filter select { max-width: 160px; height: 45px; padding: 0 30px 0 12px; border: 1px solid var(--border); border-radius: 0; background: var(--bg); color: var(--text); font: inherit; }
+.weekly-year-filter select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.weekly-reset { padding: 10px 0; border: 0; background: none; color: var(--accent); font-size: 12px; cursor: pointer; }
+.weekly-month { display: grid; grid-template-columns: 144px minmax(0, 1fr); gap: 40px; padding-top: 42px; }
+.weekly-month > h3 { position: sticky; top: 96px; align-self: start; margin: 6px 0 0; font-size: 15px; font-weight: 650; }
+.weekly-month > h3 small { display: block; margin-top: 7px; color: var(--muted); font: 11px/1.5 Consolas, monospace; font-weight: 400; }
+.weekly-entry { display: grid; grid-template-columns: 55px minmax(0, 1fr) 84px 24px; gap: 22px; align-items: start; padding: 26px 12px; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--bg) 70%, transparent); transition: background 160ms ease; }
+.weekly-entry:hover { background: var(--surface); }
+.weekly-entry-issue { display: grid; gap: 4px; padding-top: 3px; font-family: Consolas, monospace; }
+.weekly-entry-issue strong { font-size: 17px; line-height: 1.4; font-weight: 600; }
+.weekly-entry-issue > span { color: var(--muted); font-size: 10px; }
+.weekly-entry-copy { min-width: 0; }
+.weekly-entry h4 { margin: 0; font-size: 18px; line-height: 1.6; overflow-wrap: anywhere; transition: color 160ms ease; }
+.weekly-entry:hover h4 { color: var(--accent); }
+.weekly-entry-copy > p { margin: 7px 0 12px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+.weekly-entry-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font: 11px/1.8 Consolas, "Microsoft YaHei", monospace; }
+.weekly-entry-published { display: grid; gap: 5px; padding-top: 4px; color: var(--muted); font-size: 10px; }
+.weekly-entry-published time { font: 11px/1.5 Consolas, monospace; }
+.weekly-entry .weekly-arrow { font-size: 20px; }
+.weekly-empty { display: grid; grid-template-columns: .7fr 1.3fr; align-items: center; gap: 70px; padding: 66px 54px; margin-top: 32px; border: 1px solid var(--border); background: var(--bg); }
+.weekly-empty-mark { display: block; padding: 28px 0; font: italic 20px/1.7 Georgia, serif; color: var(--muted); transform: rotate(-4deg); border-block: 2px solid var(--text); }
+.weekly-empty-mark strong { color: var(--text); font-size: clamp(26px, 3.2vw, 40px); }
+.weekly-empty h3 { margin: 14px 0; font-size: 23px; line-height: 1.5; }
+.weekly-empty p:not(.weekly-kicker), .weekly-no-results p { margin: 0 0 22px; color: var(--muted); font-size: 14px; line-height: 1.9; }
+.weekly-no-results { padding: 70px 20px; text-align: center; }
+.weekly-no-results h3 { margin: 0 0 12px; font-size: 20px; }
+.weekly-no-results button { border: 0; background: none; cursor: pointer; }
+.weekly-home { padding-top: 44px; }
+.weekly-teaser { display: grid; grid-template-columns: 230px minmax(0, 1fr) 30px; gap: 32px; align-items: center; padding: 32px 34px; background: var(--bg); border: 2px solid var(--text); border-left: 7px solid var(--accent); box-shadow: 5px 5px 0 var(--accent-yellow); transition: transform 160ms ease; }
+.weekly-teaser:hover { transform: translateY(-3px); }
+.weekly-teaser-label { display: grid; gap: 9px; color: var(--text); font: 600 14px/1.5 Consolas, monospace; }
+.weekly-teaser-label > span { color: var(--muted); font: 11px/1.7 Consolas, "Microsoft YaHei", monospace; }
+.weekly-teaser-copy h3 { margin: 0 0 9px; font-size: 23px; line-height: 1.5; overflow-wrap: anywhere; }
+.weekly-teaser-copy p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
+.search-result-type.is-weekly { color: var(--text); background: var(--surface-strong); }
+.footer-nav { grid-template-columns: repeat(3, auto); }
+
+.weekly-article-header { padding-bottom: 44px; }
+.weekly-article-header > .weekly-kicker { margin-top: 38px; color: var(--accent); }
+.weekly-article-header h1 { margin-top: 18px; font-size: clamp(32px, 4.2vw, 52px); line-height: 1.4; font-weight: 750; overflow-wrap: anywhere; }
+.weekly-article-header .article-dek { font-size: 18px; }
+.weekly-period { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 30px 0 24px; padding: 17px 20px; background: var(--surface); border-left: 3px solid var(--accent); font: 14px/1.7 Consolas, monospace; }
+.weekly-period > span:first-child { margin-right: 12px; color: var(--muted); font: 12px/1.7 "Microsoft YaHei", sans-serif; }
+.weekly-period small { margin-left: auto; color: var(--muted); font: 11px/1.7 "Microsoft YaHei", sans-serif; }
+.weekly-reading { padding-top: 40px; gap: 80px; }
+.weekly-reading-main { min-width: 0; }
+.weekly-reading .prose { overflow-wrap: anywhere; }
+.weekly-reading .prose table { display: block; max-width: 100%; overflow-x: auto; }
+.weekly-reading .prose table { border: 1px solid var(--border); box-shadow: none; }
+.weekly-reading .prose :is(th, td) { border: 1px solid var(--border); }
+.weekly-reading .prose th { background: var(--surface-strong); color: var(--text); font-weight: 650; }
+.weekly-table-scroll { overflow-x: auto; margin: 34px 0; }
+.weekly-reading .weekly-table-scroll table { display: table; margin: 0; }
+.weekly-reading .prose blockquote { border: 1px solid var(--border); border-left: 3px solid var(--accent); background: var(--surface-strong); box-shadow: none; font-style: normal; font-weight: 400; }
+.weekly-reading .prose blockquote::before, .weekly-reading .prose pre::before { display: none; }
+.weekly-reading .prose pre { overflow-x: auto; border: 1px solid var(--border); box-shadow: none; }
+.weekly-mobile-toc { display: none; }
+.weekly-reading-footer { margin-top: 76px; }
+.weekly-back { font-size: 13px; }
+.weekly-pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 26px; border-top: 2px solid var(--text); }
+.weekly-pager > * { display: flex; flex-direction: column; gap: 12px; padding: 25px 20px 20px 0; }
+.weekly-pager > :last-child { align-items: end; padding-right: 0; padding-left: 20px; text-align: right; }
+.weekly-pager a > span, .weekly-pager-end { font: 11px/1.8 Consolas, "Microsoft YaHei", monospace; color: var(--muted); }
+.weekly-pager strong { font-size: 15px; line-height: 1.7; font-weight: 600; overflow-wrap: anywhere; }
+.weekly-pager a:hover strong { color: var(--accent); }
+.weekly-reading .toc .weekly-toc-back { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--border); }
+.weekly-page [hidden], .weekly-home [hidden] { display: none !important; }
+
+@media (max-width: 1050px) {
+  .weekly-heading { gap: 48px; }
+  .weekly-month { grid-template-columns: 115px minmax(0, 1fr); gap: 20px; }
+  .weekly-entry { gap: 16px; }
+  .weekly-entry-published { display: none; }
+  .weekly-entry { grid-template-columns: 50px minmax(0, 1fr) 22px; }
+  .weekly-teaser { grid-template-columns: 190px minmax(0, 1fr) 26px; gap: 24px; }
+}
+@media (max-width: 980px) {
+  .weekly-reading { grid-template-columns: minmax(0, var(--reading)); }
+  .weekly-mobile-toc { display: block; margin: 0 0 38px; padding: 14px 18px; border: 1px solid var(--border); background: var(--bg); }
+  .weekly-mobile-toc summary { cursor: pointer; font-size: 13px; }
+  .weekly-mobile-toc summary span { float: right; color: var(--accent); }
+  .weekly-mobile-toc nav { display: grid; gap: 10px; margin: 16px 0 4px; color: var(--muted); font-size: 13px; }
+}
+@media (max-width: 760px) {
+  .weekly-page { padding-bottom: 70px; }
+  .weekly-heading { grid-template-columns: 1fr; gap: 36px; padding: 54px 0 58px; }
+  .weekly-heading h1 { margin: 22px 0; font-size: 44px; letter-spacing: -1.5px; }
+  .weekly-lede { font-size: 14px; }
+  .weekly-heading-foot { margin-top: 18px; }
+  .weekly-notebook { max-width: none; margin: 4px 6px 0 2px; transform: none; }
+  .weekly-notebook ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; padding: 0 18px; }
+  .weekly-notebook li { gap: 10px; }
+  .weekly-notebook li > span { font-size: 10px; }
+  .weekly-notebook strong { font-size: 12px; }
+  .weekly-notebook p { font-size: 10px; }
+  .weekly-notebook-head { padding: 18px; }
+  .weekly-notebook-foot { padding: 14px 18px; font-size: 9px; }
+  .weekly-feature { grid-template-columns: 58px minmax(0, 1fr); gap: 18px; padding: 24px 18px; }
+  .weekly-stamp { padding: 0 10px 0 0; }
+  .weekly-stamp strong { font-size: 42px; letter-spacing: -3px; }
+  .weekly-stamp > span { font-size: 10px; }
+  .weekly-feature > .weekly-arrow { display: none; }
+  .weekly-feature-meta { gap: 10px; font-size: 10px; }
+  .weekly-feature h3 { font-size: 20px; margin-top: 13px; }
+  .weekly-feature-copy > p { font-size: 12px; }
+  .weekly-tags { gap: 6px; margin-top: 14px; }
+  .weekly-archive { padding-top: 52px; }
+  .weekly-archive-head { align-items: start; gap: 12px; }
+  .weekly-archive-head h2 { font-size: 21px; }
+  .weekly-archive-head > span { margin-top: 3px; font-size: 10px; }
+  .weekly-filters { flex-wrap: wrap; gap: 12px; padding-block: 16px; }
+  .weekly-search { flex-basis: 100%; }
+  .weekly-year-filter select { height: 38px; }
+  .weekly-reset { margin-left: auto; }
+  .weekly-month { grid-template-columns: 1fr; gap: 8px; padding-top: 30px; }
+  .weekly-month > h3 { position: static; display: flex; align-items: center; gap: 12px; font-size: 13px; }
+  .weekly-month > h3 small { margin: 0; font-size: 10px; }
+  .weekly-entry { gap: 12px; grid-template-columns: 40px minmax(0, 1fr) 18px; padding: 22px 0; }
+  .weekly-entry-issue strong { font-size: 14px; }
+  .weekly-entry h4 { font-size: 16px; }
+  .weekly-entry-copy > p { font-size: 12px; }
+  .weekly-entry-meta { flex-direction: column; gap: 4px; font-size: 10px; }
+  .weekly-entry-meta time { display: inline; }
+  .weekly-empty { grid-template-columns: 1fr; gap: 34px; margin-top: 24px; padding: 30px 24px; }
+  .weekly-empty-mark { width: 180px; padding: 14px 0; font-size: 16px; }
+  .weekly-empty-mark strong { font-size: 28px; }
+  .weekly-empty h3 { font-size: 20px; }
+  .weekly-empty p:not(.weekly-kicker) { font-size: 13px; }
+  .weekly-empty br:not(.weekly-empty-mark br) { display: none; }
+  .weekly-home { padding-top: 12px; }
+  .weekly-teaser { grid-template-columns: minmax(0, 1fr) 22px; padding: 24px 22px; gap: 18px; }
+  .weekly-teaser-label { grid-column: 1 / -1; gap: 4px; font-size: 12px; }
+  .weekly-teaser-copy h3 { font-size: 20px; }
+  .weekly-teaser-copy p { font-size: 13px; }
+  .weekly-article-header { padding-top: 58px; padding-bottom: 22px; }
+  .weekly-article-header h1 { font-size: 32px; }
+  .weekly-article-header .article-dek { font-size: 16px; }
+  .weekly-period { gap: 8px; padding: 14px; font-size: 12px; }
+  .weekly-period > span:first-child { flex-basis: 100%; }
+  .weekly-period small { margin-left: 0; }
+  .weekly-reading { padding-top: 28px; padding-bottom: 80px; }
+  .weekly-pager > * { padding-right: 12px; }
+  .weekly-pager > :last-child { padding-left: 12px; }
+  .weekly-pager strong { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .weekly-feature, .weekly-teaser, .weekly-entry, .weekly-entry h4 { transition: none; }
+  .weekly-feature:hover, .weekly-teaser:hover { transform: none; }
+}
