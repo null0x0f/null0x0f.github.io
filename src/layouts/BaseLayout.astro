@@ -2,6 +2,7 @@
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import MangaBackground from "@/components/MangaBackground.astro";
+import BlogPet from "@/components/BlogPet.astro";
 
 interface Props {
   title: string;
@@ -44,6 +45,7 @@ const { title, description = "关于 C++、Qt、嵌入式与工业软件的个�
         <div class="search-results" id="search-results" role="listbox" aria-label="搜索结果"></div>
       </div>
     </dialog>
+    <BlogPet />
     <button class="back-to-top" type="button" data-back-to-top aria-label="返回顶部" title="返回顶部">↑</button>
     <script is:inline src="/app.js"></script>
   </body>

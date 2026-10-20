@@ -1,0 +1,44 @@
+---
+import pet from "@/data/pet.json";
+const spriteUrl = `/pets/${pet.id}/${pet.spritesheetPath}`;
+---
+
+<aside class="blog-pet" data-blog-pet data-name={pet.displayName} data-sprite={spriteUrl} data-minimized="false" aria-label={`博客宠物：${pet.displayName}`} hidden>
+  <p class="pet-bubble" data-pet-message role="status" aria-live="polite" aria-atomic="true" hidden></p>
+  <div class="pet-stage" data-pet-stage>
+    <button class="pet-touch" data-pet-touch type="button" aria-label={`和${pet.displayName}打个招呼`} title={`点一点，和${pet.displayName}打个招呼`}>
+      <span class="pet-sprite" data-pet-sprite style={`background-image: url("${spriteUrl}")`} aria-hidden="true"></span>
+    </button>
+    <button class="pet-minimize" data-pet-minimize type="button" aria-label={`收起${pet.displayName}`} title="收起宠物">−</button>
+  </div>
+  <button class="pet-restore" data-pet-restore type="button" aria-label={`展开${pet.displayName}`} title={`展开${pet.displayName}`} hidden><span aria-hidden="true">喵</span></button>
+</aside>
+
+<script is:inline src="/pet.js"></script>
+
+<style>
+  :global(body.has-blog-pet) { --blog-pet-width: 96px; --blog-pet-height: 104px; --blog-pet-inset: 20px; }
+  .blog-pet { position: fixed; z-index: 19; right: max(var(--blog-pet-inset, 20px), env(safe-area-inset-right)); bottom: max(var(--blog-pet-inset, 20px), env(safe-area-inset-bottom)); width: var(--blog-pet-width, 96px); pointer-events: none; line-height: 1; }
+  .blog-pet [hidden], .blog-pet[hidden] { display: none !important; }
+  .pet-stage { position: relative; width: var(--blog-pet-width); height: var(--blog-pet-height); }
+  .pet-touch { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; pointer-events: auto; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  .pet-sprite { display: block; width: var(--blog-pet-width); height: var(--blog-pet-height); background-repeat: no-repeat; background-size: calc(var(--blog-pet-width) * 8) calc(var(--blog-pet-height) * 9); background-position: calc(var(--pet-column, 0) * var(--blog-pet-width) * -1) calc(var(--pet-row, 0) * var(--blog-pet-height) * -1); filter: drop-shadow(0 3px 2px rgb(0 0 0 / 12%)); }
+  .pet-minimize { position: absolute; top: -8px; right: -3px; display: grid; place-items: center; width: 26px; height: 26px; padding: 0; border: 1px solid var(--border); background: var(--bg); color: var(--muted); border-radius: 50%; font: 18px/1 sans-serif; cursor: pointer; pointer-events: none; opacity: 0; transition: opacity 150ms ease, color 150ms ease; }
+  .blog-pet:hover .pet-minimize, .blog-pet:focus-within .pet-minimize { opacity: 1; pointer-events: auto; }
+  .pet-minimize:hover { border-color: var(--accent); color: var(--accent); }
+  .pet-bubble { position: absolute; right: 2px; bottom: calc(100% + 12px); width: max-content; max-width: min(220px, calc(100vw - 48px)); margin: 0; padding: 12px 15px; border: 2px solid var(--text); background: var(--bg); color: var(--text); box-shadow: 3px 3px 0 var(--accent-yellow); font-size: 12px; line-height: 1.8; overflow-wrap: anywhere; }
+  .pet-bubble::after { content: ""; position: absolute; right: 25px; bottom: -6px; width: 9px; height: 9px; border-right: 2px solid var(--text); border-bottom: 2px solid var(--text); background: var(--bg); transform: rotate(45deg); }
+  .pet-restore { display: grid; place-items: center; width: 42px; height: 42px; padding: 0; margin-left: auto; border: 2px solid var(--text); border-radius: 50%; background: var(--surface); color: var(--text); box-shadow: 3px 3px 0 var(--accent-yellow); font-size: 13px; font-weight: 750; cursor: pointer; pointer-events: auto; }
+  .pet-restore:hover { background: var(--surface-strong); }
+  .pet-touch:focus-visible { outline: 2px dashed var(--accent); outline-offset: 3px; border-radius: 12px; }
+  :global(body.has-blog-pet .back-to-top) { right: calc(max(var(--blog-pet-inset), env(safe-area-inset-right)) + var(--blog-pet-width) + 16px); bottom: max(var(--blog-pet-inset), env(safe-area-inset-bottom)); }
+  :global(body.has-blog-pet.pet-is-minimized .back-to-top) { right: calc(max(var(--blog-pet-inset), env(safe-area-inset-right)) + 42px + 16px); }
+  :global(body.search-open .blog-pet) { visibility: hidden; }
+  @media (max-width: 760px) {
+    :global(body.has-blog-pet) { --blog-pet-width: 72px; --blog-pet-height: 78px; --blog-pet-inset: 14px; }
+    .pet-minimize { top: -12px; right: -2px; width: 30px; height: 30px; font-size: 19px; }
+    .pet-bubble { max-width: min(200px, calc(100vw - 40px)); padding: 10px 12px; font-size: 12px; }
+  }
+  @media (hover: none) { .pet-minimize { opacity: 1; pointer-events: auto; } }
+  @media (prefers-reduced-motion: reduce) { .pet-minimize { transition: none; } }
+</style>

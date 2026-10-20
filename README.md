@@ -271,6 +271,23 @@ Markdown 使用以 `/` 开头的公共路径：
 
 更换图片时，可以直接替换 `public/images/bleach.jpg`，或修改 `src/components/MangaBackground.astro` 中的 `src` 路径。背景强度通过组件内的 `--edge-veil`（边缘遮罩）、`--reading-veil`（阅读区遮罩）和 `--art-opacity`（图片透明度）调整；修改后重新执行 `pnpm build` 并部署 `dist/`。备用生成提示词保存在 `output/imagegen/jump-manga.prompt.txt`，当前背景不需要 API Key。
 
+## 右下角宠物：月薪喵
+
+全站右下角显示月薪喵，使用本地透明 WebP 帧图，不需要 API、后端服务或额外动画库。待机时偶尔眨眼，鼠标移上去会挥手，点击后会有动作和简短回应；键盘也可以操作。点击宠物右上角的 `−` 可以收起，右下角保留“喵”按钮供再次展开。收起状态只保存在当前浏览器。
+
+手机端自动缩小宠物，原有“返回顶部”按钮移到宠物左侧。打开站内搜索、切换到后台标签页或启用系统“减少动态效果”时，会隐藏或暂停相应动画，避免影响阅读。
+
+相关文件：
+
+- `src/components/BlogPet.astro`：显示结构、位置、尺寸及深浅色样式。
+- `src/data/pet.json`：从提供的宠物配置复制，包含名称、标识和帧图文件名。
+- `public/pets/yuexinmiao/spritesheet.webp`：宠物动画帧图，随站点一起部署。
+- `public/pet.js`：帧动画、点击回应、收起与展开等行为。
+
+原图是 1536 × 1872，按 8 列 × 9 行排列，单帧 192 × 208。当前使用第 0 行的 6 帧待机、第 3 行的 4 帧挥手和第 4 行的 5 帧点击动作。替换帧图时，如果网格或动作帧数发生变化，需要同步修改 `public/pet.js` 的 `actions` 与组件的背景尺寸。显示大小在组件中通过 `--blog-pet-width` / `--blog-pet-height` 调整，两者应保持 192:208 的比例。
+
+宠物已接入 `BaseLayout.astro`，首页、文章、周报和 About 都会显示。需要移除时，删除布局中的 `<BlogPet />` 及对应导入即可。修改后仍需构建并部署，线上才会更新。
+
 ## 搜索、主题和交互
 
 `src/pages/search-index.json.ts` 在构建时读取公开 Blog 文章和周报，生成 `/search-index.json`。搜索匹配标题、摘要、标签、周报周次和内容类型，结果区分“文章”和“周报”；目前不索引整篇正文，不需要数据库或后端搜索服务。`draft: true` 的内容不会加入索引。
