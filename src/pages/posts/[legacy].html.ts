@@ -1,4 +1,5 @@
 import type { APIRoute, GetStaticPaths } from "astro";
+import { canonicalUrl } from "@/lib/site";
 
 const legacyPosts = [
   { legacy: "1db60101", destination: "/blog/operating-system/" },
@@ -13,15 +14,16 @@ export const getStaticPaths = (() => legacyPosts.map(({ legacy, destination }) =
 }))) satisfies GetStaticPaths;
 
 // 静态 HTML endpoint 会生成原来的 .html 文件名，适用于 GitHub Pages。
-export const GET: APIRoute = ({ props }) => {
+export const GET: APIRoute = ({ props, site }) => {
   const destination = props.destination as string;
+  const canonical = canonicalUrl(destination, site);
   return new Response(`<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>文章已迁移 — Jackie Null</title>
-    <link rel="canonical" href="${destination}" />
+    <link rel="canonical" href="${canonical}" />
     <script>location.replace(${JSON.stringify(destination)} + location.search + location.hash);</script>
     <noscript><meta http-equiv="refresh" content="0;url=${destination}" /></noscript>
   </head>

@@ -16,7 +16,7 @@ const week = getWeekInfo(entry.data.weekOf);
 const toc = headings.filter(({ depth }) => depth === 2);
 ---
 
-<BaseLayout title={`${entry.data.title} · ${week.label} — Jackie Null`} description={entry.data.description} current="weekly">
+<BaseLayout title={`${entry.data.title} · ${week.label} — Jackie Null`} description={entry.data.description} current="weekly" article={entry.data}>
   <main class="weekly-detail">
     <header class="shell article-header weekly-article-header">
       <nav class="breadcrumbs" aria-label="面包屑"><a href="/weekly/">周报</a><span aria-hidden="true">/</span><span>{week.label}</span></nav>

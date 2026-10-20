@@ -1,0 +1,170 @@
+/* 文章与周报共用的阅读样式，放在页面主题之后加载。 */
+.prose {
+  --reading-border: color-mix(in srgb, var(--text) 13%, var(--bg));
+  --reading-surface: color-mix(in srgb, var(--text) 3%, var(--bg));
+  --reading-code-bg: #f6f8fa;
+  overflow-wrap: anywhere;
+}
+
+[data-theme="dark"] .prose {
+  --reading-code-bg: #0d1117;
+}
+
+.prose h2 {
+  margin-top: 60px;
+  padding-top: 0;
+  border-top: 0;
+  line-height: 1.5;
+}
+
+.prose h3 { margin-top: 40px; line-height: 1.6; }
+.prose > :first-child { margin-top: 0; }
+
+.prose a {
+  padding: 0;
+  border: 0;
+  font-weight: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  text-underline-offset: .2em;
+  transition: text-decoration-color 120ms ease;
+}
+
+.prose a:hover {
+  padding: 0;
+  background: transparent;
+  color: var(--accent);
+  text-decoration-color: currentColor;
+  transform: none;
+}
+
+.prose blockquote {
+  margin: 30px 0;
+  padding: 16px 20px;
+  border: 0;
+  border-left: 3px solid color-mix(in srgb, var(--accent) 55%, var(--bg));
+  background: var(--reading-surface);
+  box-shadow: none;
+  color: var(--muted);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose blockquote::before, .prose pre::before { content: none; }
+
+.prose :not(pre) > code {
+  padding: .15em .35em;
+  background: var(--reading-surface);
+  border-radius: 4px;
+}
+
+.prose .code-block {
+  margin: 30px 0;
+  border: 1px solid var(--reading-border);
+  border-radius: 6px;
+  background: var(--reading-code-bg);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.prose .code-head {
+  min-height: 40px;
+  height: auto;
+  padding: 4px 16px;
+  border-bottom: 1px solid var(--reading-border);
+  background: var(--reading-surface);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.prose .copy-code {
+  min-height: 32px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.prose .copy-code:hover { background: var(--reading-border); color: var(--text); }
+
+.prose pre {
+  max-width: 100%;
+  margin: 30px 0;
+  padding: 20px;
+  border: 1px solid var(--reading-border);
+  border-radius: 6px;
+  box-shadow: none;
+  background: var(--reading-code-bg);
+  color: var(--text);
+  overflow-x: auto;
+  overflow-wrap: normal;
+  white-space: pre;
+  tab-size: 4;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.prose .code-block pre { margin: 0; border: 0; border-radius: 0; }
+.prose pre code { padding: 0; background: transparent; font-size: inherit; line-height: inherit; }
+
+.prose .table-scroll {
+  max-width: 100%;
+  margin: 30px 0;
+  overflow-x: auto;
+}
+
+.prose table {
+  display: table;
+  width: 100%;
+  margin: 30px 0;
+  border: 1px solid var(--reading-border);
+  border-collapse: collapse;
+  background: var(--bg);
+  box-shadow: none;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.prose .table-scroll table { margin: 0; }
+
+.prose :is(th, td) {
+  min-width: 7rem;
+  padding: 12px 16px;
+  border: 1px solid var(--reading-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  background: var(--reading-surface);
+  color: var(--text);
+  font-weight: 600;
+  text-transform: none;
+}
+
+.prose :is(img, img:hover) {
+  border: 0;
+  border-radius: 4px;
+  box-shadow: none;
+  transform: none;
+  transition: none;
+}
+
+.prose :is(pre, .table-scroll) { scrollbar-width: thin; scrollbar-color: var(--reading-border) transparent; }
+.prose :is(pre, .table-scroll)::-webkit-scrollbar { height: 8px; }
+.prose :is(pre, .table-scroll)::-webkit-scrollbar-track { border: 0; background: transparent; }
+.prose :is(pre, .table-scroll)::-webkit-scrollbar-thumb { border: 0; border-radius: 4px; background: var(--reading-border); }
+.prose :is(pre, .table-scroll):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+@media (max-width: 760px) {
+  .prose h2 { margin-top: 48px; font-size: 25px; }
+  .prose blockquote { padding: 14px 16px; }
+  .prose pre { padding: 16px; }
+  .prose :is(th, td) { padding: 10px 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prose a { transition: none; }
+}

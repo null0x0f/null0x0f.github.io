@@ -50,7 +50,9 @@ const searchResults = searchDialog?.querySelector("#search-results");
 const searchSummary = searchDialog?.querySelector("[data-search-summary]");
 const searchClear = searchDialog?.querySelector("[data-search-clear]");
 let searchItems = [];
-let searchLoaded = false;
+let searchState = "idle";
+let searchRequest;
+let searchTools;
 let selectedSearchIndex = -1;
 
 const normalizeSearchText = (value = "") => value.normalize("NFKC").toLowerCase();
@@ -59,7 +61,7 @@ const searchHistoryKey = "site-search-history";
 const readSearchHistory = () => {
   try {
     const history = JSON.parse(localStorage.getItem(searchHistoryKey) || "[]");
-    return Array.isArray(history) ? history.slice(0, 5) : [];
+    return Array.isArray(history) ? history.filter((item) => typeof item === "string").slice(0, 5) : [];
   } catch {
     return [];
   }
@@ -68,55 +70,49 @@ const readSearchHistory = () => {
 const rememberSearchResult = (href) => {
   const history = readSearchHistory().filter((item) => item !== href);
   history.unshift(href);
-  localStorage.setItem(searchHistoryKey, JSON.stringify(history.slice(0, 5)));
+  try { localStorage.setItem(searchHistoryKey, JSON.stringify(history.slice(0, 5))); } catch { /* Browsing still works without storage. */ }
 };
 
-const appendHighlightedText = (target, value, query) => {
-  const tokens = [...new Set(query.trim().split(/\s+/).filter(Boolean))]
-    .sort((a, b) => b.length - a.length)
-    .map((token) => token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-  if (!tokens.length) {
-    target.textContent = value;
-    return;
+const appendHighlightedText = (target, value, tokens) => {
+  let offset = 0;
+  for (const [start, end] of searchTools.getHighlightRanges(value, tokens)) {
+    target.append(document.createTextNode(value.slice(offset, start)));
+    const mark = document.createElement("mark");
+    mark.textContent = value.slice(start, end);
+    target.append(mark);
+    offset = end;
   }
+  target.append(document.createTextNode(value.slice(offset)));
+};
 
-  const expression = new RegExp(`(${tokens.join("|")})`, "gi");
-  value.split(expression).filter(Boolean).forEach((part) => {
-    if (expression.test(part)) {
-      const mark = document.createElement("mark");
-      mark.textContent = part;
-      target.append(mark);
-    } else {
-      target.append(document.createTextNode(part));
+const loadSearchIndex = () => {
+  if (searchState === "ready") return Promise.resolve();
+  if (searchState === "loading") return searchRequest;
+  searchState = "loading";
+  renderResults(searchInput?.value ?? "");
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20000);
+  searchRequest = Promise.all([
+    fetch("/search-index.json", { signal: controller.signal, cache: "no-cache" }).then((response) => {
+      if (!response.ok) throw new Error(`Search index request failed: ${response.status}`);
+      return response.json();
+    }),
+    import("/search-utils.js")
+  ]).then(([items, helpers]) => {
+    if (!Array.isArray(items) || !items.every((item) => item && ["title", "type", "kind", "href", "description", "meta", "body"].every((field) => typeof item[field] === "string"))) {
+      throw new Error("Invalid search index");
     }
-    expression.lastIndex = 0;
-  });
-};
-
-const scoreSearchItem = (item, tokens) => {
-  const title = normalizeSearchText(item.title);
-  const description = normalizeSearchText(item.description);
-  const meta = normalizeSearchText([item.type, item.meta].filter(Boolean).join(" "));
-  if (!tokens.every((token) => `${title} ${description} ${meta}`.includes(token))) return -1;
-  return tokens.reduce((score, token) => {
-    if (title.startsWith(token)) return score + 80;
-    if (title.includes(token)) return score + 48;
-    if (meta.includes(token)) return score + 22;
-    return score + 10;
-  }, 0);
-};
-
-const searchIndexReady = fetch("/search-index.json")
-  .then((response) => {
-    if (!response.ok) throw new Error(`Search index request failed: ${response.status}`);
-    return response.json();
-  })
-  .then((items) => { searchItems = Array.isArray(items) ? items : []; })
-  .catch(() => { searchItems = []; })
-  .finally(() => {
-    searchLoaded = true;
+    searchTools = helpers;
+    searchItems = helpers.prepareSearchItems(items);
+    searchState = "ready";
+  }).catch(() => {
+    searchState = "error";
+  }).finally(() => {
+    clearTimeout(timeout);
     if (searchDialog?.open) renderResults(searchInput?.value ?? "");
   });
+  return searchRequest;
+};
 
 const setSelectedSearchResult = (index) => {
   const results = [...(searchResults?.querySelectorAll(".search-result") ?? [])];
@@ -142,32 +138,52 @@ const renderResults = (query = "") => {
   selectedSearchIndex = -1;
   searchInput?.removeAttribute("aria-activedescendant");
   if (searchClear) searchClear.hidden = !query;
+  searchResults.setAttribute("aria-busy", String(searchState === "loading"));
 
-  if (!searchLoaded) {
+  if (searchState === "error") {
+    searchSummary.textContent = "搜索暂不可用";
+    const error = document.createElement("div");
+    const title = document.createElement("strong");
+    const detail = document.createElement("span");
+    const retry = document.createElement("button");
+    error.className = "search-empty";
+    title.textContent = "暂时没有载入搜索内容";
+    detail.textContent = "请检查网络后重试，已输入的关键词会保留。";
+    retry.className = "search-retry";
+    retry.type = "button";
+    retry.textContent = "重新加载";
+    retry.addEventListener("click", () => {
+      loadSearchIndex();
+      searchInput?.focus();
+    });
+    error.append(title, detail, retry);
+    searchResults.append(error);
+    return;
+  }
+
+  if (searchState !== "ready") {
     searchSummary.textContent = "载入内容";
     const loading = document.createElement("div");
     const loadingTitle = document.createElement("strong");
     const loadingDetail = document.createElement("span");
     loading.className = "search-empty";
     loadingTitle.textContent = "正在准备搜索索引";
-    loadingDetail.textContent = "...";
+    loadingDetail.textContent = "正在载入文章和周报的全文内容…";
     loading.append(loadingTitle, loadingDetail);
     searchResults.append(loading);
     return;
   }
 
-  const normalized = query.trim().toLowerCase();
-  const tokens = normalizeSearchText(normalized).split(/\s+/).filter(Boolean);
+  const tokens = searchTools.getSearchTokens(query);
   let items;
 
   if (tokens.length) {
-    items = searchItems
-      .map((item, index) => ({ item, index, score: scoreSearchItem(item, tokens) }))
+    const matches = searchItems
+      .map((item, index) => ({ item, index, score: searchTools.scoreSearchItem(item, tokens) }))
       .filter(({ score }) => score >= 0)
-      .sort((a, b) => b.score - a.score || a.index - b.index)
-      .slice(0, 12)
-      .map(({ item }) => item);
-    searchSummary.textContent = `${items.length} 个结果`;
+      .sort((a, b) => b.score - a.score || a.index - b.index);
+    items = matches.slice(0, 12).map(({ item }) => item);
+    searchSummary.textContent = matches.length > 12 ? `${matches.length} 个结果 · 显示最相关的 12 个` : `${matches.length} 个结果 · 全文搜索`;
   } else {
     const history = readSearchHistory();
     const recent = history.map((href) => searchItems.find((item) => item.href === href)).filter(Boolean);
@@ -183,7 +199,7 @@ const renderResults = (query = "") => {
     const title = document.createElement("strong");
     const detail = document.createElement("span");
     title.textContent = "没有匹配内容";
-    detail.textContent = "换一个关键词或内容类型";
+    detail.textContent = "试试函数名、错误信息或协议关键词；多个词用空格分开。";
     empty.append(title, detail);
     searchResults.append(empty);
     return;
@@ -211,9 +227,10 @@ const renderResults = (query = "") => {
     arrow.className = "search-result-arrow";
     arrow.textContent = "↗";
     arrow.setAttribute("aria-hidden", "true");
-    appendHighlightedText(title, item.title, query);
-    appendHighlightedText(description, item.description, query);
-    meta.textContent = item.meta;
+    const preview = searchTools.getSearchPreview(item, tokens);
+    appendHighlightedText(title, item.title, tokens);
+    appendHighlightedText(description, preview.text, tokens);
+    appendHighlightedText(meta, `${preview.bodyMatch ? "正文命中 · " : ""}${item.meta}`, tokens);
     top.append(type, title);
     link.append(top, description, meta, arrow);
     link.addEventListener("mouseenter", () => setSelectedSearchResult(index));
@@ -229,7 +246,7 @@ const openSearch = async () => {
   document.body.classList.add("search-open");
   renderResults(searchInput?.value ?? "");
   requestAnimationFrame(() => searchInput?.focus());
-  await searchIndexReady;
+  await loadSearchIndex();
 };
 
 document.querySelector("[data-search-open]")?.addEventListener("click", openSearch);
@@ -242,13 +259,14 @@ searchClear?.addEventListener("click", () => {
 });
 searchInput?.addEventListener("input", () => renderResults(searchInput.value));
 searchInput?.addEventListener("keydown", (event) => {
+  if (event.isComposing) return;
   const results = searchResults?.querySelectorAll(".search-result") ?? [];
   if (event.key === "ArrowDown") {
     event.preventDefault();
     setSelectedSearchResult(selectedSearchIndex + 1);
   } else if (event.key === "ArrowUp") {
     event.preventDefault();
-    setSelectedSearchResult(selectedSearchIndex - 1);
+    setSelectedSearchResult(selectedSearchIndex < 0 ? results.length - 1 : selectedSearchIndex - 1);
   } else if (event.key === "Enter" && selectedSearchIndex >= 0) {
     event.preventDefault();
     results[selectedSearchIndex]?.click();
@@ -309,9 +327,10 @@ document.querySelectorAll(".copy-code").forEach((button) => {
   });
 });
 
-document.querySelectorAll(".weekly-reading .prose table").forEach((table) => {
+document.querySelectorAll(".prose table").forEach((table) => {
+  if (table.closest(".table-scroll, .weekly-table-scroll")) return;
   const wrapper = document.createElement("div");
-  wrapper.className = "weekly-table-scroll";
+  wrapper.className = "table-scroll";
   wrapper.tabIndex = 0;
   wrapper.setAttribute("role", "region");
   wrapper.setAttribute("aria-label", "可横向滚动的表格");

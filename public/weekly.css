@@ -89,16 +89,6 @@
 .weekly-period small { margin-left: auto; color: var(--muted); font: 11px/1.7 "Microsoft YaHei", sans-serif; }
 .weekly-reading { padding-top: 40px; gap: 80px; }
 .weekly-reading-main { min-width: 0; }
-.weekly-reading .prose { overflow-wrap: anywhere; }
-.weekly-reading .prose table { display: block; max-width: 100%; overflow-x: auto; }
-.weekly-reading .prose table { border: 1px solid var(--border); box-shadow: none; }
-.weekly-reading .prose :is(th, td) { border: 1px solid var(--border); }
-.weekly-reading .prose th { background: var(--surface-strong); color: var(--text); font-weight: 650; }
-.weekly-table-scroll { overflow-x: auto; margin: 34px 0; }
-.weekly-reading .weekly-table-scroll table { display: table; margin: 0; }
-.weekly-reading .prose blockquote { border: 1px solid var(--border); border-left: 3px solid var(--accent); background: var(--surface-strong); box-shadow: none; font-style: normal; font-weight: 400; }
-.weekly-reading .prose blockquote::before, .weekly-reading .prose pre::before { display: none; }
-.weekly-reading .prose pre { overflow-x: auto; border: 1px solid var(--border); box-shadow: none; }
 .weekly-mobile-toc { display: none; }
 .weekly-reading-footer { margin-top: 76px; }
 .weekly-back { font-size: 13px; }

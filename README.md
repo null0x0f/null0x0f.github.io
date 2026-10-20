@@ -123,8 +123,10 @@ pnpm preview
 │       └── search-index.json.ts   # 公开文章与周报的搜索索引
 ├── public/
 │   ├── styles.css
-│   ├── weekly.css                 # 周报布局、归档、阅读及响应式样式
+│   ├── weekly.css                 # 周报布局、归档及响应式样式
+│   ├── reading.css                # 文章与周报共用的正文阅读样式
 │   ├── app.js
+│   ├── search-utils.js            # 全文匹配、排序与命中片段
 │   ├── home-motion.js
 │   ├── github-contributions.js
 │   └── images/
@@ -290,13 +292,17 @@ Markdown 使用以 `/` 开头的公共路径：
 
 ## 搜索、主题和交互
 
-`src/pages/search-index.json.ts` 在构建时读取公开 Blog 文章和周报，生成 `/search-index.json`。搜索匹配标题、摘要、标签、周报周次和内容类型，结果区分“文章”和“周报”；目前不索引整篇正文，不需要数据库或后端搜索服务。`draft: true` 的内容不会加入索引。
+`src/pages/search-index.json.ts` 在构建时读取公开 Blog 文章和周报，生成 `/search-index.json`。搜索范围包括标题、摘要、标签、周次、内容类型和完整正文，代码块中的函数名、错误信息、协议关键词也可以检索。正文从渲染后的内容中提取，不把 Markdown 标记直接展示给读者；`draft: true` 的内容不会加入索引。
+
+点击导航搜索按钮或按 `Cmd/Ctrl + K` 后才加载索引，不需要数据库、后端搜索服务或 API Key。搜索不区分大小写；多个词用空格分隔时，结果需要同时包含这些词。标题和摘要命中优先，正文命中会显示附近片段并高亮关键词。示例：输入 `PINS_DRV_WritePin` 查找具体函数，输入 `std::` 查找 C++ 代码，输入 `Modbus 超时` 查找同时包含两个词的内容。这里是关键词检索，不提供拼写纠错或语义搜索。
+
+新增或修改 Markdown 后，需要重新构建并部署，线上搜索索引才会更新。长文较多时索引文件会随内容增长，目前采用打开搜索后按需下载、同页复用的方式。网络加载失败会显示重试入口。
 
 `public/app.js` 负责：
 
 - `Cmd/Ctrl + K` 打开搜索
 - Blog 标签筛选
-- 关键词高亮和相关度排序
+- 全文关键词高亮、相关度排序和正文命中片段
 - 方向键选择、回车打开
 - 最近访问文章与周报记录
 - 深色 / 浅色模式
@@ -305,7 +311,9 @@ Markdown 使用以 `/` 开头的公共路径：
 - 阅读进度和返回顶部
 - 页面区块滚动显现
 
-`public/styles.css` 负责颜色、排版、响应式断点、深色模式和页面间距。修改视觉时优先从这里开始。
+`public/styles.css` 负责全站主题、响应式断点和页面间距；`public/weekly.css` 负责周报布局；最后加载的 `public/reading.css` 统一管理文章与周报正文。代码块、引用、表格使用低对比度背景和细边框，没有硬阴影；正文图片和链接悬停时不移动。宽表格和长代码在各自区域内横向滚动，保留代码高亮与复制按钮。漫画背景和右下角宠物由原组件独立控制。
+
+当前不提供 RSS 订阅，页脚已移除 RSS 入口；无需配置 `/rss.xml`。
 
 首页 GitHub 贡献日历由 `src/components/GitHubContributions.astro` 输出结构，`public/github-contributions.js` 在浏览器端读取公开数据。当前用户名配置在 `src/pages/index.astro`：
 
@@ -314,6 +322,21 @@ Markdown 使用以 `/` 开头的公共路径：
 ```
 
 贡献数据使用公开接口，不需要 GitHub Token。页面会先显示浏览器中的最近缓存，同时在后台检查新数据；点击贡献区右上角的刷新按钮可以手动检查。页面重新变为可见且距离上次检查超过 5 分钟时也会再次请求。GitHub 官方统计和第三方接口 CDN 本身可能存在数分钟到数十分钟延迟，因此这里是近实时显示，而不是秒级实时数据。接口不可用时会保留最近缓存，首页其他内容仍然可以正常显示。
+
+## 分享预览与网站基础配置
+
+站点地址统一读取 `astro.config.mjs` 的 `site`，当前为 `https://null0x0f.github.io`。以后换成云服务器上的独立域名时，将它改为实际的 HTTPS 站点地址，再重新构建和部署。不要填写本地开发地址或 GitHub 仓库地址。
+
+站点名、作者、简介、GitHub 主页和默认分享图路径集中在 `src/lib/site.ts`。通用组件 `src/components/SEO.astro` 会给每个页面输出规范链接（canonical）、Open Graph 和 Twitter Card；文章及周报还会输出发布日期、修改日期、标签和 BlogPosting 结构化数据。标题和摘要来自各页面或 Markdown frontmatter，修改文章的 `title`、`description`、`publishedAt`、`updatedAt`、`tags` 即可同步更新相关元数据。
+
+默认分享图为 `/og/default.png`，构建时用现有图片依赖生成 1200 × 630 的本地 PNG，无需外部图片接口或密钥。图案源码在 `src/pages/og/default.png.ts`；网站图标在 `public/favicon.svg`。目前各页面共用品牌分享图，文章标题、摘要和链接分别对应当前文章。若更换分享图路径，请同时调整 SEO 组件中的格式、尺寸和图片说明，保证文件真实可访问。
+
+另外生成：
+
+- `/sitemap.xml`：首页、Blog、周报、About 和已公开文章/周报；不包含草稿、旧地址跳转页和搜索索引。
+- `/robots.txt`：允许搜索引擎抓取，并指向正式域名下的站点地图。它不承担内容保密作用，未公开文章请继续使用 `draft: true`。
+
+部署后可以打开 `/og/default.png`、`/sitemap.xml` 和 `/robots.txt` 检查是否可访问，并查看文章页面源代码里的 `og:title`、`og:image`、`canonical` 是否正确。聊天或社交平台有各自的抓取规则和缓存，配置更新后可能需要等待平台刷新；本地预览页无法供外部平台抓取。
 
 ## 部署到 GitHub Pages
 

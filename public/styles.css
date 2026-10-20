@@ -2034,17 +2034,23 @@ body.search-open {
 [data-theme="dark"] .search-result-type.is-project { color: #63d297; }
 
 .search-result-description {
+  display: -webkit-box;
+  grid-column: 1 / -1;
   overflow: hidden;
   margin: 0;
   color: var(--muted);
   font-size: 13px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
 .search-result-meta {
   overflow: hidden;
-  max-width: 190px;
+  grid-column: 1 / -1;
+  max-width: 100%;
   color: var(--faint);
   font: 10px/1.65 "SFMono-Regular", Consolas, monospace;
   text-overflow: ellipsis;
@@ -2085,6 +2091,21 @@ body.search-open {
   font-size: 14px;
   font-weight: 600;
 }
+
+.search-retry {
+  justify-self: center;
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.search-retry:hover { border-color: var(--accent); }
 
 .search-empty span {
   margin-top: 5px;
