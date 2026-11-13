@@ -1,0 +1,19 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  filename: string;
+  class?: string;
+  movable?: boolean;
+}
+const { id, title, filename, class: className, movable = true } = Astro.props;
+---
+<section class:list={["desktop-window", className]} data-window={id} data-window-title={title} data-window-movable={movable || undefined} aria-labelledby={`${id}-title`}>
+  <header class="window-bar" data-window-handle>
+    <span class="window-symbol" aria-hidden="true">▧</span>
+    <h2 id={`${id}-title`}>{title}</h2>
+    <span class="window-filename">{filename}</span>
+    <button class="window-control" type="button" data-window-toggle aria-expanded="true" aria-controls={`${id}-body`} aria-label={`收起${title}窗口`} title="收起 / 展开">−</button>
+  </header>
+  <div class="window-body" id={`${id}-body`} data-window-body><slot /></div>
+</section>

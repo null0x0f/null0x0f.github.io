@@ -3,37 +3,56 @@ import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import GitHubContributions from "@/components/GitHubContributions.astro";
 import HomeHero from "@/components/HomeHero.astro";
-import WeeklyTeaser from "@/components/WeeklyTeaser.astro";
+import DesktopWindow from "@/components/DesktopWindow.astro";
+import { getPublishedWeekly } from "@/lib/weekly";
+import { getWeekInfo } from "@/lib/weekly-dates";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
-const formatDate = (date: Date) => date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+const weekly = await getPublishedWeekly();
+const latest = weekly[0];
+const week = latest && getWeekInfo(latest.data.weekOf);
+const formatDate = (date: Date) => date.toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" });
 ---
 
 <BaseLayout title="Jackie Null — Software & Systems">
-  <main>
+  <main class="desktop-home">
     <HomeHero />
-
-    <section class="section" id="latest-writing" data-reveal>
-      <div class="shell">
-        <header class="section-head">
-          <span class="section-index">01</span>
-          <div><p class="section-label">Latest writing</p><h2>最近文章</h2></div>
-          <a class="text-link internal" href="/blog">浏览全部文章</a>
-        </header>
-        <div class="writing-list">
-          {posts.slice(0, 4).map((post) => (
-            <a class="writing-item" href={`/blog/${post.id}`}>
-              <div><h3>{post.data.title}</h3><p>{post.data.description}</p></div>
-              <span class="topic">{post.data.tags.join(" · ")}</span>
-              <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
-              <span class="row-arrow" aria-hidden="true">↗</span>
-            </a>
-          ))}
-        </div>
+    <section class="shell desktop-workspace" id="desktop" data-desktop-workspace aria-label="我的内容桌面">
+      <div class="workspace-tools"><span><i aria-hidden="true"></i> / HOME / DESKTOP</span><div><span class="workspace-hint">拖动标题栏，整理你的桌面</span><button type="button" data-workspace-reset>↺ 还原布局</button></div></div>
+      <p class="sr-only" data-workspace-status aria-live="polite"></p>
+      <div class="window-slot profile-slot" data-reveal>
+        <DesktopWindow id="profile" title="关于我" filename="about.txt">
+          <div class="profile-heading"><span class="profile-avatar" aria-hidden="true">JN<span>↗</span></span><div><p>HELLO, WORLD.</p><h3>Jackie Null</h3><span>Software & Systems Engineer</span></div></div>
+          <p class="profile-description">在软件与真实世界的交界处，<br />把复杂的问题，拆成可理解的答案。</p>
+          <p class="profile-detail">专注 C++ / Qt、嵌入式与工业通信。这个小角落，记录每一次构建、调试与重新理解。</p>
+          <div class="desktop-tags"><span>C++</span><span>Qt</span><span>Embedded</span><span>Fieldbus</span></div>
+          <div class="profile-counts"><a href="/blog/"><strong>{String(posts.length).padStart(2, "0")}</strong><span>技术文章</span></a><a href="/weekly/"><strong>{String(weekly.length).padStart(2, "0")}</strong><span>周间记录</span></a><span><strong>∞</strong><span>保持好奇</span></span></div>
+          <div class="window-footer"><a href="/about/">更多关于我 ↗</a><a href="https://github.com/null0x0f" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+        </DesktopWindow>
+      </div>
+      <div class="window-slot writing-slot" data-reveal>
+        <DesktopWindow id="writing" title="最近文章" filename="/blog">
+          <div class="window-intro"><p>问题值得记录，答案值得分享。</p><span>{posts.length} ENTRIES</span></div>
+          <div class="desktop-posts">
+            {posts.slice(0, 5).map((post, index) => <a class="desktop-post" href={`/blog/${post.id}/`}><span class="desktop-post-number">{String(index + 1).padStart(2, "0")}</span><div><h3>{post.data.title}</h3><p>{post.data.description}</p><div class="desktop-post-meta"><time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time><span>{post.data.tags.slice(0, 2).join(" / ")}</span></div></div><span class="desktop-post-arrow" aria-hidden="true">↗</span></a>)}
+          </div>
+          <div class="window-footer"><span>THOUGHTS, PUT INTO WORDS.</span><a href="/blog/">全部文章 ↗</a></div>
+        </DesktopWindow>
+      </div>
+      <div class="window-slot journal-slot" data-reveal>
+        <DesktopWindow id="journal" title="周间记录" filename="weekly.log">
+          {latest && week ? <><a class="desktop-weekly-feature" href={`/weekly/${latest.id}/`}><div class="desktop-week-stamp"><span>WEEK</span><strong>{week.number}</strong><span>{week.isoYear}</span></div><div><span class="desktop-latest">LATEST UPDATE</span><h3>{latest.data.title}</h3><p>{latest.data.description}</p></div></a><div class="desktop-weekly-older">{weekly.slice(1, 3).map((entry) => <a href={`/weekly/${entry.id}/`}><span>{getWeekInfo(entry.data.weekOf).label}</span><strong>{entry.data.title}</strong><span aria-hidden="true">↗</span></a>)}</div></> : <p class="desktop-weekly-empty">给每一周，留一页记录。第一篇周报正在酝酿中。</p>}
+          <div class="window-footer"><span>BUILD / LEARN / REPEAT</span><a href="/weekly/">全部周报 ↗</a></div>
+        </DesktopWindow>
+      </div>
+      <div class="window-slot activity-slot">
+        <DesktopWindow id="activity" title="持续构建" filename="github.activity" movable={false} class="window-github">
+          <GitHubContributions username="null0x0f" />
+          <div class="window-footer"><span>SMALL STEPS, EVERY DAY.</span><a href="https://github.com/null0x0f" target="_blank" rel="noreferrer">@null0x0f ↗</a></div>
+        </DesktopWindow>
       </div>
     </section>
-
-    <WeeklyTeaser />
-    <GitHubContributions username="null0x0f" />
+    <div class="desktop-signoff shell"><span>END OF DESKTOP</span><p>保持好奇，继续构建。</p><a href="#top">回到顶部 ↑</a></div>
   </main>
+  <nav class="desktop-dock" aria-label="桌面快捷导航"><a href="#desktop"><span aria-hidden="true">▦</span>桌面</a><a href="/blog/"><span aria-hidden="true">▤</span>文章</a><a href="/weekly/"><span aria-hidden="true">▥</span>周报</a><a href="/about/"><span aria-hidden="true">◎</span>关于</a><span class="dock-divider" aria-hidden="true"></span><time data-local-clock aria-label="本地时间">--:--</time></nav>
 </BaseLayout>

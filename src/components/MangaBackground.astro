@@ -1,20 +1,10 @@
 <div class="manga-background" aria-hidden="true">
-  <img
-    src="/images/bleach.jpg"
-    alt=""
-    width="640"
-    height="914"
-    loading="eager"
-    decoding="async"
-    fetchpriority="low"
-  />
+  <img src="/images/bleach.jpg" alt="" width="640" height="914" loading="eager" decoding="async" fetchpriority="high" />
+  <div class="scene-grain"></div>
 </div>
 
 <style>
   .manga-background {
-    --edge-veil: 35%;
-    --reading-veil: 92%;
-    --art-opacity: 0.7;
     position: fixed;
     inset: 0;
     z-index: 0;
@@ -23,60 +13,36 @@
     user-select: none;
     background: var(--bg);
   }
-
   .manga-background img {
     position: absolute;
-    top: 0;
-    right: 0;
+    right: -3%;
+    top: -6%;
     display: block;
-    width: auto;
+    width: min(76vw, 1100px);
     max-width: none;
-    height: 100%;
-    opacity: var(--art-opacity);
+    height: 118%;
+    object-fit: cover;
+    object-position: center 35%;
+    opacity: .34;
     mix-blend-mode: multiply;
-    mask-image: linear-gradient(90deg, transparent, #000 24%);
+    mask-image: linear-gradient(90deg, transparent, #000 36%);
+    transform: translate3d(var(--scene-x, 0px), calc(var(--scene-y, 0px) - var(--scene-scroll, 0px)), 0) scale(1.025);
   }
-
   .manga-background::after {
+    content: "";
     position: absolute;
     inset: 0;
-    content: "";
-    background:
-      linear-gradient(180deg, transparent 65%, color-mix(in srgb, var(--bg) 35%, transparent)),
-      linear-gradient(
-        90deg,
-        var(--bg),
-        color-mix(in srgb, var(--bg) var(--reading-veil), transparent) 22%,
-        color-mix(in srgb, var(--bg) var(--reading-veil), transparent) 78%,
-        color-mix(in srgb, var(--bg) var(--edge-veil), transparent)
-      );
+    background: linear-gradient(90deg, var(--bg), color-mix(in srgb, var(--bg) 50%, transparent) 50%, transparent), linear-gradient(0deg, var(--bg), transparent 24%);
   }
-
-  :global([data-theme="dark"]) .manga-background {
-    --edge-veil: 75%;
-    --reading-veil: 96%;
-    --art-opacity: 0.5;
-  }
-
-  :global([data-theme="dark"]) .manga-background img {
-    mix-blend-mode: normal;
-  }
-
+  :global(body[data-page="home"]) .manga-background img { opacity: .85; }
+  :global([data-theme="dark"]) .manga-background img { mix-blend-mode: luminosity; opacity: .13; }
+  :global([data-theme="dark"] body[data-page="home"]) .manga-background img { opacity: .48; mix-blend-mode: normal; }
+  :global([data-theme="dark"]) .manga-background::after { background: linear-gradient(90deg, var(--bg), color-mix(in srgb, var(--bg) 60%, transparent) 50%, color-mix(in srgb, var(--bg) 20%, transparent)), linear-gradient(0deg, var(--bg), transparent 40%); }
+  .scene-grain { position: absolute; inset: 0; z-index: 1; opacity: .16; background-image: radial-gradient(var(--accent) .5px, transparent .5px); background-size: 5px 5px; mask-image: linear-gradient(90deg, #000, transparent 65%); }
   @media (max-width: 760px) {
-    .manga-background {
-      --edge-veil: 70%;
-      --reading-veil: 90%;
-    }
-
-    .manga-background img {
-      left: 50%;
-      right: auto;
-      transform: translateX(-50%);
-    }
-
-    :global([data-theme="dark"]) .manga-background {
-      --edge-veil: 88%;
-      --reading-veil: 97%;
-    }
+    .manga-background img { width: 110%; right: -20%; height: 106%; top: 0; object-position: 56% center; opacity: .18; mask-image: linear-gradient(90deg, transparent, #000 45%); }
+    :global(body[data-page="home"]) .manga-background img { opacity: .52; }
+    .manga-background::after { background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 82%, transparent), color-mix(in srgb, var(--bg) 12%, transparent)), linear-gradient(0deg, var(--bg), transparent 65%); }
   }
+  @media (prefers-reduced-motion: reduce) { .manga-background img { transform: none; } }
 </style>

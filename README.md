@@ -124,10 +124,11 @@ pnpm preview
 ├── public/
 │   ├── styles.css
 │   ├── weekly.css                 # 周报布局、归档及响应式样式
-│   ├── reading.css                # 文章与周报共用的正文阅读样式
+│   ├── desktop.css                # 蓝青色桌面窗口主题与全站响应式覆盖
+│   ├── reading.css                # 文章与周报共用的正文阅读样式，最后加载
 │   ├── app.js
 │   ├── search-utils.js            # 全文匹配、排序与命中片段
-│   ├── home-motion.js
+│   ├── desktop-motion.js          # 背景视差、窗口拖动/收起/还原、本地时钟
 │   ├── github-contributions.js
 │   └── images/
 │       ├── blog/                 # 文章图片
@@ -267,11 +268,11 @@ Markdown 使用以 `/` 开头的公共路径：
 
 ## Jump 漫画背景
 
-全站背景组件位于 `src/components/MangaBackground.astro`，接入现有橙黄漫画 UI，包含浅色、深色遮罩和手机端裁切设置。中间阅读区的遮罩较强，边缘保留漫画画面。
+全站背景组件位于 `src/components/MangaBackground.astro`，包含浅色、深色遮罩和手机端裁切设置。首页突出画面，归档和正文使用更强的遮罩与内容面板。
 
-当前使用 `public/images/bleach.jpg` 作为全站背景，对应访问路径 `/images/bleach.jpg`。这是一张竖版《死神》群像：桌面端保持图片比例、按视口高度靠右显示，手机端居中裁切。浅色模式使用正片叠底融入米色背景，深色模式使用暗色遮罩，保留中间区域的阅读对比度。
+当前使用 `public/images/bleach.jpg` 作为全站背景，对应访问路径 `/images/bleach.jpg`。这是一张竖版《死神》群像：桌面端放大并靠右裁切，手机端单独调整宽度和位置。浅色模式融入蓝灰底色，深色模式使用暗色遮罩，保证文字与画面有足够对比度。
 
-更换图片时，可以直接替换 `public/images/bleach.jpg`，或修改 `src/components/MangaBackground.astro` 中的 `src` 路径。背景强度通过组件内的 `--edge-veil`（边缘遮罩）、`--reading-veil`（阅读区遮罩）和 `--art-opacity`（图片透明度）调整；修改后重新执行 `pnpm build` 并部署 `dist/`。备用生成提示词保存在 `output/imagegen/jump-manga.prompt.txt`，当前背景不需要 API Key。
+更换图片时，可以直接替换 `public/images/bleach.jpg`，或修改 `src/components/MangaBackground.astro` 中的 `src` 路径。背景强度在组件的 `img` 透明度、`::after` 渐变和 `body[data-page="home"]` 首页规则里调整；`object-position` 控制裁切重点。`--scene-x`、`--scene-y`、`--scene-scroll` 由动态脚本控制，不需要手动修改。修改后重新执行 `pnpm build` 并部署 `dist/`。当前背景不需要 API Key。
 
 ## 右下角宠物：月薪喵
 
@@ -289,6 +290,30 @@ Markdown 使用以 `/` 开头的公共路径：
 原图是 1536 × 1872，按 8 列 × 9 行排列，单帧 192 × 208。当前使用第 0 行的 6 帧待机、第 3 行的 4 帧挥手和第 4 行的 5 帧点击动作。替换帧图时，如果网格或动作帧数发生变化，需要同步修改 `public/pet.js` 的 `actions` 与组件的背景尺寸。显示大小在组件中通过 `--blog-pet-width` / `--blog-pet-height` 调整，两者应保持 192:208 的比例。
 
 宠物已接入 `BaseLayout.astro`，首页、文章、周报和 About 都会显示。需要移除时，删除布局中的 `<BlogPet />` 及对应导入即可。修改后仍需构建并部署，线上才会更新。
+
+## 桌面窗口主题与动态效果
+
+界面参考 `https://0z5a.github.io/` 的场景背景、蓝青色窗口标题栏和错落布局，保留本博客的 `public/images/bleach.jpg`。首页由整屏介绍和四个内容窗口组成：关于我、最近文章、周间记录、GitHub 贡献。数据继续自动读取现有 Markdown，文章和周报不需要为新界面迁移。
+
+- 电脑端可以拖动前三个窗口的标题栏；双击标题栏或点击“还原布局”恢复位置。
+- 标题栏右侧的按钮可以收起和展开窗口内容。“还原布局”同时展开窗口。
+- 桌面窗口的位置只在本次页面中生效，重新加载会回到默认布局。贡献日历保持固定位置，以确保日期提示和横向滚动稳定。
+- 鼠标移动和页面滚动会带来轻微背景视差；系统开启“减少动态效果”后停止背景视差和轮换文案。手机端使用单列窗口，不启用拖动。
+- 页面底部快捷导航在宽屏显示；右侧时钟是访问者设备的本地时间。
+
+主题的主要修改位置：
+
+| 文件 | 用途 |
+| --- | --- |
+| `src/pages/index.astro` | 首页窗口内容和排列 |
+| `src/components/HomeHero.astro` | 首屏标题、介绍和入口 |
+| `src/components/DesktopWindow.astro` | 共用窗口标题栏与收起按钮 |
+| `src/components/MangaBackground.astro` | 原背景图、遮罩、缩放和位置 |
+| `public/desktop.css` | 蓝青色主题、窗口、归档、搜索与响应式布局 |
+| `public/desktop-motion.js` | 背景和窗口交互，独立于搜索脚本 |
+| `public/reading.css` | 正文排版、代码、引用和表格 |
+
+样式加载顺序为 `styles.css → weekly.css → desktop.css → reading.css`。新主题集中在 `desktop.css`，正文规则最后加载。修改背景图只需替换 `public/images/bleach.jpg`；这版界面没有引入新的动画库或后端服务。
 
 ## 搜索、主题和交互
 
@@ -311,7 +336,7 @@ Markdown 使用以 `/` 开头的公共路径：
 - 阅读进度和返回顶部
 - 页面区块滚动显现
 
-`public/styles.css` 负责全站主题、响应式断点和页面间距；`public/weekly.css` 负责周报布局；最后加载的 `public/reading.css` 统一管理文章与周报正文。代码块、引用、表格使用低对比度背景和细边框，没有硬阴影；正文图片和链接悬停时不移动。宽表格和长代码在各自区域内横向滚动，保留代码高亮与复制按钮。漫画背景和右下角宠物由原组件独立控制。
+`public/styles.css` 和 `public/weekly.css` 保留基础布局；当前界面由 `public/desktop.css` 统一覆盖颜色、窗口、导航和响应式样式；最后加载的 `public/reading.css` 管理文章与周报正文。代码块、引用、表格使用低对比度背景和细边框；正文图片和链接悬停时不移动。宽表格和长代码在各自区域内横向滚动，保留代码高亮与复制按钮。漫画背景和右下角宠物由各自组件控制。
 
 当前不提供 RSS 订阅，页脚已移除 RSS 入口；无需配置 `/rss.xml`。
 
