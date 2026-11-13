@@ -7,12 +7,16 @@
   const windows = [...document.querySelectorAll(".desktop-window")];
   const movable = windows.filter((window) => window.hasAttribute("data-window-movable"));
   const header = document.querySelector(".site-header");
+  const sceneToggle = document.querySelector("[data-scene-toggle]");
+  let scenePaused = false;
+  try { scenePaused = localStorage.getItem("scene-paused") === "true"; } catch {}
   let frame = 0;
   let pointerX = 0;
   let pointerY = 0;
   let dragging = null;
   const clamp = (value, min, max) => Math.min(Math.max(value, min), Math.max(min, max));
-  const canAnimate = () => !reduced.matches && fine.matches && !document.hidden;
+  const sceneIsRunning = () => !scenePaused && !reduced.matches && !document.hidden && !document.body.classList.contains("search-open");
+  const canAnimate = () => sceneIsRunning() && fine.matches;
 
   const paintScene = () => {
     frame = 0;
@@ -20,8 +24,29 @@
     root.style.setProperty("--scene-x", `${enabled ? pointerX : 0}px`);
     root.style.setProperty("--scene-y", `${enabled ? pointerY : 0}px`);
     root.style.setProperty("--scene-scroll", `${enabled ? Math.min(scrollY * .055, 60) : 0}px`);
+    root.style.setProperty("--scene-tilt-x", `${enabled ? -pointerY * .1 : 0}deg`);
+    root.style.setProperty("--scene-tilt-y", `${enabled ? pointerX * .08 : 0}deg`);
   };
   const queueScene = () => { if (!frame) frame = requestAnimationFrame(paintScene); };
+  const updateScenePlayback = () => {
+    const running = sceneIsRunning();
+    root.style.setProperty("--scene-play-state", running ? "running" : "paused");
+    if (sceneToggle) {
+      sceneToggle.hidden = false;
+      sceneToggle.disabled = reduced.matches;
+      sceneToggle.setAttribute("aria-pressed", String(!scenePaused && !reduced.matches));
+      sceneToggle.title = reduced.matches ? "已按系统设置减少动态效果" : scenePaused ? "播放背景动画" : "暂停背景动画";
+      sceneToggle.querySelector("[data-scene-pause]").toggleAttribute("hidden", scenePaused || reduced.matches);
+      sceneToggle.querySelector("[data-scene-play]").toggleAttribute("hidden", !scenePaused && !reduced.matches);
+    }
+    queueScene();
+  };
+  sceneToggle?.addEventListener("click", () => {
+    scenePaused = !scenePaused;
+    try { localStorage.setItem("scene-paused", String(scenePaused)); } catch {}
+    updateScenePlayback();
+  });
+  new MutationObserver(updateScenePlayback).observe(document.body, { attributes: true, attributeFilter: ["class"] });
   document.addEventListener("pointermove", (event) => {
     if (!canAnimate() || dragging || event.pointerType === "touch") return;
     pointerX = (event.clientX / innerWidth - .5) * 16;
@@ -138,7 +163,7 @@
     role?.classList.remove("is-changing");
     if (role && !reduced.matches && !document.hidden) roleTimer = setTimeout(rotateRole, 3800);
     if (document.hidden) endDrag();
-    queueScene();
+    updateScenePlayback();
     updateClock();
   };
   reduced.addEventListener("change", updateMotion);

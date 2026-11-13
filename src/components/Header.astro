@@ -19,6 +19,10 @@ const { current } = Astro.props;
       <button class="nav-action search-trigger" data-search-open aria-label="搜索">
         <span class="search-trigger-icon" aria-hidden="true">⌕</span><span class="search-label">搜索</span><span class="shortcut">⌘K</span>
       </button>
+      <button class="nav-action scene-toggle" type="button" data-scene-toggle aria-label="背景动画" aria-pressed="true" title="暂停背景动画" hidden>
+        <span data-scene-pause><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 3h3v10H4zm5 0h3v10H9z" /></svg></span>
+        <span data-scene-play hidden><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="m5 3 8 5-8 5z" /></svg></span>
+      </button>
       <button class="nav-action" data-theme-toggle aria-label="切换主题">☾</button>
     </div>
   </div>

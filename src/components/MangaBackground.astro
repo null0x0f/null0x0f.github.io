@@ -1,6 +1,16 @@
 <div class="manga-background" aria-hidden="true">
-  <img src="/images/bleach.jpg" alt="" width="640" height="914" loading="eager" decoding="async" fetchpriority="high" />
+  <div class="scene-camera">
+    <div class="scene-drift">
+      <img src="/images/bleach.jpg" alt="" width="640" height="914" loading="eager" decoding="async" fetchpriority="high" />
+    </div>
+  </div>
+  <div class="scene-light"></div>
   <div class="scene-grain"></div>
+  <div class="scene-motes">
+    {Array.from({ length: 9 }, (_, index) => (
+      <span style={`--mote-x:${8 + index * 10}%;--mote-duration:${16 + index * 2}s;--mote-delay:${index * -3.7}s;--mote-size:${index % 3 + 2}px`}></span>
+    ))}
+  </div>
 </div>
 
 <style>
@@ -12,37 +22,89 @@
     pointer-events: none;
     user-select: none;
     background: var(--bg);
+    perspective: 1400px;
+  }
+  .scene-camera {
+    position: absolute;
+    inset: -10%;
+    transform: translate3d(var(--scene-x, 0px), calc(var(--scene-y, 0px) - var(--scene-scroll, 0px)), 0) rotateX(var(--scene-tilt-x, 0deg)) rotateY(var(--scene-tilt-y, 0deg));
+    transition: transform 900ms cubic-bezier(.2, .7, .2, 1);
+  }
+  .scene-drift {
+    position: absolute;
+    inset: 0;
+    transform-origin: 65% 42%;
+    animation: scene-camera-drift 24s ease-in-out infinite alternate;
   }
   .manga-background img {
     position: absolute;
-    right: -3%;
-    top: -6%;
+    inset: 0;
     display: block;
-    width: min(76vw, 1100px);
+    width: 100%;
     max-width: none;
-    height: 118%;
+    height: 100%;
     object-fit: cover;
-    object-position: center 35%;
-    opacity: .34;
+    object-position: center 38%;
+    opacity: .3;
     mix-blend-mode: multiply;
-    mask-image: linear-gradient(90deg, transparent, #000 36%);
-    transform: translate3d(var(--scene-x, 0px), calc(var(--scene-y, 0px) - var(--scene-scroll, 0px)), 0) scale(1.025);
   }
   .manga-background::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, var(--bg), color-mix(in srgb, var(--bg) 50%, transparent) 50%, transparent), linear-gradient(0deg, var(--bg), transparent 24%);
+    z-index: 2;
+    background: linear-gradient(90deg, var(--bg), color-mix(in srgb, var(--bg) 72%, transparent) 34%, color-mix(in srgb, var(--bg) 8%, transparent) 80%), linear-gradient(0deg, var(--bg), transparent 24%);
   }
-  :global(body[data-page="home"]) .manga-background img { opacity: .85; }
+  :global(body[data-page="home"]) .manga-background img { opacity: .76; }
   :global([data-theme="dark"]) .manga-background img { mix-blend-mode: luminosity; opacity: .13; }
   :global([data-theme="dark"] body[data-page="home"]) .manga-background img { opacity: .48; mix-blend-mode: normal; }
   :global([data-theme="dark"]) .manga-background::after { background: linear-gradient(90deg, var(--bg), color-mix(in srgb, var(--bg) 60%, transparent) 50%, color-mix(in srgb, var(--bg) 20%, transparent)), linear-gradient(0deg, var(--bg), transparent 40%); }
-  .scene-grain { position: absolute; inset: 0; z-index: 1; opacity: .16; background-image: radial-gradient(var(--accent) .5px, transparent .5px); background-size: 5px 5px; mask-image: linear-gradient(90deg, #000, transparent 65%); }
-  @media (max-width: 760px) {
-    .manga-background img { width: 110%; right: -20%; height: 106%; top: 0; object-position: 56% center; opacity: .18; mask-image: linear-gradient(90deg, transparent, #000 45%); }
-    :global(body[data-page="home"]) .manga-background img { opacity: .52; }
-    .manga-background::after { background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 82%, transparent), color-mix(in srgb, var(--bg) 12%, transparent)), linear-gradient(0deg, var(--bg), transparent 65%); }
+  .scene-light {
+    position: absolute;
+    inset: -20%;
+    z-index: 1;
+    opacity: .25;
+    background: radial-gradient(ellipse at 65% 30%, color-mix(in srgb, var(--accent) 38%, transparent), transparent 50%);
+    animation: scene-light-drift 18s ease-in-out infinite alternate;
   }
-  @media (prefers-reduced-motion: reduce) { .manga-background img { transform: none; } }
+  .scene-grain { position: absolute; inset: 0; z-index: 3; opacity: .12; background-image: radial-gradient(var(--accent) .5px, transparent .5px); background-size: 5px 5px; mask-image: linear-gradient(90deg, #000, transparent 65%); }
+  .scene-motes { position: absolute; inset: 0; z-index: 3; overflow: hidden; opacity: .17; }
+  :global(body[data-page="home"]) .scene-motes { opacity: .4; }
+  .scene-motes span {
+    position: absolute;
+    left: var(--mote-x);
+    bottom: -10%;
+    width: var(--mote-size);
+    height: var(--mote-size);
+    background: var(--accent);
+    border-radius: 50%;
+    animation: scene-mote-rise var(--mote-duration) linear var(--mote-delay) infinite;
+  }
+  .scene-drift, .scene-light, .scene-motes span { animation-play-state: var(--scene-play-state, running); }
+  @keyframes scene-camera-drift {
+    from { transform: translate3d(-1.4%, .8%, 0) scale(1.025) rotate(-.35deg); }
+    to { transform: translate3d(1.6%, -1.6%, 0) scale(1.1) rotate(.4deg); }
+  }
+  @keyframes scene-light-drift {
+    from { transform: translate3d(-8%, -3%, 0); opacity: .16; }
+    to { transform: translate3d(10%, 6%, 0); opacity: .32; }
+  }
+  @keyframes scene-mote-rise {
+    0% { transform: translate3d(0, 0, 0); opacity: 0; }
+    15%, 75% { opacity: .7; }
+    100% { transform: translate3d(45px, -115vh, 0); opacity: 0; }
+  }
+  @media (max-width: 760px) {
+    .scene-camera { inset: -7%; }
+    .scene-drift { animation-duration: 30s; }
+    .manga-background img { object-position: right center; opacity: .18; }
+    :global(body[data-page="home"]) .manga-background img { opacity: .5; }
+    .manga-background::after { background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 82%, transparent), color-mix(in srgb, var(--bg) 12%, transparent)), linear-gradient(0deg, var(--bg), transparent 65%); }
+    .scene-motes span:nth-child(even) { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scene-camera { transform: none; transition: none; }
+    .scene-drift { animation: none; }
+    .scene-light, .scene-motes { display: none; }
+  }
 </style>
