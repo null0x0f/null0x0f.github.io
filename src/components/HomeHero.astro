@@ -1,18 +1,10 @@
----
-import WallpaperGallery from "@/components/WallpaperGallery.astro";
----
-<section class="scene-hero manga-hero" data-home-hero aria-labelledby="home-title">
-  <div class="shell scene-hero-inner">
-    <div class="scene-intro">
-      <p class="scene-eyebrow">PERSONAL DESKTOP <span>/</span> EST. 2023</p>
-      <h1 id="home-title"><span class="scene-slash">/</span>Felix<br /><span class="scene-name">Ding<span class="scene-cursor" aria-hidden="true">_</span></span></h1>
-      <p class="scene-tagline">写代码，也记录过程。</p>
-      <p class="scene-description">从桌面软件到嵌入式设备，<br />在这里存放问题、解法与一点日常。</p>
-      <div class="scene-actions"><a class="scene-button" href="#desktop">打开我的桌面</a><a class="scene-text-link" href="/blog/">阅读文章</a></div>
-      <p class="scene-focus"><span>FOCUS</span><span data-rotating-role>C++ Systems</span></p>
-    </div>
-    <div class="hero-artwork"><div class="hero-artwork-label"><span>THE LITTLE THINGS I LIKE</span><span aria-hidden="true">✳</span></div><WallpaperGallery /><p class="hero-artwork-note"><span aria-hidden="true">✳</span> 代码之外，也有喜欢的世界。</p></div>
-    <div class="scene-caption"><span>SOFTWARE & SYSTEMS ENGINEER</span><span>BUILD. LEARN. LEAVE A TRACE.</span></div>
-    <a class="scene-scroll" href="#desktop"><span>向下探索我的桌面</span><span class="scroll-track" aria-hidden="true"></span></a>
+<section class="shell home-intro" aria-labelledby="home-title">
+  <div class="home-intro-copy">
+    <p class="eyebrow">Software &amp; Systems Engineer</p>
+    <h1 id="home-title">Felix Ding<span>.</span></h1>
+    <p class="home-tagline">写代码，也记录过程。</p>
+    <p class="home-description">专注 C++ / Qt、嵌入式与工业通信。<br />在这里，记录遇到的问题、找到的答案，<br class="desktop-break" />以及代码之外的一点日常。</p>
+    <div class="home-links"><a class="text-link" href="/blog/">阅读文章</a><a class="text-link secondary-link" href="/about/">关于我</a></div>
   </div>
+  <figure class="home-illustration"><img src="/images/bleach/bleach.jpg" alt="BLEACH 漫画人物群像" width="640" height="914" fetchpriority="high" decoding="async" /></figure>
 </section>

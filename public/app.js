@@ -1,5 +1,6 @@
 const root = document.documentElement;
-const storedTheme = localStorage.getItem("theme");
+let storedTheme;
+try { storedTheme = localStorage.getItem("theme"); } catch { /* Use the system preference when storage is unavailable. */ }
 const preferredDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 root.dataset.theme = storedTheme || (preferredDark ? "dark" : "light");
@@ -17,7 +18,7 @@ const updateThemeButton = () => {
 
 themeButton?.addEventListener("click", () => {
   root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
-  localStorage.setItem("theme", root.dataset.theme);
+  try { localStorage.setItem("theme", root.dataset.theme); } catch { /* The current theme still works without storage. */ }
   updateThemeButton();
 });
 updateThemeButton();
@@ -41,6 +42,7 @@ const nav = document.querySelector(".site-nav");
 menuButton?.addEventListener("click", () => {
   const isOpen = nav?.classList.toggle("is-open");
   menuButton.setAttribute("aria-expanded", String(Boolean(isOpen)));
+  menuButton.setAttribute("aria-label", isOpen ? "关闭导航" : "打开导航");
   menuButton.textContent = isOpen ? "×" : "☰";
 });
 
@@ -338,15 +340,11 @@ document.querySelectorAll(".prose table").forEach((table) => {
   wrapper.append(table);
 });
 
-const filterButtons = document.querySelectorAll("[data-filter]");
-const archiveItems = document.querySelectorAll("[data-topic]");
-filterButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const filter = button.dataset.filter;
-    filterButtons.forEach((item) => {
-      item.classList.toggle("is-active", item === button);
-      item.setAttribute("aria-pressed", String(item === button));
-    });
+const blogFilter = document.querySelector("[data-blog-filter]");
+if (blogFilter) {
+  const archiveItems = [...document.querySelectorAll("[data-topic]")];
+  const applyBlogFilter = () => {
+    const filter = blogFilter.value;
     archiveItems.forEach((item) => { item.hidden = filter !== "all" && !JSON.parse(item.dataset.topic).includes(filter); });
     document.querySelectorAll("[data-archive-year]").forEach((group) => {
       const visible = group.querySelectorAll("[data-topic]:not([hidden])").length;
@@ -354,11 +352,13 @@ filterButtons.forEach((button) => {
       const count = group.querySelector("[data-year-count]");
       if (count) count.textContent = `${visible} 篇记录`;
     });
-    const visible = [...archiveItems].filter((item) => !item.hidden).length;
+    const visible = archiveItems.filter((item) => !item.hidden).length;
     const count = document.querySelector("[data-result-count]");
     if (count) count.textContent = `${visible} 篇内容`;
-  });
-});
+  };
+  blogFilter.addEventListener("change", applyBlogFilter);
+  applyBlogFilter();
+}
 
 const weeklyArchive = document.querySelector("[data-weekly-archive]");
 if (weeklyArchive) {
