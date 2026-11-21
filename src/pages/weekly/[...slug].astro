@@ -20,8 +20,9 @@ const toc = headings.filter(({ depth }) => depth === 2);
   <main class="weekly-detail">
     <header class="shell article-header weekly-article-header">
       <nav class="breadcrumbs" aria-label="面包屑"><a href="/weekly/">周报</a><span aria-hidden="true">/</span><span>{week.label}</span></nav>
+      <p class="weekly-kicker">Weekly journal / {week.label}</p>
       <h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p>
-      <div class="weekly-period"><time datetime={entry.data.weekOf}>{formatWeeklyDate(week.start)}</time><span aria-hidden="true">—</span><time datetime={week.end.toISOString().slice(0, 10)}>{formatWeeklyDate(week.end)}</time></div>
+      <div class="weekly-period"><span>记录周期</span><time datetime={entry.data.weekOf}>{formatWeeklyDate(week.start)}</time><span aria-hidden="true">—</span><time datetime={week.end.toISOString().slice(0, 10)}>{formatWeeklyDate(week.end)}</time><small>周一至周日</small></div>
       <div class="article-meta"><span>发布于 <time datetime={entry.data.publishedAt.toISOString()}>{formatWeeklyDate(entry.data.publishedAt)}</time></span><span>{Math.max(1, Math.ceil((entry.body?.length ?? 0) / 900))} 分钟阅读</span>{entry.data.updatedAt && <span>更新于 {formatWeeklyDate(entry.data.updatedAt)}</span>}</div>
       {entry.data.tags.length > 0 && <div class="weekly-tags">{entry.data.tags.map((tag) => <span>{tag}</span>)}</div>}
     </header>
@@ -30,14 +31,14 @@ const toc = headings.filter(({ depth }) => depth === 2);
         {toc.length > 0 && <details class="weekly-mobile-toc"><summary>本期目录 <span aria-hidden="true">＋</span></summary><nav aria-label="本期目录">{toc.map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}</nav></details>}
         <article class="prose"><Content /></article>
         <footer class="weekly-reading-footer">
-          <a class="weekly-back text-link" href="/weekly/">返回全部周报</a>
+          <a class="weekly-back text-link" href="/weekly/">← 返回全部周报</a>
           <nav class="weekly-pager" aria-label="前后期周报">
-            {older ? <a href={`/weekly/${older.id}/`}><span>上一期 · {getWeekInfo(older.data.weekOf).label}</span><strong>{older.data.title}</strong></a> : <span class="weekly-pager-end">已是最早的一期</span>}
-            {newer ? <a href={`/weekly/${newer.id}/`}><span>下一期 · {getWeekInfo(newer.data.weekOf).label}</span><strong>{newer.data.title}</strong></a> : <span class="weekly-pager-end">已是最新的一期</span>}
+            {older ? <a href={`/weekly/${older.id}/`}><span>← 上一期 · {getWeekInfo(older.data.weekOf).label}</span><strong>{older.data.title}</strong></a> : <span class="weekly-pager-end">已是最早的一期</span>}
+            {newer ? <a href={`/weekly/${newer.id}/`}><span>下一期 · {getWeekInfo(newer.data.weekOf).label} →</span><strong>{newer.data.title}</strong></a> : <span class="weekly-pager-end">已是最新的一期</span>}
           </nav>
         </footer>
       </div>
-      {toc.length > 0 && <aside class="toc"><strong>本期目录</strong><nav aria-label="本期目录">{toc.map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}</nav><a class="weekly-toc-back" href="/weekly/">周报归档</a></aside>}
+      {toc.length > 0 && <aside class="toc"><strong>本期目录</strong><nav aria-label="本期目录">{toc.map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}</nav><a class="weekly-toc-back" href="/weekly/">← 周报归档</a></aside>}
     </div>
   </main>
 </BaseLayout>
