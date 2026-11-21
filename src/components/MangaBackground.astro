@@ -1,7 +1,7 @@
 <div class="manga-background" aria-hidden="true">
   <div class="scene-camera">
     <div class="scene-drift">
-      <img src="/images/bleach.jpg" alt="" width="640" height="914" loading="eager" decoding="async" fetchpriority="high" />
+      <img data-wallpaper-background src="/images/bleach/bleach.jpg" alt="" width="640" height="914" loading="eager" decoding="async" />
     </div>
   </div>
   <div class="scene-light"></div>
@@ -45,7 +45,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center 38%;
-    opacity: .3;
+    opacity: .1;
     mix-blend-mode: multiply;
   }
   .manga-background::after {
@@ -55,9 +55,9 @@
     z-index: 2;
     background: linear-gradient(90deg, var(--bg), color-mix(in srgb, var(--bg) 72%, transparent) 34%, color-mix(in srgb, var(--bg) 8%, transparent) 80%), linear-gradient(0deg, var(--bg), transparent 24%);
   }
-  :global(body[data-page="home"]) .manga-background img { opacity: .76; }
+  :global(body[data-page="home"]) .manga-background img { opacity: .2; }
   :global([data-theme="dark"]) .manga-background img { mix-blend-mode: luminosity; opacity: .13; }
-  :global([data-theme="dark"] body[data-page="home"]) .manga-background img { opacity: .48; mix-blend-mode: normal; }
+  :global([data-theme="dark"] body[data-page="home"]) .manga-background img { opacity: .12; mix-blend-mode: luminosity; }
   :global([data-theme="dark"]) .manga-background::after { background: linear-gradient(90deg, var(--bg), color-mix(in srgb, var(--bg) 60%, transparent) 50%, color-mix(in srgb, var(--bg) 20%, transparent)), linear-gradient(0deg, var(--bg), transparent 40%); }
   .scene-light {
     position: absolute;
@@ -98,7 +98,7 @@
     .scene-camera { inset: -7%; }
     .scene-drift { animation-duration: 30s; }
     .manga-background img { object-position: right center; opacity: .18; }
-    :global(body[data-page="home"]) .manga-background img { opacity: .5; }
+    :global(body[data-page="home"]) .manga-background img { opacity: .12; }
     .manga-background::after { background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 82%, transparent), color-mix(in srgb, var(--bg) 12%, transparent)), linear-gradient(0deg, var(--bg), transparent 65%); }
     .scene-motes span:nth-child(even) { display: none; }
   }

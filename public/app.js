@@ -343,8 +343,17 @@ const archiveItems = document.querySelectorAll("[data-topic]");
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const filter = button.dataset.filter;
-    filterButtons.forEach((item) => item.classList.toggle("is-active", item === button));
-    archiveItems.forEach((item) => { item.hidden = filter !== "all" && !item.dataset.topic.split(" ").includes(filter); });
+    filterButtons.forEach((item) => {
+      item.classList.toggle("is-active", item === button);
+      item.setAttribute("aria-pressed", String(item === button));
+    });
+    archiveItems.forEach((item) => { item.hidden = filter !== "all" && !JSON.parse(item.dataset.topic).includes(filter); });
+    document.querySelectorAll("[data-archive-year]").forEach((group) => {
+      const visible = group.querySelectorAll("[data-topic]:not([hidden])").length;
+      group.hidden = visible === 0;
+      const count = group.querySelector("[data-year-count]");
+      if (count) count.textContent = `${visible} 篇记录`;
+    });
     const visible = [...archiveItems].filter((item) => !item.hidden).length;
     const count = document.querySelector("[data-result-count]");
     if (count) count.textContent = `${visible} 篇内容`;

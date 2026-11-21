@@ -1,0 +1,21 @@
+---
+import { wallpapers } from "@/lib/wallpapers";
+interface Props { compact?: boolean; }
+const { compact = false } = Astro.props;
+const initial = wallpapers[0];
+---
+<section class:list={["wallpaper-gallery", { "wallpaper-gallery-compact": compact }]} aria-label="漫画壁纸">
+  <header class="wallpaper-titlebar"><span class="wallpaper-file-icon" aria-hidden="true">▧</span><span>我的壁纸</span><span data-wallpaper-filename>{initial.filename}</span><span class="wallpaper-window-marks" aria-hidden="true">− &nbsp; □</span></header>
+  <div class="wallpaper-stage">
+    <img data-wallpaper-image src={initial.src} alt="BLEACH 漫画人物插画" width={initial.width} height={initial.height} decoding="async" loading={compact ? "lazy" : "eager"} />
+    <span class="wallpaper-corner wallpaper-corner-top" aria-hidden="true"></span><span class="wallpaper-corner wallpaper-corner-bottom" aria-hidden="true"></span>
+    <div class="wallpaper-stage-caption"><span>BLEACH / ART COLLECTION</span><span data-wallpaper-number>01 / 03</span></div>
+  </div>
+  <div class="wallpaper-toolbar">
+    <div class="wallpaper-current"><span>DESKTOP MOOD</span><strong data-wallpaper-label>{initial.title}</strong></div>
+    <div class="wallpaper-choices" role="group" aria-label="选择桌面壁纸">
+      {wallpapers.map((wallpaper, index) => <button type="button" data-wallpaper-choice={wallpaper.id} aria-label={`切换壁纸：${wallpaper.title}`} aria-pressed={index === 0} title={wallpaper.title}><img src={wallpaper.src} alt="" width="40" height="48" loading="lazy" decoding="async" /></button>)}
+    </div>
+  </div>
+  <p class="sr-only" data-wallpaper-status aria-live="polite"></p>
+</section>
