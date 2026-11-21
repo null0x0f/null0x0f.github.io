@@ -1,0 +1,39 @@
+:root {
+  color-scheme: light;
+  --color-ink: #111110;
+  --color-paper: #f3f0e8;
+  --color-signal: #ff4d00;
+  --color-electric: #2850ff;
+  --color-muted: #77736b;
+  --color-border: #d8d4ca;
+  --ink: var(--color-ink);
+  --paper: var(--color-paper);
+  --muted: #666259;
+  --rule: var(--color-border);
+  --surface: #e9e5dc;
+  --focus: var(--color-electric);
+  --font-display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+  --font-ui: "Space Grotesk", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-cn: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "IBM Plex Mono", Consolas, monospace;
+  --page-gutter: clamp(48px, 4vw, 72px);
+  --page-width: 1600px;
+  --grid-columns: 12;
+  /* Compatibility tokens for the existing search and contribution widgets. */
+  --bg: var(--paper);
+  --text: var(--ink);
+  --border: var(--rule);
+  --accent: var(--ink);
+  --mono: var(--font-mono);
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #191918;
+  --ink: #f3f0e8;
+  --muted: #b1ada4;
+  --rule: #46443e;
+  --surface: #242421;
+  --focus: #94a8ff;
+}
+@media (max-width: 1100px) { :root { --page-gutter: 32px; --grid-columns: 8; } }
+@media (max-width: 640px) { :root { --page-gutter: 20px; --grid-columns: 4; } }

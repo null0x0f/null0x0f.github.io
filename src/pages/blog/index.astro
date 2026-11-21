@@ -1,55 +1,74 @@
 ---
 import { getCollection } from "astro:content";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import WallpaperGallery from "@/components/WallpaperGallery.astro";
+import EditorialLayout from "@/layouts/EditorialLayout.astro";
+import { siteInfo } from "@/lib/site";
+import "@/styles/archive.css";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
 const years = [...new Set(posts.map((post) => post.data.publishedAt.getFullYear()))];
-const month = (value: Date) => value.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
 const topics = [...new Map(posts.flatMap((post) => post.data.tags).map((tag) => [tag.toLowerCase(), tag])).values()];
+const numbers = new Map(posts.map((post, index) => [post.id, String(index + 1).padStart(2, "0")]));
+const formatDate = (date: Date) => date.toLocaleDateString("en-GB", {
+  year: "numeric", month: "2-digit", day: "2-digit",
+}).split("/").reverse().join(".");
 ---
 
-<BaseLayout title="Blog — Felix Ding" description="关于 C++、Qt、嵌入式与工业软件的技术文章。" current="blog">
-  <main class="shell writing-room">
-    <div class="writing-path"><a href="/">我的桌面</a><span>/</span><span>文章归档</span><span class="writing-path-file">/blog/index</span></div>
-    <header class="writing-cover">
-      <div class="writing-cover-copy">
-        <p class="writing-kicker">THE WRITING ROOM</p>
-        <h1>工程笔记，<br />与一路上的<span>思考。</span></h1>
-        <p class="writing-cover-description">把问题写清楚，把经验留下来。<br />这里是关于代码、系统与持续学习的个人记录。</p>
-        <div class="writing-cover-topics"><span>C++ / Qt</span><span>EMBEDDED</span><span>INDUSTRIAL I/O</span></div>
+<EditorialLayout title={`INDEX — 文章归档 | ${siteInfo.name}`} description="关于 C++、Qt、嵌入式与工业软件的技术文章。把问题写清楚，把经验留下来。" current="blog">
+  <main id="main-content" class="archive-shell archive-index">
+    <header class="archive-cover">
+      <div class="archive-cover-meta"><span>THE UNFINISHED ARCHIVE</span><span>WRITING / 01</span></div>
+      <h1>INDEX<span class="archive-cover-mark" aria-hidden="true"></span><span class="sr-only"> / 文章归档</span></h1>
+      <div class="archive-cover-intro">
+        <p class="archive-cover-statement">把问题写清楚，<br />把经验留下来。</p>
+        <p class="archive-cover-description">关于代码、系统与持续学习的个人记录。<br />从一个具体的问题开始，寻找可以复用的答案。</p>
       </div>
-      <figure class="writing-cover-art"><img src="/images/bleach/pingzi.jpg" alt="戴着耳机，坐在书籍与唱片之间的 BLEACH 漫画人物" width="800" height="1176" fetchpriority="high" /><figcaption><span>AFTER HOURS / A LITTLE INSPIRATION</span><span>留一点时间，给喜欢的事。</span></figcaption></figure>
     </header>
-    <div class="writing-summary"><p><strong>{String(posts.length).padStart(2, "0")}</strong> 篇记录<span class="writing-summary-divider">/</span><strong>{String(topics.length).padStart(2, "0")}</strong> 个主题<span class="writing-summary-divider">/</span><strong>{years.length}</strong> 个年份</p><span>THOUGHTS, PUT INTO WORDS.</span></div>
-    <div class="writing-layout">
-      <section class="writing-archive" aria-labelledby="writing-archive-title">
-        <header class="writing-window-bar"><span aria-hidden="true">▤</span><h2 id="writing-archive-title">文章归档</h2><span>/ writings</span></header>
-        <div class="writing-filters">
-          <div class="filter-group" role="group" aria-label="按主题筛选文章"><button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">全部文章</button>{topics.map((topic) => <button type="button" class="filter-btn" data-filter={topic.toLowerCase()} aria-pressed="false">{topic}</button>)}</div>
-          <p class="writing-filter-count"><span>按发布时间排序</span><span data-result-count aria-live="polite">{posts.length} 篇内容</span></p>
-        </div>
-        <div class="writing-years">
-          {years.map((year) => (
-            <section class="writing-year" data-archive-year aria-labelledby={`year-${year}`}>
-              <header class="writing-year-heading"><h3 id={`year-${year}`}>{year}<span>/</span></h3><span data-year-count>{posts.filter((post) => post.data.publishedAt.getFullYear() === year).length} 篇记录</span></header>
-              {posts.filter((post) => post.data.publishedAt.getFullYear() === year).map((post) => (
-                <a class="writing-entry" data-topic={JSON.stringify(post.data.tags.map((tag) => tag.toLowerCase()))} href={`/blog/${post.id}/`}>
-                  <time class="writing-entry-date" datetime={post.data.publishedAt.toISOString()}><strong>{String(post.data.publishedAt.getDate()).padStart(2, "0")}</strong><span>{month(post.data.publishedAt)}</span></time>
-                  <div class="writing-entry-copy"><div class="writing-entry-topics">{post.data.tags.slice(0, 3).map((tag) => <span>{tag}</span>)}{post.id === posts[0]?.id && <span class="writing-latest">最新</span>}</div><h4>{post.data.title}</h4><p>{post.data.description}</p><span class="writing-entry-read">阅读全文<span aria-hidden="true"> +</span></span></div>
-                </a>
-              ))}
+
+    <section class="archive-catalog" aria-label="按年份排列的文章归档">
+      <div class="archive-toolbar">
+        <p><span data-result-count aria-live="polite" aria-atomic="true">{posts.length} 篇内容</span><span class="archive-order"> / 按发布时间</span></p>
+        <label class="archive-filter">
+          <span>主题</span>
+          <select data-blog-filter aria-label="按主题筛选文章">
+            <option value="all">全部文章</option>
+            {topics.map((topic) => <option value={topic.toLowerCase()}>{topic}</option>)}
+          </select>
+        </label>
+      </div>
+
+      <div class="archive-year-list">
+        {years.map((year) => {
+          const yearPosts = posts.filter((post) => post.data.publishedAt.getFullYear() === year);
+          return (
+            <section class="archive-year" data-archive-year aria-labelledby={`year-${year}`}>
+              <header class="archive-year-heading">
+                <h2 id={`year-${year}`}>{year}</h2>
+                <span data-year-count>{yearPosts.length} 篇记录</span>
+              </header>
+              <div class="archive-entries">
+                {yearPosts.map((post) => (
+                  <a class="archive-index-entry" data-topic={JSON.stringify(post.data.tags.map((tag) => tag.toLowerCase()))} href={`/blog/${post.id}/`}>
+                    <span class="archive-entry-number" aria-hidden="true">{numbers.get(post.id)}</span>
+                    <div class="archive-entry-copy">
+                      <h3>{post.data.title}</h3>
+                      <p>{post.data.description}</p>
+                    </div>
+                    <div class="archive-entry-meta">
+                      <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+                      {post.data.tags.length > 0 && <span class="archive-entry-tags">{post.data.tags.slice(0, 3).join(" / ")}</span>}
+                    </div>
+                  </a>
+                ))}
+              </div>
             </section>
-          ))}
-          {!posts.length && <p class="writing-empty">第一篇记录正在酝酿中。</p>}
-        </div>
-        <div class="writing-archive-end"><span>END OF ARCHIVE</span><span>保持好奇，继续构建。</span></div>
-      </section>
-      <aside class="writing-sidebar" aria-label="关于作者与桌面壁纸">
-        <WallpaperGallery compact />
-        <section class="writing-author"><div class="writing-author-heading"><span class="writing-author-monogram" aria-hidden="true">FD</span><div><h2>Felix Ding</h2><p>SOFTWARE & SYSTEMS</p></div></div><p>在软件与真实世界的交界处，把复杂的问题，拆成可理解的答案。</p><div class="writing-author-links"><a href="/about/">关于我</a><a href="/weekly/">周间记录</a><a href="https://github.com/null0x0f" target="_blank" rel="noreferrer">GitHub</a></div></section>
-        <div class="writing-side-note"><span aria-hidden="true">✳</span><p>有时调试代码，<br />有时整理思绪。</p><span>ONE THING AT A TIME.</span></div>
-      </aside>
-    </div>
+          );
+        })}
+        {!posts.length && <p class="archive-empty">第一篇记录正在酝酿中。</p>}
+      </div>
+
+      <div class="archive-end"><span>END OF INDEX</span><p>保持好奇，继续构建。</p></div>
+    </section>
   </main>
-</BaseLayout>
+</EditorialLayout>

@@ -1,0 +1,12 @@
+<dialog class="search-dialog" id="site-search" aria-labelledby="search-dialog-title">
+  <div class="search-surface">
+    <header class="search-box">
+      <label class="sr-only" id="search-dialog-title" for="site-search-input">搜索站内内容</label>
+      <input id="site-search-input" type="search" placeholder="搜索文章、函数或错误信息" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-autocomplete="list" />
+      <button class="search-clear" type="button" data-search-clear aria-label="清空搜索" hidden>×</button>
+      <button class="search-close" type="button" data-search-close aria-label="关闭搜索">ESC</button>
+    </header>
+    <div class="search-toolbar"><span data-search-summary aria-live="polite">载入内容</span><span class="micro">SEARCH THE ARCHIVE</span></div>
+    <div class="search-results" id="search-results" role="listbox" aria-label="搜索结果"></div>
+  </div>
+</dialog>

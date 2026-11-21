@@ -1,0 +1,8 @@
+---
+interface Props { number: string; title: string; subtitle: string; href?: string; linkText?: string; }
+const { number, title, subtitle, href, linkText } = Astro.props;
+---
+<header class="editorial-section-heading">
+  <div class="section-label"><span class="section-number">{number}</span><span>{subtitle}</span></div>
+  <div class="section-heading-line"><h2>{title}</h2>{href && <a class="underlined-link" href={href}>{linkText}</a>}</div>
+</header>

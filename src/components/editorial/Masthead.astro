@@ -1,0 +1,22 @@
+---
+import Brand from "./Brand.astro";
+interface Props { current?: "blog" | "weekly" | "about"; }
+const { current } = Astro.props;
+---
+<a class="skip-link" href="#main-content">跳转到主要内容</a>
+<header class="archive-masthead site-header">
+  <div class="archive-shell masthead-inner">
+    <Brand />
+    <button class="archive-tool archive-menu" type="button" data-menu-toggle aria-label="打开导航" aria-expanded="false" aria-controls="archive-navigation">☰</button>
+    <nav class="site-nav archive-navigation" id="archive-navigation" aria-label="主导航">
+      <a href="/blog/" aria-current={current === "blog" ? "page" : undefined}><span>01</span>文章 <small>INDEX</small></a>
+      <a href="/weekly/" aria-current={current === "weekly" ? "page" : undefined}><span>02</span>周报 <small>WEEKLY</small></a>
+      <a href="/about/" aria-current={current === "about" ? "page" : undefined}><span>03</span>关于 <small>ABOUT</small></a>
+      <a href="/#after-hours"><span>04</span>AFTER HOURS</a>
+    </nav>
+    <div class="archive-tools">
+      <button class="archive-tool archive-search" type="button" data-search-open aria-label="搜索站内内容"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="6.5" /><path d="m15 15 6 6" /></svg><kbd class="shortcut">⌘K</kbd></button>
+      <button class="archive-tool" type="button" data-theme-toggle aria-label="切换主题">☾</button>
+    </div>
+  </div>
+</header>

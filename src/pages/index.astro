@@ -1,58 +1,83 @@
 ---
 import { getCollection } from "astro:content";
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import EditorialLayout from "@/layouts/EditorialLayout.astro";
+import Cover from "@/components/editorial/Cover.astro";
+import SectionHeading from "@/components/editorial/SectionHeading.astro";
 import GitHubContributions from "@/components/GitHubContributions.astro";
-import HomeHero from "@/components/HomeHero.astro";
-import DesktopWindow from "@/components/DesktopWindow.astro";
+import { siteInfo } from "@/lib/site";
 import { getPublishedWeekly } from "@/lib/weekly";
 import { getWeekInfo } from "@/lib/weekly-dates";
+import "@/styles/home.css";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const featured = posts.filter(({ data }) => data.featured);
+const selected = [...featured, ...posts.filter((post) => !featured.includes(post))].slice(0, 3);
+const [lead, ...supporting] = selected;
 const weekly = await getPublishedWeekly();
 const latest = weekly[0];
-const week = latest && getWeekInfo(latest.data.weekOf);
-const formatDate = (date: Date) => date.toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" });
+const latestWeek = latest && getWeekInfo(latest.data.weekOf);
+const firstYear = posts.length ? Math.min(...posts.map(({ data }) => data.publishedAt.getFullYear())) : new Date().getFullYear();
+const projects = ["horizontal_45kw_lxn06", "工业后端项目复盘", "250ets"].flatMap((id) => { const post = posts.find((entry) => entry.id === id); return post ? [post] : []; });
+const date = (value: Date) => value.toISOString().slice(0, 10).replaceAll("-", ".");
 ---
 
-<BaseLayout title="Felix Ding — Software & Systems">
-  <main class="desktop-home">
-    <HomeHero />
-    <section class="shell desktop-workspace" id="desktop" data-desktop-workspace aria-label="我的内容桌面">
-      <div class="workspace-tools"><span><i aria-hidden="true"></i> / HOME / DESKTOP</span><div><span class="workspace-hint">拖动标题栏，整理你的桌面</span><button type="button" data-workspace-reset>↺ 还原布局</button></div></div>
-      <p class="sr-only" data-workspace-status aria-live="polite"></p>
-      <div class="window-slot profile-slot" data-reveal>
-        <DesktopWindow id="profile" title="关于我" filename="about.txt">
-          <div class="profile-heading"><span class="profile-avatar profile-avatar-art"><img src="/images/bleach/pingzi.jpg" alt="" width="56" height="56" loading="lazy" /><span>FD</span></span><div><p>HELLO, WORLD.</p><h3>Felix Ding</h3><span>Software & Systems Engineer</span></div></div>
-          <p class="profile-description">在软件与真实世界的交界处，<br />把复杂的问题，拆成可理解的答案。</p>
-          <p class="profile-detail">专注 C++ / Qt、嵌入式与工业通信。这个小角落，记录每一次构建、调试与重新理解。</p>
-          <div class="desktop-tags"><span>C++</span><span>Qt</span><span>Embedded</span><span>Fieldbus</span></div>
-          <div class="profile-counts"><a href="/blog/"><strong>{String(posts.length).padStart(2, "0")}</strong><span>技术文章</span></a><a href="/weekly/"><strong>{String(weekly.length).padStart(2, "0")}</strong><span>周间记录</span></a><span><strong>∞</strong><span>保持好奇</span></span></div>
-          <div class="window-footer"><a href="/about/">更多关于我 ↗</a><a href="https://github.com/null0x0f" target="_blank" rel="noreferrer">GitHub ↗</a></div>
-        </DesktopWindow>
-      </div>
-      <div class="window-slot writing-slot" data-reveal>
-        <DesktopWindow id="writing" title="最近文章" filename="/blog">
-          <div class="window-intro"><p>问题值得记录，答案值得分享。</p><span>{posts.length} ENTRIES</span></div>
-          <div class="desktop-posts">
-            {posts.slice(0, 5).map((post, index) => <a class="desktop-post" href={`/blog/${post.id}/`}><span class="desktop-post-number">{String(index + 1).padStart(2, "0")}</span><div><h3>{post.data.title}</h3><p>{post.data.description}</p><div class="desktop-post-meta"><time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time><span>{post.data.tags.slice(0, 2).join(" / ")}</span></div></div><span class="desktop-post-arrow" aria-hidden="true">↗</span></a>)}
-          </div>
-          <div class="window-footer"><span>THOUGHTS, PUT INTO WORDS.</span><a href="/blog/">全部文章 ↗</a></div>
-        </DesktopWindow>
-      </div>
-      <div class="window-slot journal-slot" data-reveal>
-        <DesktopWindow id="journal" title="周间记录" filename="weekly.log">
-          {latest && week ? <><a class="desktop-weekly-feature" href={`/weekly/${latest.id}/`}><div class="desktop-week-stamp"><span>WEEK</span><strong>{week.number}</strong><span>{week.isoYear}</span></div><div><span class="desktop-latest">LATEST UPDATE</span><h3>{latest.data.title}</h3><p>{latest.data.description}</p></div></a><div class="desktop-weekly-older">{weekly.slice(1, 3).map((entry) => <a href={`/weekly/${entry.id}/`}><span>{getWeekInfo(entry.data.weekOf).label}</span><strong>{entry.data.title}</strong><span aria-hidden="true">↗</span></a>)}</div></> : <p class="desktop-weekly-empty">给每一周，留一页记录。第一篇周报正在酝酿中。</p>}
-          <div class="window-footer"><span>BUILD / LEARN / REPEAT</span><a href="/weekly/">全部周报 ↗</a></div>
-        </DesktopWindow>
-      </div>
-      <div class="window-slot activity-slot">
-        <DesktopWindow id="activity" title="持续构建" filename="github.activity" movable={false} class="window-github">
-          <GitHubContributions username="null0x0f" />
-          <div class="window-footer"><span>SMALL STEPS, EVERY DAY.</span><a href="https://github.com/null0x0f" target="_blank" rel="noreferrer">@null0x0f ↗</a></div>
-        </DesktopWindow>
+<EditorialLayout title={`NULL / 0x0F — The Unfinished Archive · ${siteInfo.author}`}>
+  <main id="main-content">
+    <Cover articleCount={posts.length} firstYear={firstYear} />
+    <section class="manifesto" id="manifesto" aria-labelledby="manifesto-title">
+      <div class="archive-shell">
+        <div class="section-label"><span class="section-number">02</span><span>MANIFESTO / 写在前面</span></div>
+        <h2 id="manifesto-title">MAKE SENSE.<br /><span>LEAVE A TRACE.</span></h2>
+        <div class="manifesto-foot"><span class="micro">THINK IN SYSTEMS.<br />WRITE IN PUBLIC.</span><p>把复杂的问题，拆成可理解的答案。<br />记录构建、调试与重新理解的过程。<br />这里没有最终版本，只有持续更新的思考。</p></div>
       </div>
     </section>
-    <div class="desktop-signoff shell"><span>END OF DESKTOP</span><p>保持好奇，继续构建。</p><a href="#top">回到顶部 ↑</a></div>
+
+    <section class="archive-shell home-selected home-section" aria-label="精选文章">
+      <SectionHeading number="03" title="SELECTED WRITING" subtitle="精选文章 / 从这里开始" />
+      {lead ? <div class="selected-spread">
+        <article class="selected-lead">
+          <div class="selected-top micro"><span>FEATURE / 01</span><span>{date(lead.data.publishedAt)}</span></div>
+          <div class="selected-type-art" aria-hidden="true"><span>{lead.data.tags[0] ?? "NOTE"}</span><span class="selected-art-line"></span><small>FIELD NOTES<br />FROM THE ARCHIVE</small></div>
+          <div class="selected-lead-copy"><p class="micro">{lead.data.tags.slice(0, 3).join(" / ")}</p><h3><a href={`/blog/${lead.id}/`}>{lead.data.title}</a></h3><p>{lead.data.description}</p><a class="underlined-link" href={`/blog/${lead.id}/`}>阅读这篇文章</a></div>
+        </article>
+        <div class="selected-supporting">{supporting.map((post, index) => <article class="selected-secondary"><div class="selected-top micro"><span>0{index + 2} / {post.data.tags[0] ?? "NOTES"}</span><time datetime={post.data.publishedAt.toISOString()}>{date(post.data.publishedAt)}</time></div><h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3><p>{post.data.description}</p><a class="underlined-link" href={`/blog/${post.id}/`}>阅读全文</a></article>)}</div>
+      </div> : <p class="archive-empty">档案即将开始。</p>}
+    </section>
+
+    <section class="archive-shell home-index home-section" aria-label="最新文章索引">
+      <SectionHeading number="04" title="THE INDEX" subtitle={`文章索引 / ${posts.length} ENTRIES`} href="/blog/" linkText="完整归档" />
+      <div class="home-index-list">{posts.slice(0, 6).map((post, index) => <a class="home-index-row" href={`/blog/${post.id}/`}><span class="index-ordinal micro">{String(index + 1).padStart(2, "0")}</span><div class="index-writing"><h3>{post.data.title}</h3><p>{post.data.tags.slice(0, 3).join(" / ")}</p></div><time class="micro" datetime={post.data.publishedAt.toISOString()}>{date(post.data.publishedAt)}</time><span class="index-open" aria-hidden="true">+</span></a>)}</div>
+    </section>
+
+    <section class="home-weekly home-section" aria-label="周报">
+      <div class="archive-shell">
+        <SectionHeading number="05" title="WEEKLY EDITIONS" subtitle="周间刊物 / 一周一页" href="/weekly/" linkText="全部周报" />
+        {latest && latestWeek ? <div class="weekly-spread">
+          <a class="weekly-edition" href={`/weekly/${latest.id}/`}><div class="edition-stamp"><span class="micro">LATEST EDITION / {latestWeek.isoYear}</span><strong><small>W</small>{latestWeek.number}</strong><span class="micro">{latestWeek.range}</span></div><div class="edition-copy"><h3>{latest.data.title}</h3><p>{latest.data.description}</p><span class="underlined-link">打开本期</span></div></a>
+          <div class="edition-index"><p class="micro">PREVIOUS EDITIONS</p>{weekly.slice(1, 4).map((entry) => <a href={`/weekly/${entry.id}/`}><span class="edition-number">W{getWeekInfo(entry.data.weekOf).number}</span><div><h3>{entry.data.title}</h3><p>{getWeekInfo(entry.data.weekOf).range}</p></div></a>)}<p class="edition-note">开发中的进展、问题与新收获。<br />给每一周，留一点记录。</p></div>
+        </div> : <p>第一期周报正在酝酿中。</p>}
+      </div>
+    </section>
+
+    <section class="archive-shell home-work home-section" aria-label="项目记录">
+      <SectionHeading number="06" title="SELECTED WORK" subtitle="项目记录 / 在真实问题中工作" href={siteInfo.profile} linkText="GitHub" />
+      <p class="work-intro">从已有项目复盘中，观察系统如何连接真实世界。</p>
+      <div class="work-index">{projects.map((post, index) => <a href={`/blog/${post.id}/`}><span class="work-number">{String(index + 1).padStart(2, "0")}</span><div><p class="micro">{post.data.tags.slice(0, 3).join(" / ")}</p><h3>{post.data.title}</h3><p>{post.data.description}</p></div><span class="work-kind micro">PROJECT NOTES</span></a>)}</div>
+      <div class="archive-activity"><div class="activity-heading"><h3>持续构建</h3><span class="micro">PUBLIC GITHUB ACTIVITY</span></div><GitHubContributions username="null0x0f" /></div>
+    </section>
+
+    <section class="home-after-hours home-section" id="after-hours" aria-labelledby="after-hours-title">
+      <div class="archive-shell">
+        <div class="section-label"><span class="section-number">07</span><span>AFTER HOURS / 代码之外</span></div>
+        <div class="after-hours-spread">
+          <div class="after-hours-copy"><h2 id="after-hours-title">OFF <br />THE <br /><span>CLOCK.</span></h2><p>有时调试代码，<br />有时只是，喜欢一张画。</p><span class="micro">A SMALL COLLECTION OF<br />THINGS I KEEP AROUND.</span></div>
+          <div class="after-hours-collage">
+            <figure class="collage-main"><img src="/images/bleach/pingzi.jpg" alt="戴耳机坐在书与唱片之间的 BLEACH 漫画人物" width="800" height="1176" loading="lazy" decoding="async" /><figcaption class="micro">BLEACH / PERSONAL COLLECTION</figcaption></figure>
+            <figure class="collage-side"><img src="/images/bleach/bleach.jpg" alt="BLEACH 漫画人物群像" width="640" height="914" loading="lazy" decoding="async" /><figcaption class="micro">KEEP WHAT MOVES YOU.</figcaption></figure>
+            <span class="collage-label" aria-hidden="true">NO DEADLINES.</span>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
-  <nav class="desktop-dock" aria-label="桌面快捷导航"><a href="#desktop"><span aria-hidden="true">▦</span>桌面</a><a href="/blog/"><span aria-hidden="true">▤</span>文章</a><a href="/weekly/"><span aria-hidden="true">▥</span>周报</a><a href="/about/"><span aria-hidden="true">◎</span>关于</a><span class="dock-divider" aria-hidden="true"></span><time data-local-clock aria-label="本地时间">--:--</time></nav>
-</BaseLayout>
+</EditorialLayout>

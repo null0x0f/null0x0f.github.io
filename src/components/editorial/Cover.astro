@@ -1,0 +1,14 @@
+---
+import { siteInfo } from "@/lib/site";
+interface Props { articleCount: number; firstYear: number; }
+const { articleCount, firstYear } = Astro.props;
+---
+<section class="archive-cover archive-shell" aria-labelledby="cover-title">
+  <div class="cover-meta micro"><span>AN INDEPENDENT DIGITAL ARCHIVE</span><span>EST. {firstYear} / BY {siteInfo.author}</span></div>
+  <div class="cover-composition" data-editorial-reveal>
+    <h1 class="cover-title" id="cover-title"><span class="cover-null">NULL</span><span class="cover-code"><i>/</i>0x0F</span></h1>
+    <div class="cover-side-note"><span class="cover-sign" aria-hidden="true">[ N / F ]</span><p>代码、系统，<br />与未完成的思考。</p><span class="micro">C++ / Qt / EMBEDDED<br />BUILD. LEARN. LEAVE A TRACE.</span></div>
+    <p class="cover-caption">THE<br />UNFINISHED<br /><span>ARCHIVE.</span></p>
+  </div>
+  <div class="cover-bottom"><a class="editorial-button" href="/blog/">进入文章索引 <span class="micro">[{String(articleCount).padStart(2, "0")}]</span></a><span class="cover-bottom-note">记录真实问题。保留思考过程。</span><a class="cover-scroll micro" href="#manifesto"><span class="scroll-line" aria-hidden="true"></span>SCROLL TO EXPLORE</a></div>
+</section>

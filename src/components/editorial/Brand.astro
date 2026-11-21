@@ -1,0 +1,8 @@
+---
+interface Props { footer?: boolean; }
+const { footer = false } = Astro.props;
+---
+<a class:list={["archive-brand", { "archive-brand-footer": footer }]} href="/" aria-label="NULL / 0x0F，返回首页">
+  <span class="brand-block" aria-hidden="true">N<span>/</span></span>
+  <span class="brand-wordmark">NULL / 0x0F<span>THE UNFINISHED ARCHIVE</span></span>
+</a>

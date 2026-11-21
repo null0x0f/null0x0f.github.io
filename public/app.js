@@ -1,8 +1,9 @@
 const root = document.documentElement;
-const storedTheme = localStorage.getItem("theme");
+let storedTheme;
+try { storedTheme = localStorage.getItem("theme"); } catch { /* Theme switching also works without browser storage. */ }
 const preferredDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-root.dataset.theme = storedTheme || (preferredDark ? "dark" : "light");
+root.dataset.theme = ["light", "dark"].includes(storedTheme) ? storedTheme : (preferredDark ? "dark" : "light");
 
 const shortcutLabel = document.querySelector(".shortcut");
 if (shortcutLabel && !/Mac|iPhone|iPad/.test(navigator.userAgent)) shortcutLabel.textContent = "Ctrl K";
@@ -17,7 +18,7 @@ const updateThemeButton = () => {
 
 themeButton?.addEventListener("click", () => {
   root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
-  localStorage.setItem("theme", root.dataset.theme);
+  try { localStorage.setItem("theme", root.dataset.theme); } catch { /* Keep the selected theme for this page. */ }
   updateThemeButton();
 });
 updateThemeButton();
@@ -38,10 +39,18 @@ backToTop?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "
 
 const menuButton = document.querySelector("[data-menu-toggle]");
 const nav = document.querySelector(".site-nav");
-menuButton?.addEventListener("click", () => {
-  const isOpen = nav?.classList.toggle("is-open");
-  menuButton.setAttribute("aria-expanded", String(Boolean(isOpen)));
-  menuButton.textContent = isOpen ? "×" : "☰";
+const setMenuOpen = (isOpen, restoreFocus = false) => {
+  const expanded = Boolean(isOpen && nav);
+  nav?.classList.toggle("is-open", expanded);
+  menuButton?.setAttribute("aria-expanded", String(expanded));
+  menuButton?.setAttribute("aria-label", expanded ? "关闭导航" : "打开导航");
+  if (menuButton) menuButton.textContent = expanded ? "×" : "☰";
+  if (restoreFocus) menuButton?.focus();
+};
+setMenuOpen(nav?.classList.contains("is-open"));
+menuButton?.addEventListener("click", () => setMenuOpen(!nav?.classList.contains("is-open")));
+nav?.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", () => setMenuOpen(false));
 });
 
 const searchDialog = document.querySelector("#site-search");
@@ -278,7 +287,13 @@ document.addEventListener("keydown", (event) => {
     if (searchDialog?.open) searchDialog.close();
     else openSearch();
   }
-  if (event.key === "Escape" && searchDialog?.open) searchDialog.close();
+  if (event.key === "Escape") {
+    if (searchDialog?.open) searchDialog.close();
+    else if (nav?.classList.contains("is-open")) {
+      event.preventDefault();
+      setMenuOpen(false, true);
+    }
+  }
 });
 
 searchDialog?.addEventListener("click", (event) => {
@@ -319,11 +334,27 @@ document.querySelectorAll(".prose pre, .note-content pre").forEach((pre) => {
 });
 
 document.querySelectorAll(".copy-code").forEach((button) => {
+  let feedbackTimer;
+  const originalTitle = button.getAttribute("title");
+  button.setAttribute("aria-live", "polite");
   button.addEventListener("click", async () => {
     const code = button.closest(".code-block")?.querySelector("code")?.innerText || "";
-    await navigator.clipboard.writeText(code);
-    button.textContent = "已复制";
-    setTimeout(() => { button.textContent = "复制"; }, 1400);
+    clearTimeout(feedbackTimer);
+    button.disabled = true;
+    try {
+      await navigator.clipboard.writeText(code);
+      button.textContent = "已复制";
+    } catch {
+      button.textContent = "复制失败";
+      button.setAttribute("title", "无法访问剪贴板，请选择代码手动复制");
+    } finally {
+      button.disabled = false;
+      feedbackTimer = setTimeout(() => {
+        button.textContent = "复制";
+        if (originalTitle === null) button.removeAttribute("title");
+        else button.setAttribute("title", originalTitle);
+      }, 1800);
+    }
   });
 });
 
@@ -339,26 +370,41 @@ document.querySelectorAll(".prose table").forEach((table) => {
 });
 
 const filterButtons = document.querySelectorAll("[data-filter]");
+const filterSelect = document.querySelector("select[data-blog-filter]");
 const archiveItems = document.querySelectorAll("[data-topic]");
-filterButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const filter = button.dataset.filter;
-    filterButtons.forEach((item) => {
-      item.classList.toggle("is-active", item === button);
-      item.setAttribute("aria-pressed", String(item === button));
-    });
-    archiveItems.forEach((item) => { item.hidden = filter !== "all" && !JSON.parse(item.dataset.topic).includes(filter); });
-    document.querySelectorAll("[data-archive-year]").forEach((group) => {
-      const visible = group.querySelectorAll("[data-topic]:not([hidden])").length;
-      group.hidden = visible === 0;
-      const count = group.querySelector("[data-year-count]");
-      if (count) count.textContent = `${visible} 篇记录`;
-    });
-    const visible = [...archiveItems].filter((item) => !item.hidden).length;
-    const count = document.querySelector("[data-result-count]");
-    if (count) count.textContent = `${visible} 篇内容`;
+const applyBlogFilter = (value = "all") => {
+  const filter = value.toLowerCase();
+  filterButtons.forEach((button) => {
+    const active = button.dataset.filter?.toLowerCase() === filter;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
   });
+  if (filterSelect) {
+    const selected = [...filterSelect.options].find((option) => option.value.toLowerCase() === filter);
+    if (selected) filterSelect.value = selected.value;
+  }
+  archiveItems.forEach((item) => {
+    const topics = JSON.parse(item.dataset.topic).map((topic) => topic.toLowerCase());
+    item.hidden = filter !== "all" && !topics.includes(filter);
+  });
+  document.querySelectorAll("[data-archive-year]").forEach((group) => {
+    const visible = group.querySelectorAll("[data-topic]:not([hidden])").length;
+    group.hidden = visible === 0;
+    const count = group.querySelector("[data-year-count]");
+    if (count) count.textContent = `${visible} 篇记录`;
+  });
+  const visible = [...archiveItems].filter((item) => !item.hidden).length;
+  const count = document.querySelector("[data-result-count]");
+  if (count) count.textContent = `${visible} 篇内容`;
+};
+filterButtons.forEach((button) => {
+  button.addEventListener("click", () => applyBlogFilter(button.dataset.filter));
 });
+filterSelect?.addEventListener("change", () => applyBlogFilter(filterSelect.value));
+if (filterSelect || filterButtons.length) {
+  const activeButton = [...filterButtons].find((button) => button.getAttribute("aria-pressed") === "true" || button.classList.contains("is-active"));
+  applyBlogFilter(filterSelect?.value || activeButton?.dataset.filter || "all");
+}
 
 const weeklyArchive = document.querySelector("[data-weekly-archive]");
 if (weeklyArchive) {

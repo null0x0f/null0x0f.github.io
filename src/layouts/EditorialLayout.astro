@@ -1,0 +1,30 @@
+---
+import SEO from "@/components/SEO.astro";
+import Masthead from "@/components/editorial/Masthead.astro";
+import Colophon from "@/components/editorial/Colophon.astro";
+import SearchDialog from "@/components/editorial/SearchDialog.astro";
+import { siteInfo } from "@/lib/site";
+import "@/styles/tokens.css";
+import "@/styles/editorial.css";
+interface Props { title: string; description?: string; current?: "blog" | "weekly" | "about"; }
+const { title, description = siteInfo.description, current } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <SEO title={title} description={description} editorial />
+    <link rel="preload" href="/fonts/barlow-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+    <script is:inline>document.documentElement.classList.add('js');let theme;try{theme=localStorage.getItem('theme')}catch{}document.documentElement.dataset.theme=theme==='light'||theme==='dark'?theme:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'</script>
+  </head>
+  <body id="top" class="editorial-site">
+    <Masthead current={current} />
+    <slot />
+    <Colophon />
+    <SearchDialog />
+    <script is:inline src="/app.js"></script>
+  </body>
+</html>
