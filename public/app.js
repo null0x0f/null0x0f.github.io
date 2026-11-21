@@ -317,6 +317,8 @@ if (tocLinks.length) {
 }
 
 document.querySelectorAll(".prose pre, .note-content pre").forEach((pre) => {
+  pre.tabIndex = 0;
+  pre.setAttribute("aria-label", "代码块，可横向滚动");
   if (pre.closest(".code-block")) return;
   const wrapper = document.createElement("div");
   const header = document.createElement("div");

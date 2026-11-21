@@ -1,0 +1,16 @@
+---
+import EditorialLayout from "@/layouts/EditorialLayout.astro";
+import { siteInfo } from "@/lib/site";
+import "@/styles/profile.css";
+---
+
+<EditorialLayout title={`404 — File Not Found · ${siteInfo.author}`} description="这份档案暂时找不到了。返回首页或文章索引，继续阅读。" noindex>
+  <main id="main-content" class="archive-shell missing-page">
+    <div class="missing-meta micro"><span>ARCHIVE STATUS / 404</span><span>ENTRY UNAVAILABLE</span></div>
+    <div class="missing-composition">
+      <p class="missing-code" aria-hidden="true">404<span>.</span></p>
+      <div class="missing-copy"><p class="micro">THIS PAGE IS MISSING.</p><h1>FILE <br />NOT <br /><span>FOUND.</span></h1></div>
+    </div>
+    <div class="missing-bottom"><p>这份档案暂时找不到了。<br />可以从首页重新开始，或到文章索引继续寻找。</p><nav aria-label="页面未找到后的导航"><a class="editorial-button" href="/">返回首页</a><a class="underlined-link" href="/blog/">打开文章索引</a></nav></div>
+  </main>
+</EditorialLayout>

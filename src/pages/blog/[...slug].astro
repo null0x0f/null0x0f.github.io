@@ -1,10 +1,28 @@
 ---
 import { getCollection, render } from "astro:content";
-import BaseLayout from "@/layouts/BaseLayout.astro";
 import type { GetStaticPaths } from "astro";
-export const getStaticPaths = (async () => { const posts = await getCollection("blog", ({ data }) => !data.draft); return posts.map((post) => ({ params: { slug: post.id }, props: { post } })); }) satisfies GetStaticPaths;
-const { post } = Astro.props;
+import EditorialLayout from "@/layouts/EditorialLayout.astro";
+import ReadingFrame from "@/components/editorial/ReadingFrame.astro";
+import { siteInfo } from "@/lib/site";
+export const getStaticPaths = (async () => {
+  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+  return posts.map((post, index) => ({ params: { slug: post.id }, props: { post, older: posts[index + 1], newer: posts[index - 1] } }));
+}) satisfies GetStaticPaths;
+const { post, older, newer } = Astro.props;
 const { Content, headings } = await render(post);
-const date = post.data.publishedAt.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" });
+const date = (value: Date) => value.toLocaleDateString("zh-CN", { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" });
+const minutes = Math.max(1, Math.ceil((post.body?.length ?? 0) / 900));
 ---
-<BaseLayout title={`${post.data.title} — Felix Ding`} description={post.data.description} current="blog" article={post.data}><main><header class="shell article-header"><div class="breadcrumbs"><a href="/blog">Blog</a><span>/</span><span>{post.data.tags[0]}</span></div><h1>{post.data.title}</h1><p class="article-dek">{post.data.description}</p><div class="article-meta"><span>{date}</span><span>{Math.max(1, Math.ceil((post.body?.length ?? 0) / 900))} 分钟阅读</span>{post.data.updatedAt && <span>最后更新于 {post.data.updatedAt.toLocaleDateString("zh-CN", { month: "numeric", day: "numeric" })}</span>}</div></header><div class="shell article-layout"><article class="prose"><Content /></article><aside class="toc"><strong>本页目录</strong>{headings.filter((heading) => heading.depth <= 2).map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}</aside></div></main></BaseLayout>
+<EditorialLayout title={`${post.data.title} — ${siteInfo.author}`} description={post.data.description} current="blog" article={post.data}>
+  <main id="main-content" class="reading-page">
+    <header class="archive-shell reading-cover">
+      <div class="reading-cover-top"><nav aria-label="面包屑"><a href="/blog/">文章归档</a><span aria-hidden="true">/</span><span>技术笔记</span></nav><span class="micro">FIELD NOTES / {post.data.publishedAt.getUTCFullYear()}</span></div>
+      <div class="reading-cover-grid"><div><p class="reading-category micro">{post.data.tags.join(" / ") || "NOTES"}</p><h1>{post.data.title}</h1><p class="reading-dek">{post.data.description}</p></div><aside class="reading-cover-aside"><span class="reading-aside-mark" aria-hidden="true">N/</span><p class="micro">THE UNFINISHED<br />ARCHIVE</p></aside></div>
+      <div class="reading-byline"><a href="/about/">{siteInfo.author}</a><time datetime={post.data.publishedAt.toISOString()}>{date(post.data.publishedAt)}</time><span>约 {minutes} 分钟阅读</span>{post.data.updatedAt && <span>更新于 <time datetime={post.data.updatedAt.toISOString()}>{date(post.data.updatedAt)}</time></span>}</div>
+    </header>
+    <ReadingFrame headings={headings.filter(({ depth }) => depth <= 2)} archiveHref="/blog/" archiveLabel="返回文章归档">
+      <Content />
+      <Fragment slot="footer"><div class="reading-end"><span class="micro">END OF NOTE</span><a class="underlined-link" href="/blog/">返回文章归档</a></div><nav class="reading-pager" aria-label="相邻文章">{older ? <a href={`/blog/${older.id}/`}><span>较早文章</span><strong>{older.data.title}</strong></a> : <p>已是最早的文章</p>}{newer ? <a href={`/blog/${newer.id}/`}><span>较新文章</span><strong>{newer.data.title}</strong></a> : <p>已是最新的文章</p>}</nav></Fragment>
+    </ReadingFrame>
+  </main>
+</EditorialLayout>

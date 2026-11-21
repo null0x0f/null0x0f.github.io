@@ -1,0 +1,14 @@
+---
+import "@/styles/reading.css";
+interface Heading { depth: number; slug: string; text: string; }
+interface Props { headings: Heading[]; label?: string; archiveHref: string; archiveLabel: string; }
+const { headings, label = "文章目录", archiveHref, archiveLabel } = Astro.props;
+---
+<div class:list={["archive-shell reading-layout", { "reading-layout-solo": !headings.length }]}>
+  <div class="reading-main">
+    {headings.length > 0 && <details class="reading-mobile-toc"><summary>{label}<span aria-hidden="true">＋</span></summary><nav aria-label={label}>{headings.map((heading) => <a class:list={{ "is-subheading": heading.depth > 1 }} href={`#${heading.slug}`}>{heading.text}</a>)}</nav></details>}
+    <article class="prose"><slot /></article>
+    <footer class="reading-tail"><slot name="footer" /></footer>
+  </div>
+  {headings.length > 0 && <aside class="toc reading-toc"><p class="micro">ON THIS PAGE</p><strong>{label}</strong><nav aria-label={label}>{headings.map((heading) => <a class:list={{ "is-subheading": heading.depth > 1 }} href={`#${heading.slug}`}>{heading.text}</a>)}</nav><a class="reading-toc-back" href={archiveHref}>{archiveLabel}</a></aside>}
+</div>

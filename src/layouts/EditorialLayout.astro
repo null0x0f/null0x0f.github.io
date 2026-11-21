@@ -3,11 +3,11 @@ import SEO from "@/components/SEO.astro";
 import Masthead from "@/components/editorial/Masthead.astro";
 import Colophon from "@/components/editorial/Colophon.astro";
 import SearchDialog from "@/components/editorial/SearchDialog.astro";
-import { siteInfo } from "@/lib/site";
+import { siteInfo, type ArticleMetadata } from "@/lib/site";
 import "@/styles/tokens.css";
 import "@/styles/editorial.css";
-interface Props { title: string; description?: string; current?: "blog" | "weekly" | "about"; }
-const { title, description = siteInfo.description, current } = Astro.props;
+interface Props { title: string; description?: string; current?: "blog" | "weekly" | "about"; article?: ArticleMetadata; noindex?: boolean; }
+const { title, description = siteInfo.description, current, article, noindex = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -15,7 +15,8 @@ const { title, description = siteInfo.description, current } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <SEO title={title} description={description} editorial />
+    <SEO title={title} description={description} article={article} editorial />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="preload" href="/fonts/barlow-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/fonts/fonts.css" />
     <script is:inline>document.documentElement.classList.add('js');let theme;try{theme=localStorage.getItem('theme')}catch{}document.documentElement.dataset.theme=theme==='light'||theme==='dark'?theme:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'</script>
