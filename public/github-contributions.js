@@ -10,18 +10,6 @@
   const timeFormatter = new Intl.DateTimeFormat("zh-CN", { hour: "2-digit", minute: "2-digit" });
 
   const parseDate = (value) => new Date(`${value}T00:00:00Z`);
-  const positionedCalendars = new WeakSet();
-
-  const scrollToLatest = (widget) => {
-    if (positionedCalendars.has(widget)) return;
-    const disclosure = widget.closest("details");
-    if (disclosure && !disclosure.open) return;
-    const grid = widget.querySelector("[data-contribution-grid]");
-    const scroller = widget.querySelector(".contribution-scroll");
-    if (!grid?.childElementCount || !scroller?.clientWidth) return;
-    if (scroller.scrollWidth > scroller.clientWidth) scroller.scrollLeft = scroller.scrollWidth;
-    positionedCalendars.add(widget);
-  };
 
   const setAnimatedTotal = (target, total) => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -139,7 +127,8 @@
     widget.setAttribute("aria-busy", "false");
     requestAnimationFrame(() => grid.classList.add("is-ready"));
 
-    scrollToLatest(widget);
+    const scroller = widget.querySelector(".contribution-scroll");
+    if (scroller && scroller.scrollWidth > scroller.clientWidth) scroller.scrollLeft = scroller.scrollWidth;
   };
 
   const requestLatest = async (widget, cached) => {
@@ -194,10 +183,6 @@
     const username = widget.dataset.username;
     const cacheKey = `github-contributions:${username}:v2`;
     const legacyCacheKey = `github-contributions:${username}:v1`;
-    const disclosure = widget.closest("details");
-    disclosure?.addEventListener("toggle", () => {
-      if (disclosure.open) requestAnimationFrame(() => scrollToLatest(widget));
-    });
     const cached = readCache(cacheKey) ?? readCache(legacyCacheKey);
     if (cached?.data) render(widget, cached.data, { fromCache: true, checkedAt: cached.savedAt });
     widget.querySelector("[data-contribution-refresh]")?.addEventListener("click", () => {

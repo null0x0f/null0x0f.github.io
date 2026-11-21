@@ -1,6 +1,8 @@
 ---
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import MangaBackground from "@/components/MangaBackground.astro";
+import BlogPet from "@/components/BlogPet.astro";
 import SEO from "@/components/SEO.astro";
 import { siteInfo, type ArticleMetadata } from "@/lib/site";
 
@@ -21,12 +23,15 @@ const { title, description = siteInfo.description, current, hideFooter = false, 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <SEO title={title} description={description} article={article} />
-    <link rel="stylesheet" href="/editorial.css" />
-    <link rel="stylesheet" href="/journal.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/weekly.css" />
+    <link rel="stylesheet" href="/desktop.css" />
     <link rel="stylesheet" href="/reading.css" />
-    <script is:inline>document.documentElement.classList.add('js');let savedTheme;try{savedTheme=localStorage.getItem('theme')}catch{}document.documentElement.dataset.theme=savedTheme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')</script>
+    <link rel="stylesheet" href="/manga-desktop.css" />
+    <script is:inline>document.documentElement.classList.add('js');document.documentElement.dataset.theme=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')</script>
   </head>
   <body id="top" data-page={article ? "article" : current ?? "home"}>
+    <MangaBackground />
     <Header current={current} />
     <slot />
     {!hideFooter && <Footer />}
@@ -45,6 +50,10 @@ const { title, description = siteInfo.description, current, hideFooter = false, 
         <div class="search-results" id="search-results" role="listbox" aria-label="搜索结果"></div>
       </div>
     </dialog>
+    <BlogPet />
+    <button class="back-to-top" type="button" data-back-to-top aria-label="返回顶部" title="返回顶部">↑</button>
     <script is:inline src="/app.js"></script>
+    <script is:inline src="/desktop-motion.js"></script>
+    <script>import "@/scripts/wallpaper";</script>
   </body>
 </html>
