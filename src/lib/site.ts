@@ -1,10 +1,10 @@
 export const siteInfo = {
-  name: "Jackie Null",
+  name: "Felix Ding",
   description: "关于 C++、Qt、嵌入式与工业软件的个人技术博客。",
-  author: "Jackie Null",
+  author: "Felix Ding",
   profile: "https://github.com/null0x0f",
   image: "/og/default.png",
-  imageAlt: "Jackie Null — Software & Systems · C++ / Qt / Embedded",
+  imageAlt: "Felix Ding — Software & Systems · C++ / Qt / Embedded",
 } as const;
 
 export interface ArticleMetadata {

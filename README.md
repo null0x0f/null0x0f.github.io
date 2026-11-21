@@ -1,4 +1,4 @@
-# Jackie Null 技术博客
+# Felix Ding 技术博客
 
 这是一个基于 Astro 的个人技术博客，内容以 Markdown 文件为中心，主要记录 C++、Qt、Embedded、Modbus、CAN、RS485、工业软件和上位机开发经验。
 
@@ -410,7 +410,7 @@ server {
     listen 80;
     server_name example.com www.example.com;
 
-    root /var/www/jackie-null-blog/dist;
+    root /var/www/felix-ding-blog/dist;
     index index.html;
 
     location / {

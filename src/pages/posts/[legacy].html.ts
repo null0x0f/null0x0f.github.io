@@ -22,7 +22,7 @@ export const GET: APIRoute = ({ props, site }) => {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>文章已迁移 — Jackie Null</title>
+    <title>文章已迁移 — Felix Ding</title>
     <link rel="canonical" href="${canonical}" />
     <script>location.replace(${JSON.stringify(destination)} + location.search + location.hash);</script>
     <noscript><meta http-equiv="refresh" content="0;url=${destination}" /></noscript>
