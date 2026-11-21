@@ -3,27 +3,18 @@ interface Props { current?: "blog" | "weekly" | "about"; }
 const { current } = Astro.props;
 ---
 <header class="site-header">
-  <span class="scroll-progress" data-scroll-progress aria-hidden="true"></span>
   <div class="shell nav-wrap">
-    <a class="brand" href="/" aria-label="返回首页">
-      <span class="brand-mark">FD</span><span class="brand-name">/felix.ding</span>
-    </a>
-    <button class="nav-action menu-toggle" data-menu-toggle aria-label="打开导航" aria-expanded="false">☰</button>
-    <nav class="site-nav" aria-label="主导航">
+    <a class="brand" href="/" aria-label="Felix Ding，返回首页">Felix Ding<span>.</span></a>
+    <button class="nav-action menu-toggle" type="button" data-menu-toggle aria-label="打开导航" aria-expanded="false" aria-controls="main-navigation">☰</button>
+    <nav class="site-nav" id="main-navigation" aria-label="主导航">
       <a href="/" aria-current={!current ? "page" : undefined}>首页</a>
-      <a href="/blog" aria-current={current === "blog" ? "page" : undefined}>Blog</a>
+      <a href="/blog/" aria-current={current === "blog" ? "page" : undefined}>文章</a>
       <a href="/weekly/" aria-current={current === "weekly" ? "page" : undefined}>周报</a>
-      <a href="/about" aria-current={current === "about" ? "page" : undefined}>About</a>
+      <a href="/about/" aria-current={current === "about" ? "page" : undefined}>关于</a>
     </nav>
     <div class="nav-tools">
-      <button class="nav-action search-trigger" data-search-open aria-label="搜索">
-        <span class="search-trigger-icon" aria-hidden="true">⌕</span><span class="search-label">搜索</span><span class="shortcut">⌘K</span>
-      </button>
-      <button class="nav-action scene-toggle" type="button" data-scene-toggle aria-label="背景动画" aria-pressed="true" title="暂停背景动画" hidden>
-        <span data-scene-pause><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 3h3v10H4zm5 0h3v10H9z" /></svg></span>
-        <span data-scene-play hidden><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="m5 3 8 5-8 5z" /></svg></span>
-      </button>
-      <button class="nav-action" data-theme-toggle aria-label="切换主题">☾</button>
+      <button class="nav-action" type="button" data-search-open aria-label="搜索文章"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg></button>
+      <button class="nav-action" type="button" data-theme-toggle aria-label="切换主题">☾</button>
     </div>
   </div>
 </header>
